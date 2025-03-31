@@ -27,8 +27,10 @@
     "@openapitools/openapi-generator-cli": "^2.7.0",
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.2",
+    "keycloak-angular": "^19.0.2",
+    "keycloak-js": "^26.1.4",
     "ng-openapi-gen": "0.23.0",
-    "ngx-cookie-service": "^17.0.1",
+    "ngx-cookie-service": "^19.1.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
