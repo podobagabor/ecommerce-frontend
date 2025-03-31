@@ -1,0 +1,43 @@
+.main-card {
+  width: 60rem;
+  padding: 3rem;
+}
+
+.back-button {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.title {
+  font-weight: bold;
+  font-size: 30px;
+  text-align: center;
+}
+
+.my-button {
+  border: none;
+  height: 3rem;
+  background-color: var(--light-primary);
+  font-family: 'Raleway', sans-serif;
+  font-size: 20px;
+  font-weight: bolder;
+}
+
+.text {
+  text-align: center;
+}
+mat-card-content {
+  mat-icon {
+    font-size: 10rem;
+    height: 10rem;
+    width: 10rem;
+  }
+}
+.my-button:hover {
+  background-color: var(--primary);
+  cursor: pointer;
+}
+
+.password-error {
+  color: var(--warn);
+}

@@ -1,0 +1,294 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+
+$dark-primary-text: #213555;
+$light-primary-text: white;
+:root {
+  --light-gray: #F0F0F0;
+  --light-primary: #bfcbdc;
+  --my-font-family: 'Raleway', sans-serif;
+  --primary: #4f709c;
+  --accent: #e5d183;
+  --accent-dark: #d29c00;
+  --warn:#f44336;
+}
+
+$mat-primary: (
+  50: #e6eaf0,
+  100: #bfcbdc,
+  200: #97aac4,
+  300: #6f89ac,
+  400: #4f709c,
+  500: #2b598e,
+  600: #235185,
+  700: #1a477a,
+  800: #133e6d,
+  900: #002d5b,
+  contrast: (
+    50: $dark-primary-text,
+    100: $dark-primary-text,
+    200: $dark-primary-text,
+    300: $light-primary-text,
+    400: $light-primary-text,
+    500: $light-primary-text,
+    600: $light-primary-text,
+    700: $light-primary-text,
+    800: $light-primary-text,
+    900: $light-primary-text,
+  )
+);
+
+$mat-accent: (
+  50: #f8f4e1,
+  100: #efe3b3,
+  200: #e5d183,
+  300: #dcc151,
+  400: #d7b42a,
+  500: #d2a807,
+  600: #d29c00,
+  700: #d28b00,
+  800: #d17c00,
+  900: #d06000,
+  contrast: (
+    50: $dark-primary-text,
+    100: $dark-primary-text,
+    200: $dark-primary-text,
+    300: $dark-primary-text,
+    400: $dark-primary-text,
+    500: $light-primary-text,
+    600: $light-primary-text,
+    700: $light-primary-text,
+    800: $light-primary-text,
+    900: $light-primary-text,
+  )
+);
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$Nile-primary: mat.define-palette($mat-primary, 400);
+$Nile-accent: mat.define-palette($mat-accent, 200);
+
+// The warn palette is optional (defaults to red).
+$Nile-warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$Nile-theme: mat.define-light-theme((
+  color: (
+    primary: $Nile-primary,
+    accent: $Nile-accent,
+    warn: $Nile-warn,
+  )
+));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($Nile-theme);
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Raleway', sans-serif !important;
+}
+
+.my-button {
+  border: none;
+  height: 3rem;
+  background-color: var(--light-primary);
+  font-family: 'Raleway', sans-serif;
+  font-size: 20px;
+  font-weight: bolder;
+}
+
+.my-button:hover {
+  background-color: var(--primary);
+  cursor: pointer;
+}
+
+.my-button-accent {
+  border: none;
+  height: 3rem;
+  background-color: var(--accent);
+  font-family: 'Raleway', sans-serif;
+  font-size: 20px;
+  font-weight: bolder;
+  text-align: center;
+}
+
+.my-button-accent-link {
+  border: none;
+  height: 3rem;
+  background-color: var(--accent);
+  font-family: 'Raleway', sans-serif;
+  font-size: 20px;
+  font-weight: bolder;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-decoration: none;
+  color: #000000;
+}
+
+.my-button-accent-link:hover {
+  background-color: var(--accent-dark);
+  cursor: pointer;
+}
+
+.my-button-accent:hover {
+  background-color: var(--accent-dark);
+  cursor: pointer;
+}
+
+.my-button-form {
+  text-align: center;
+  border-radius: 3px;
+  border: none;
+  height: 3rem;
+  background-color: var(--light-primary);
+  font-family: 'Raleway', sans-serif;
+  font-size: 20px;
+  font-weight: bolder;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.32);
+  padding: 5px 1rem 5px 1rem;
+}
+
+.my-button-form:hover {
+  background-color: var(--primary);
+  cursor: pointer;
+  box-shadow: 0 0 10px black;
+}
+
+.my-button-form-accent {
+  text-align: center;
+  border-radius: 3px;
+  border: none;
+  height: 3rem;
+  background-color: var(--accent);
+  font-family: 'Raleway', sans-serif;
+  font-size: 20px;
+  font-weight: bolder;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.32);
+  padding: 5px 1rem 5px 1rem;
+}
+
+.my-button-form-accent:hover {
+  background-color: var(--accent-dark);
+  cursor: pointer;
+  box-shadow: 0 0 10px black;
+}
+
+.back-button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 1rem;
+  background-color: var(--light-primary);
+  border-radius: 3px;
+  font-weight: bold;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.32);
+  position: absolute;
+  left: 3rem;
+  text-decoration: none;
+  color: black;
+}
+
+.back-button:hover {
+  cursor: pointer;
+  background-color: var(--primary);
+  box-shadow: 0 0 10px black;
+}
+
+.table {
+  width: 100%;
+  background-color: transparent !important;;
+
+  th {
+    font-size: large;
+    padding-bottom: 2rem;
+    padding-top: 2rem;
+    padding-left: 2rem;
+  }
+
+  tr[mat-row]:hover {
+    background-color: var(--light-primary) !important;
+    cursor: pointer;
+  }
+}
+
+.bordered-container-fill {
+  border: 0.15em solid var(--light-primary);
+  border-radius: 0.5rem;
+  box-shadow: rgba(0, 0, 0, 0.09) 0 0 10px;
+}
+
+.text-centered {
+  text-align: center;
+}
+
+.my-main {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1024px;
+  gap:1rem
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  border: 0.15em solid var(--light-primary);
+  border-radius: 0.5rem;
+  box-shadow: rgba(0, 0, 0, 0.09) 0 0 10px;
+}
+
+.back-link {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.my-button-form-link {
+  text-align: center;
+  border-radius: 3px;
+  border: none;
+  background-color: var(--light-primary);
+  font-family: 'Raleway', sans-serif;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  font-weight: bolder;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.32);
+  padding: 5px 1rem 5px 1rem;
+  color: black;
+  text-decoration: none;
+}
+
+.my-button-form-link:hover {
+  background-color: var(--primary);
+  cursor: pointer;
+  box-shadow: 0 0 10px black;
+}
+
+mat-expansion-panel-header {
+  background-color: var(--light-primary);
+}
+
+mat-expansion-panel-header:hover {
+  background-color: var(--primary)!important;
+}
+
+mat-expansion-panel-header:focus {
+  background-color: var(--light-primary) !important;
+}
+
+

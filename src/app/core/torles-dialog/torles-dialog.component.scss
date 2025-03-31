@@ -1,0 +1,15 @@
+.dialog-content {
+  text-align: center;
+  padding: 2rem;
+  color: var(--primary-darker-color);
+}
+
+.dialog-actions {
+  padding: 2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  button {
+    width: 45%;
+  }
+}

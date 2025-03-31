@@ -1,0 +1,48 @@
+<mat-sidenav-container class="side-nav-container" [autosize]="true">
+  <mat-sidenav #sideNav class="side_nav">
+    <h2>Szűrő</h2>
+    <h3>Márka</h3>
+    <section class="filter-list">
+      <mat-checkbox [(ngModel)]="brand.selected" *ngFor="let brand of brands">{{brand.brand.name}}</mat-checkbox>
+    </section>
+    <h3>Kategória</h3>
+    <section class="filter-list">
+      <mat-checkbox [(ngModel)]="category.selected"
+                    *ngFor="let category of categories">{{category.category.name}}</mat-checkbox>
+    </section>
+    <h3>Ár</h3>
+    <mat-slider discrete min=0 max="120000" step="100" class="slider">
+      <input [(ngModel)]="price.min" matSliderStartThumb>
+      <input [(ngModel)]="price.max" matSliderEndThumb>
+    </mat-slider>
+    <h3>Kedvezmény %</h3>
+    <mat-slider discrete min="0" max="100" step="5" class="slider">
+      <input [(ngModel)]="discount.min" matSliderStartThumb>
+      <input [(ngModel)]="discount.max" matSliderEndThumb>
+    </mat-slider>
+    <div class="button-container">
+      <button class="my-button-form" (click)="getProducts()">Szűrés</button>
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-content class="side-nav-content">
+    <div class="list-header">
+      <button mat-fab (click)="sideNav.toggle()">
+        <mat-icon>
+          filter_alt
+        </mat-icon>
+      </button>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" [length]="products.totalElements!" [pageIndex]="products.number!"
+                     [pageSize]="products.size!" (page)="page($event)" showFirstLastButtons
+                     aria-label="Select page of periodic elements">
+      </mat-paginator>
+    </div>
+    <section class="card-container">
+      <app-product-card [hasUser]="hasUser" [savedProducts]="savedProducts" (addSaved)="addToSaved($event)"
+                        (removeSaved)="removeFromSaved($event)" [product]="product"
+                        *ngFor="let product of products.content"></app-product-card>
+    </section>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+
+

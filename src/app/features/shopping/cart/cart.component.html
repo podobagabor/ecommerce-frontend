@@ -1,0 +1,57 @@
+<main>
+  <h1>Kosár</h1>
+  <section class="cart-items">
+    <h2>Kiválasztott termékek</h2>
+    <mat-card class="cart-element" *ngFor="let item of cartItems">
+      <p class="product-name">
+       {{item.product?.brand?.name}} {{item.product?.name}}
+      </p>
+      <div class="qounatity-container">
+        <button mat-icon-button (click)="reduce(item)">
+          <mat-icon>
+            remove
+          </mat-icon>
+        </button>
+        <p class="product-price">{{item.count}} db</p>
+        <button mat-icon-button (click)="grow(item)">
+          <mat-icon>
+            add
+          </mat-icon>
+        </button>
+      </div>
+      <p class="product-price">{{item.product?.price! * item.count! | number}}Ft</p>
+      <div class="product-image">
+        <img
+          [src]="item.product?.imageUrls?.[0]">
+      </div>
+    </mat-card>
+    <h1 *ngIf="!cartItems.length" class="text-centered">Üres a kosarad</h1>
+    <mat-card class="total-amount-container">
+      <p class="total-amount">Fizetendő</p>
+      <p class="total-amount-sum">{{getSum() | number}} Ft</p>
+    </mat-card>
+  </section>
+  <section class="user-adatok-container">
+    <h2>Szükséges adatok</h2>
+    <div class="user-adatok">
+      <div class="adat-label">
+        <p>Név:</p>
+        <p>E-mail:</p>
+        <p>Tel:</p>
+        <p>Szállítási cím:</p>
+        <p>Számlázási cím:</p>
+      </div>
+      <div class="adat-value">
+        <p>{{currentUser?.lastname}} {{currentUser?.firstname}}</p>
+        <p>{{currentUser?.email}}</p>
+        <p>{{currentUser?.phoneNumber || "Nincs!"}}</p>
+        <p>{{currentUser?.shippingAddress ? (currentUser!.shippingAddress?.country + " " + currentUser!.shippingAddress?.zipCode + " " + currentUser!.shippingAddress?.city + " " + currentUser!.shippingAddress?.street + " " + currentUser!.shippingAddress?.streetNumber + " " + currentUser!.shippingAddress?.floorNumber) : "Nincs!"}}</p>
+        <p>{{currentUser?.billingAddress ? (currentUser!.billingAddress?.country + " " + currentUser!.billingAddress?.zipCode + " " + currentUser!.billingAddress?.city + " " + currentUser!.billingAddress?.street + " " + currentUser!.billingAddress?.streetNumber + " " + currentUser!.billingAddress?.floorNumber) : "Nincs!"}}</p>
+      </div>
+    </div>
+  </section>
+  <div class="buton-container">
+    <a routerLink="/home/userSettings" *ngIf="!canOrder" class="my-button-accent-link">Adatok megadása</a>
+    <button (click)="order()" *ngIf="canOrder && cartItems.length" class="my-button-form full-size-button">Tovább a megrendeléshez</button>
+  </div>
+</main>

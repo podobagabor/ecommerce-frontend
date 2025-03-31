@@ -1,0 +1,21 @@
+<mat-card class="main-card">
+  <div *ngIf="loading" fxLayout="column" fxLayoutAlign="center center">
+    <mat-icon color="primary" class="progress-indicator">
+      refresh
+    </mat-icon>
+    <p>Kis türelmet, hitelesítünk...</p>
+  </div>
+  <div *ngIf="!loading" fxLayout="row" fxLayoutAlign="center">
+    <mat-icon color="primary">
+      task_alt
+    </mat-icon>
+  </div>
+  <p *ngIf="!loading" class="title">Gratulálunk!</p>
+  <mat-card-content *ngIf="!loading" fxLayout="column" fxLayoutGap="1rem">
+    <p class="text">Sikeresen hitelesítetted az e-mail címedet.</p>
+    <button class="my-button" (click)="startShopping()" [matDialogClose]="true">
+      Kezdjük a vásárlást!
+    </button>
+  </mat-card-content>
+</mat-card>
+

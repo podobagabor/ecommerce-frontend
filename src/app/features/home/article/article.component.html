@@ -1,0 +1,21 @@
+<div class="article-container" *ngIf="articles.length" [style.background-image]="'url(' + articles[numberOfImage].imageUrl+ ')'" >
+  <img>
+  <a (click)="left()">
+    <mat-icon color="accent">
+      arrow_back_ios_new
+    </mat-icon>
+  </a>
+  <div class="article-text">
+    <p>
+      {{articles[numberOfImage].text}}
+    </p>
+    <div class="button-container">
+      <a [routerLink]="articles[numberOfImage].buttonLink" class="my-button-accent-link">{{articles[numberOfImage].buttonText}}</a>
+    </div>
+  </div>
+  <a (click)="right()" class="arrow-forward">
+    <mat-icon color="accent">
+      arrow_forward_ios_new
+    </mat-icon>
+  </a>
+</div>

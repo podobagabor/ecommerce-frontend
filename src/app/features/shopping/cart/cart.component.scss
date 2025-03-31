@@ -1,0 +1,117 @@
+:host {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 2rem;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 800px;
+  width: 100%;
+
+  .cart-items {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+}
+
+.cart-element {
+  background-color: var(--light-gray);
+  display: flex;
+  flex-direction: row;
+  width: 90%;
+  height: 100px;
+  .qounatity-container {
+    display: flex;
+    flex-direction: row;
+    width: 30%;
+    align-items: center;
+  }
+  .product-name {
+    width: 30%;
+    margin-left: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .product-price {
+    width: 20%;
+    font-weight: bolder;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .product-image {
+    width: 20%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    img {
+      height: 100%;
+      border-radius: 5px;
+    }
+  }
+}
+
+.cart-element:hover {
+  cursor: pointer;
+  background-color: var(--light-primary);
+  box-shadow: black 0 0 10px;
+}
+
+.total-amount-container {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+  display: flex;
+  flex-direction: row;
+  width: 90%;
+  background-color: var(--light-primary);
+  .total-amount {
+    font-weight: bolder;
+    width: 30%;
+    text-align: center;
+  }
+
+  .total-amount-sum {
+    font-weight: bolder;
+    width: 70%;
+    text-align: center;
+  }
+}
+
+.buton-container {
+  margin-top: 2rem;
+  width: 100%;
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  a {
+    width: 90%;
+  }
+}
+
+.user-adatok-container {
+  .user-adatok {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .adat-label {
+      font-weight: bolder;
+    }
+  }
+}
+
+.full-size-button {
+  width: 100%;
+}

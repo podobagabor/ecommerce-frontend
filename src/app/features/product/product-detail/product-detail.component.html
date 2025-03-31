@@ -1,0 +1,35 @@
+<a class="back-button" routerLink="/product/list" [queryParams]="{'category': query}">
+  <mat-icon>
+    arrow_back
+  </mat-icon>
+  Vissza
+</a>
+<main class="main-container">
+  <section class="photo-container">
+    <div class="photo">
+      <img [src]="image">
+    </div>
+    <div class="image-container">
+      <img (mouseenter)="showImage(image)" class="image" *ngFor="let image of product?.imageUrls" [src]="image">
+    </div>
+  </section>
+  <section class="information-container">
+    <header>
+      <div class="product-title">
+        <h2 class="product-brand">{{product?.brand?.name}}</h2>
+        <h1 class="product-name">{{product?.name}}</h1>
+      </div>
+      <button mat-icon-button (click)="addToSaved()">
+      <span *ngIf="!isSaved" class="material-symbols-outlined">
+        favorite
+      </span>
+        <mat-icon *ngIf="isSaved">
+          favorite
+        </mat-icon>
+      </button>
+    </header>
+    <p class="product-price">{{product?.price | number}}Ft</p>
+    <button (click)="addToCart()" class="my-button-form">Kosárba</button>
+    <p class="product-description">{{product?.description}}</p>
+  </section>
+</main>

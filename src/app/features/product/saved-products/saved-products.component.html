@@ -1,0 +1,5 @@
+<main class="saved-container" *ngIf="savedItems.length">
+  <app-product-card [hasUser]="hasUser" (removeSaved)="removeFromSaved($event)" [savedMode]="true" [product]="product"
+                    *ngFor="let product of savedItems"></app-product-card>
+</main>
+<h1 *ngIf="!savedItems.length" class="text-centered">Eddig üres a listád. :(</h1>
