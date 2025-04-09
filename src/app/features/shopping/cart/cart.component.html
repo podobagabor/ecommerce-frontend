@@ -4,7 +4,7 @@
     <h2>Kiválasztott termékek</h2>
     <mat-card class="cart-element" *ngFor="let item of cartItems">
       <p class="product-name">
-       {{item.product?.brand?.name}} {{item.product?.name}}
+       {{item.productDto?.brand?.name}} {{item.productDto?.name}}
       </p>
       <div class="qounatity-container">
         <button mat-icon-button (click)="reduce(item)">
@@ -12,17 +12,17 @@
             remove
           </mat-icon>
         </button>
-        <p class="product-price">{{item.count}} db</p>
+        <p class="product-price">{{item.quantity}} db</p>
         <button mat-icon-button (click)="grow(item)">
           <mat-icon>
             add
           </mat-icon>
         </button>
       </div>
-      <p class="product-price">{{item.product?.price! * item.count! | number}}Ft</p>
+      <p class="product-price">{{item.productDto?.price! * item.quantity! | number}}Ft</p>
       <div class="product-image">
         <img
-          [src]="item.product?.imageUrls?.[0]">
+          [src]="item.productDto?.images?.[0]">
       </div>
     </mat-card>
     <h1 *ngIf="!cartItems.length" class="text-centered">Üres a kosarad</h1>
@@ -42,12 +42,15 @@
         <p>Számlázási cím:</p>
       </div>
       <div class="adat-value">
-        <p>{{currentUser?.lastname}} {{currentUser?.firstname}}</p>
+        <p>{{currentUser?.lastName}} {{currentUser?.firsName}}</p>
         <p>{{currentUser?.email}}</p>
-        <p>{{currentUser?.phoneNumber || "Nincs!"}}</p>
+
+        <!-- <p>{{currentUser?.phoneNumber || "Nincs!"}}</p>
         <p>{{currentUser?.shippingAddress ? (currentUser!.shippingAddress?.country + " " + currentUser!.shippingAddress?.zipCode + " " + currentUser!.shippingAddress?.city + " " + currentUser!.shippingAddress?.street + " " + currentUser!.shippingAddress?.streetNumber + " " + currentUser!.shippingAddress?.floorNumber) : "Nincs!"}}</p>
         <p>{{currentUser?.billingAddress ? (currentUser!.billingAddress?.country + " " + currentUser!.billingAddress?.zipCode + " " + currentUser!.billingAddress?.city + " " + currentUser!.billingAddress?.street + " " + currentUser!.billingAddress?.streetNumber + " " + currentUser!.billingAddress?.floorNumber) : "Nincs!"}}</p>
-      </div>
+    -->
+
+         </div>
     </div>
   </section>
   <div class="buton-container">

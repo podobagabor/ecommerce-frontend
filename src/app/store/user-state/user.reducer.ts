@@ -1,20 +1,20 @@
 import {createReducer, on} from "@ngrx/store";
-import {SavedActions} from "../saved-state/saved.actions";
-import {UserResponse} from "../../api/models/user-response";
 import {UserActions} from "./user.actions";
 import {UserState} from "../store.interfaces";
-const noUser: UserResponse = {}
+import {UserDtoDetailed} from "../../api/models/user-dto-detailed";
+
+const noUser: UserDtoDetailed = {}
 export var initialState: UserState = {user: undefined}
 
 export const userReducer = createReducer(
   initialState,
   on(UserActions.login, (state, {user}) => {
-    return {user : user}
+    return {user: user}
   }),
   on(UserActions.logout, (_state) => {
-    return {user : undefined}
+    return {user: undefined}
   }),
   on(UserActions.modified, (state, {user}) => {
-    return {user : user}
+    return {user: user}
   })
 )

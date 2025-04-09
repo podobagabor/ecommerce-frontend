@@ -1,9 +1,9 @@
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA} from "@angular/material/dialog";
-import {CategoryResponse} from "../../../api/models/category-response";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {CategoryServiceService} from "../../../api/services/category-service.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {CategoryResponse} from "../../../services/api/models/category-response";
+import {CategoryControllerService} from "../../../api/services/category-controller.service";
 
 @Component({
     selector: 'app-category-edit-dialog',
@@ -19,7 +19,7 @@ export class CategoryEditDialogComponent {
     name: new FormControl<string>('',Validators.required),
   })
 
-  constructor(@Inject(MAT_DIALOG_DATA) private data: any, private categoryService: CategoryServiceService, private snackService: MatSnackBar) {
+  constructor(@Inject(MAT_DIALOG_DATA) private data: any, private categoryService: CategoryControllerService, private snackService: MatSnackBar) {
     const category = data.category;
     const addingMode = data.addSubCategory;
     if(addingMode) {
@@ -34,6 +34,11 @@ export class CategoryEditDialogComponent {
   }
 
   saveCategory() {
+
+
+    /*
+
+
     if(this.addingSubCategoryMode) {
       this.categoryService.addSubCategory({id: this.category?.id!, body: {
         name: this.categoryForm.value.name!,
@@ -51,5 +56,8 @@ export class CategoryEditDialogComponent {
         });
       })
     }
+
+    */
+
   }
 }

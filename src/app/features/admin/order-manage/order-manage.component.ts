@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {OrderServiceService} from "../../../api/services/order-service.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {OrderResponse} from "../../../api/models/order-response";
-import {PageOrderResponse} from "../../../api/models/page-order-response";
+import {OrderDto} from "../../../api/models/order-dto";
+import {OrderControllerService} from "../../../api/services/order-controller.service";
+
 
 @Component({
     selector: 'app-order-manage',
@@ -11,22 +11,23 @@ import {PageOrderResponse} from "../../../api/models/page-order-response";
     standalone: false
 })
 export class OrderManageComponent implements OnInit {
-  protected orders: PageOrderResponse = {};
+  //TODO ilyen még nincs
+  protected orders: OrderDto[] = [];
 
-  constructor(private orderService: OrderServiceService, private snackService: MatSnackBar) {
+  constructor(private orderService: OrderControllerService, private snackService: MatSnackBar) {
   }
 
   ngOnInit(): void {
-    this.orderService.getAll1().subscribe(value => {
+    this.orderService.getAllOrder().subscribe(value => {
       this.orders = value;
     })
   }
 
-  statusChanged($event: Event, order: OrderResponse) {
+  statusChanged($event: Event, order: OrderDto) {
     $event.stopPropagation();
-    this.orderService.changeOrderStatus({id: order.id!, body: {
-      orderStatus: order.status!
-      }}).subscribe( value => {
+    this.orderService.changeOrderStatus({id: order.id!,
+      status: order.status!
+      }).subscribe( value => {
         this.snackService.open('Sikeres sátusz módosítás',undefined,{
           duration:2000,
         });

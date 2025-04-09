@@ -1,9 +1,9 @@
 import {createActionGroup, props} from "@ngrx/store";
-import {ProductResponse} from "../../api/models/product-response";
+import {ProductDto} from "../../api/models/product-dto";
 
 export const ProductsActions = createActionGroup({
   source: "Products",
   events: {
-    'loadProducts': props<{ products: ProductResponse[] }>()
+    'loadProducts': props<{ products: ProductDto[] }>()
   }
 })

@@ -1,9 +1,8 @@
 import {createReducer, on} from "@ngrx/store";
-import {CartActions} from "../cart-state/cart.actions";
-import {ProductResponse} from "../../api/models/product-response";
 import {ProductsActions} from "./products.actions";
+import {ProductDto} from "../../api/models/product-dto";
 
-export const initialState: ReadonlyArray<ProductResponse> = []
+export const initialState: ReadonlyArray<ProductDto> = []
 
 export const productsReducer = createReducer(
   initialState,

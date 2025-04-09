@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ArticleServiceService} from "../../../api/services/article-service.service";
-import {ArticleResponse} from "../../../api/models/article-response";
 import {Subscription} from "rxjs";
+import {ArticleResponse} from "../../../services/api/models/article-response";
+import {ArticleServiceService} from "../../../services/api/services/article-service.service";
 
 @Component({
     selector: 'app-article',

@@ -4,6 +4,7 @@ import { AddressResponse } from './address-response';
 import { CartItemResponse } from './cart-item-response';
 import { OrderResponse } from './order-response';
 import { ProductResponse } from './product-response';
+/*
 export interface UserResponse {
   billingAddress?: AddressResponse;
   cart?: Array<CartItemResponse>;
@@ -20,3 +21,5 @@ export interface UserResponse {
   subscribedToEmail?: boolean;
   verified?: boolean;
 }
+
+ */

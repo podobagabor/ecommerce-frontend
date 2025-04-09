@@ -1,24 +1,24 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {UserResponse} from "../../../api/models/user-response";
-import {UserServiceService} from "../../../api/services/user-service.service";
-import {AddressRequest} from "../../../api/models/address-request";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatDialog} from "@angular/material/dialog";
 import {ChangePasswordComponent} from "../change-password/change-password.component";
 import {Router} from "@angular/router";
 import {CookieService} from "ngx-cookie-service";
 import {AuthenticationService} from "../../../services/authentication.service";
+import {AddressRequest} from "../../../services/api/models/address-request";
+import {UserControllerService} from "../../../api/services/user-controller.service";
+import {UserDtoDetailed} from "../../../api/models/user-dto-detailed";
 
 @Component({
-    selector: 'app-user-settings',
-    templateUrl: './user-settings.component.html',
-    styleUrls: ['./user-settings.component.scss'],
-    standalone: false
+  selector: 'app-user-settings',
+  templateUrl: './user-settings.component.html',
+  styleUrls: ['./user-settings.component.scss'],
+  standalone: false
 })
 export class UserSettingsComponent implements OnInit {
 
-  protected currentUser?: UserResponse;
+  protected currentUser?: UserDtoDetailed;
   protected billingAddressIsTheSame: boolean = false;
   protected emailChanged: boolean = false;
   protected hasBillingAddress: boolean = false;
@@ -49,7 +49,7 @@ export class UserSettingsComponent implements OnInit {
     gender: new FormControl<'MALE' | 'FEMALE'>('MALE'),
   })
 
-  constructor(private userService: UserServiceService, private snackService: MatSnackBar, private dialog: MatDialog, private router: Router, private cookieService: CookieService, private authenticationService: AuthenticationService) {
+  constructor(private userService: UserControllerService, private snackService: MatSnackBar, private dialog: MatDialog, private router: Router, private cookieService: CookieService, private authenticationService: AuthenticationService) {
   }
 
   ngOnInit(): void {
@@ -66,11 +66,13 @@ export class UserSettingsComponent implements OnInit {
   getCurrentUser() {
     this.userService.getCurrentUser().subscribe(value => {
       this.currentUser = value;
+      //todo
+      /*
       if (value) {
         this.userSettingsForm.patchValue({
           email: value.email,
           gender: value.gender,
-          phoneNumber: value.phoneNumber,
+          phoneNumber: value.t,
           familyName: value.lastname,
           firstName: value.firstname,
         })
@@ -96,6 +98,8 @@ export class UserSettingsComponent implements OnInit {
           });
         }
       }
+
+       */
     })
   }
 
@@ -127,15 +131,16 @@ export class UserSettingsComponent implements OnInit {
     if (this.currentUser?.email !== this.userSettingsForm.value.email) {
       this.emailChanged = true;
     }
-    this.userService.updateUser({
+    //todo
+    this.userService.modifyUser({
       body: {
-        billingAddress: billingAddress,
+        //billingAddress: billingAddress,
         gender: this.userSettingsForm.value.gender!,
-        shippingAddress: shippingAddress,
+        //  shippingAddress: shippingAddress,
         email: this.userSettingsForm.value.email!,
-        phoneNumber: this.userSettingsForm.value.phoneNumber!,
-        lastname: this.userSettingsForm.value.familyName!,
-        firstname: this.userSettingsForm.value.firstName!
+        //  phoneNumber: this.userSettingsForm.value.phoneNumber!,
+        lastName: this.userSettingsForm.value.familyName!,
+        firsName: this.userSettingsForm.value.firstName!
       }
     }).subscribe(value => {
       if (value) {

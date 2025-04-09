@@ -60,7 +60,7 @@
     <p class="text">Sikeresen regisztáltál. Most küldünk neked egy e-mail, amivel hitelesítheted a profilodat.</p>
   </mat-card-content>
   <mat-card-actions fxLayout="row" fxLayoutAlign="center">
-    <button *ngIf="!registrated" fxFlex="60%" class="my-button" (click)="registrate()" [disabled]="registrationForm.invalid || passwordsNotCorrect">
+    <button *ngIf="!registrated" fxFlex="60%" class="my-button" (click)="registration()" [disabled]="registrationForm.invalid || passwordsNotCorrect">
       Regisztráció
     </button>
   </mat-card-actions>

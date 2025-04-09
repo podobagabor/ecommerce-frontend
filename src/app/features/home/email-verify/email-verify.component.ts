@@ -1,32 +1,38 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {UserServiceService} from "../../../api/services/user-service.service";
 import {MAT_DIALOG_DATA} from "@angular/material/dialog";
+import {UserControllerService} from "../../../api/services/user-controller.service";
+import {catchError, of} from "rxjs";
 
 @Component({
-    selector: 'app-email-verify',
-    templateUrl: './email-verify.component.html',
-    styleUrls: ['./email-verify.component.scss'],
-    standalone: false
+  selector: 'app-email-verify',
+  templateUrl: './email-verify.component.html',
+  styleUrls: ['./email-verify.component.scss'],
+  standalone: false
 })
-export class EmailVerifyComponent implements OnInit{
+export class EmailVerifyComponent implements OnInit {
   protected loading: boolean = true;
-  protected userId?: string;
-  constructor(private activatedRoute: ActivatedRoute, private userService: UserServiceService, @Inject(MAT_DIALOG_DATA) private data: any, private router: Router) {
-    if(data) {
-      this.userId = data['userId'];
+  protected userToken?: string;
+
+  constructor(private activatedRoute: ActivatedRoute, private userService: UserControllerService, @Inject(MAT_DIALOG_DATA) private data: any, private router: Router) {
+    if (data) {
+      this.userToken = data['userToken'];
     }
   }
+
   ngOnInit(): void {
-    if(this.userId) {
-      this.userService.verify({body: {
-          id: this.userId,
-        }}).subscribe( _ => {
+    if (this.userToken) {
+      this.userService.validateUserEmail({token: this.userToken}).pipe(
+        catchError(err => {
+          return of("Hiba")
+        })
+      ).subscribe(_ => {
         this.loading = false;
       })
     }
   }
+
   startShopping() {
-   this.router.navigateByUrl('/home');
+    this.router.navigateByUrl('/home');
   }
 }

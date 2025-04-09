@@ -1,27 +1,26 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
-import {ProductResponse} from "../../../api/models/product-response";
 import {Router} from "@angular/router";
-import {UserServiceService} from "../../../api/services/user-service.service";
 import {Store} from "@ngrx/store";
 import {SavedActions} from "../../../store/saved-state/saved.actions";
+import {ProductDto} from "../../../api/models/product-dto";
 
 @Component({
-    selector: 'app-product-card',
-    templateUrl: './product-card.component.html',
-    styleUrls: ['./product-card.component.scss'],
-    standalone: false
+  selector: 'app-product-card',
+  templateUrl: './product-card.component.html',
+  styleUrls: ['./product-card.component.scss'],
+  standalone: false
 })
 export class ProductCardComponent implements OnChanges, OnInit {
 
-  @Input({required: true}) product?: ProductResponse;
+  @Input({required: true}) product?: ProductDto;
   @Input() hasUser: boolean = false;
-  @Input() savedProducts: string[] = [];
+  @Input() savedProducts: number[] = [];
   @Input() savedMode: boolean = false
-  @Output() addSaved = new EventEmitter<string>();
-  @Output() removeSaved = new EventEmitter<string>();
+  @Output() addSaved = new EventEmitter<number>();
+  @Output() removeSaved = new EventEmitter<number>();
   protected isSaved: boolean = false
 
-  constructor(private router: Router, private userService: UserServiceService, private store: Store) {
+  constructor(private router: Router, private store: Store) {
   }
 
   ngOnInit() {

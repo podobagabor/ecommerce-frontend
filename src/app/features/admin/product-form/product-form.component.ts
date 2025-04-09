@@ -1,30 +1,26 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {ProductServiceService} from "../../../api/services/product-service.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {catchError, of} from "rxjs";
 import {ActivatedRoute, Router} from "@angular/router";
-import {ProductRequest} from "../../../api/models/product-request";
-import {CategoryResponse} from "../../../api/models/category-response";
-import {SubCategoryResponse} from "../../../api/models/sub-category-response";
-import {CategoryServiceService} from "../../../api/services/category-service.service";
-import {BrandResponse} from "../../../api/models/brand-response";
+import {CategoryDto} from "../../../api/models/category-dto";
+import {ProductControllerService} from "../../../api/services/product-controller.service";
+import {CategoryControllerService} from "../../../api/services/category-controller.service";
 
 @Component({
-    selector: 'app-product-form',
-    templateUrl: './product-form.component.html',
-    styleUrls: ['./product-form.component.scss'],
-    standalone: false
+  selector: 'app-product-form',
+  templateUrl: './product-form.component.html',
+  styleUrls: ['./product-form.component.scss'],
+  standalone: false
 })
 export class ProductFormComponent implements OnInit {
-
+//todo sub sima categoryt kezeli
   protected editingMode: boolean = false;
   protected id: string = "";
   protected displayedColumnsIllustration = ["fileName", "actions"];
   protected productForm = new FormGroup({
     productName: new FormControl<string>('', Validators.required),
-    category: new FormControl<string | CategoryResponse>('', Validators.required),
-    subCategory: new FormControl<string | SubCategoryResponse>('', Validators.required),
+    category: new FormControl<string | CategoryDto>('', Validators.required),
+    subCategory: new FormControl<string | CategoryDto>('', Validators.required),
     price: new FormControl<number | undefined>(undefined, Validators.required),
     discount: new FormControl<number | undefined>(undefined, Validators.required),
     brand: new FormControl<string>('', Validators.required),
@@ -33,11 +29,12 @@ export class ProductFormComponent implements OnInit {
     type: new FormControl<string>('', Validators.required),
   })
   protected illustrationImages: File[] = [];
-  protected categories: CategoryResponse[] = [];
-  protected filteredCategories: CategoryResponse[] = [];
-  protected subCategories: SubCategoryResponse[] = [];
-  protected filteredSubCategories: SubCategoryResponse[] = [];
-  constructor(private productService: ProductServiceService, private snackService: MatSnackBar, private router: Router, private activatedRoute: ActivatedRoute, private categoryService: CategoryServiceService) {
+  protected categories: CategoryDto[] = [];
+  protected filteredCategories: CategoryDto[] = [];
+  protected subCategories: CategoryDto[] = [];
+  protected filteredSubCategories: CategoryDto[] = [];
+
+  constructor(private productService: ProductControllerService, private snackService: MatSnackBar, private router: Router, private activatedRoute: ActivatedRoute, private categoryService: CategoryControllerService) {
   }
 
   ngOnInit(): void {
@@ -46,7 +43,10 @@ export class ProductFormComponent implements OnInit {
       if (productId) {
         this.id = productId;
         this.editingMode = true;
-        this.productService.getById({id: productId}).subscribe(value => {
+        this.productService.getProductById({id: productId}).subscribe(value => {
+          //todo
+          /*
+
           this.categoryService.getAll2().subscribe( categories => {
             this.categories = categories;
             this.filteredCategories = categories;
@@ -70,27 +70,40 @@ export class ProductFormComponent implements OnInit {
           Promise.all(images).then(value => {
             this.illustrationImages = [...value];
           })
+
+
+           */
+
+
         })
       } else {
         this.productForm.controls.subCategory.disable();
       }
     })
+    //todo
+    /*
+
     this.categoryService.getAll2().subscribe( value => {
       this.categories = value;
       this.filteredCategories = value;
     });
-    this.productForm.controls.category.valueChanges.subscribe( value => {
-      if(typeof value === 'string' ) {
-        this.filteredCategories = this.categories.filter( category => category.name?.toLowerCase().includes(value.toLowerCase()));
+
+     */
+
+
+    this.productForm.controls.category.valueChanges.subscribe(value => {
+      if (typeof value === 'string') {
+        this.filteredCategories = this.categories.filter(category => category.name?.toLowerCase().includes(value.toLowerCase()));
         this.productForm.controls.subCategory.disable();
       } else {
-        this.subCategories = value?.subCategories || [];
+        //todo
+        //this.subCategories = value?.subCategoryIds || [];
         this.filteredSubCategories = [...this.subCategories];
         this.productForm.controls.subCategory.enable();
       }
     });
-    this.productForm.controls.subCategory.valueChanges.subscribe( value => {
-      if(typeof value === 'string') {
+    this.productForm.controls.subCategory.valueChanges.subscribe(value => {
+      if (typeof value === 'string') {
         this.filteredSubCategories = this.subCategories.filter(subCat => subCat.name?.toLowerCase().includes(value.toLowerCase()));
       }
     })
@@ -105,8 +118,9 @@ export class ProductFormComponent implements OnInit {
     this.illustrationImages = [...this.illustrationImages];
   }
 
-  displayCategory(category: CategoryResponse | SubCategoryResponse | string): string {
-    if(typeof category === 'string') {
+  //todo
+  displayCategory(category: CategoryDto | CategoryDto | string): string {
+    if (typeof category === 'string') {
       return category;
     } else {
       return category.name!;
@@ -115,7 +129,12 @@ export class ProductFormComponent implements OnInit {
 
 
   createProduct() {
-    const product: ProductRequest = {
+
+    //todo
+
+    /*
+
+    const product: ProductDto = {
       brand: this.productForm.value.brand!,
       subCategoryId: (this.productForm.value.subCategory as SubCategoryResponse).id!,
       count: this.productForm.value.quantity!,
@@ -152,6 +171,11 @@ export class ProductFormComponent implements OnInit {
         this.router.navigateByUrl("/admin/productList");
       })
     }
+
+
+     */
+
+
   }
 
   deleteImage(element: File) {

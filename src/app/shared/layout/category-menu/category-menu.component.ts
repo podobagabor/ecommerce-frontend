@@ -1,21 +1,29 @@
 import {Component, OnInit} from '@angular/core';
-import {CategoryServiceService} from "../../../api/services/category-service.service";
-import {CategoryResponse} from "../../../api/models/category-response";
+import {CategoryResponse} from "../../../services/api/models/category-response";
+import {CategoryControllerService} from "../../../api/services/category-controller.service";
 
 @Component({
-    selector: 'app-category-menu',
-    templateUrl: './category-menu.component.html',
-    styleUrls: ['./category-menu.component.scss'],
-    standalone: false
+  selector: 'app-category-menu',
+  templateUrl: './category-menu.component.html',
+  styleUrls: ['./category-menu.component.scss'],
+  standalone: false
 })
-export class CategoryMenuComponent implements OnInit{
+export class CategoryMenuComponent implements OnInit {
 
   protected categories: CategoryResponse[] = [];
-  constructor(private categoryService: CategoryServiceService){}
+
+  constructor(private categoryService: CategoryControllerService) {
+  }
+
   ngOnInit(): void {
+    //todo
+
+    /*
     this.categoryService.getAll2().subscribe( value => {
       this.categories = value;
     })
+
+     */
   }
 
 }

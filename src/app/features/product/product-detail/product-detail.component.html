@@ -10,7 +10,7 @@
       <img [src]="image">
     </div>
     <div class="image-container">
-      <img (mouseenter)="showImage(image)" class="image" *ngFor="let image of product?.imageUrls" [src]="image">
+      <img (mouseenter)="showImage(image)" class="image" *ngFor="let image of product?.images" [src]="image">
     </div>
   </section>
   <section class="information-container">

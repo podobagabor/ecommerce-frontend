@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {UserServiceService} from "../../../api/services/user-service.service";
 import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
+import {UserControllerService} from "../../../api/services/user-controller.service";
 
 @Component({
     selector: 'app-new-password',
@@ -17,7 +17,7 @@ export class NewPasswordComponent implements OnInit {
     password2: new FormControl<string>('', Validators.required),
   })
 
-  constructor(private userService: UserServiceService, private dialog: MatDialog, @Inject(MAT_DIALOG_DATA) private data: any) {
+  constructor(private userService: UserControllerService, private dialog: MatDialog, @Inject(MAT_DIALOG_DATA) private data: any) {
     if(data) {
       this.userId = data['userId'];
     }
@@ -31,6 +31,8 @@ export class NewPasswordComponent implements OnInit {
 
 
   newPassword() {
+    //TODO
+    /*
     this.userService.newPassword({
       body: {
         id: this.userId!,
@@ -39,5 +41,7 @@ export class NewPasswordComponent implements OnInit {
     }).subscribe(_ => {
       this.dialog.closeAll();
     })
+
+     */
   }
 }

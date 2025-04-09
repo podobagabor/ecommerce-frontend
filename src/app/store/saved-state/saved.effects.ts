@@ -3,8 +3,8 @@ import {Actions, createEffect, ofType} from "@ngrx/effects";
 import {exhaustMap, of, withLatestFrom} from "rxjs";
 import {selectUser} from "../app.selectors";
 import {Store} from "@ngrx/store";
-import {UserServiceService} from "../../api/services/user-service.service";
 import {SavedActions} from "./saved.actions";
+import {SavedControllerService} from "../../api/services/saved-controller.service";
 
 @Injectable()
 export class SavedEffects {
@@ -13,12 +13,12 @@ export class SavedEffects {
       withLatestFrom(this.store.select(selectUser)),
       exhaustMap(([action, user]) => {
         if (user) {
-          return this.userService.addSaved({body: [action.productId]});
+          return this.savedService.addProductToSaved({id: action.productId});
         } else {
           let temp = localStorage.getItem("saved");
-          let tempList: string[] = [];
+          let tempList: number[] = [];
           if (temp) {
-            tempList = JSON.parse(temp) as string[];
+            tempList = JSON.parse(temp) as number[];
           }
           tempList.push(action.productId);
           localStorage.setItem("saved", JSON.stringify(tempList));
@@ -33,12 +33,12 @@ export class SavedEffects {
       withLatestFrom(this.store.select(selectUser)),
       exhaustMap(([action, user]) => {
         if (user) {
-          return this.userService.removeSaved({body: [action.productId]});
+          return this.savedService.removeProductFromSaved({id: action.productId});
         } else {
           let temp = localStorage.getItem("saved");
-          let tempList: string[] = [];
+          let tempList: number[] = [];
           if (temp) {
-            tempList = JSON.parse(temp) as string[]
+            tempList = JSON.parse(temp) as number[]
             tempList = tempList.filter(item => item !== action.productId);
           }
           localStorage.setItem("saved", JSON.stringify(tempList));
@@ -49,6 +49,6 @@ export class SavedEffects {
     ),
     {dispatch: false});
 
-  constructor(private store: Store, private actions$: Actions, private userService: UserServiceService) {
+  constructor(private store: Store, private actions$: Actions, private savedService: SavedControllerService) {
   }
 }

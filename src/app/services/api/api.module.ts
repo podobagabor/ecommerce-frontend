@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
 import { ProductServiceService } from './services/product-service.service';
-import { CategoryServiceService } from './services/category-service.service';
+import { CategoryServiceService } from './services/category-service.service'
 import { UserServiceService } from './services/user-service.service';
 import { OrderServiceService } from './services/order-service.service';
 import { AuthServiceService } from './services/auth-service.service';
@@ -43,7 +43,7 @@ export class ApiModule {
     }
   }
 
-  constructor( 
+  constructor(
     @Optional() @SkipSelf() parentModule: ApiModule,
     @Optional() http: HttpClient
   ) {

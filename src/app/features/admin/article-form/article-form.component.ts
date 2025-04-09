@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {ProductServiceService} from "../../../api/services/product-service.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
-import {ArticleServiceService} from "../../../api/services/article-service.service";
+import {ArticleServiceService} from "../../../services/api/services/article-service.service";
 
 @Component({
     selector: 'app-article-form',

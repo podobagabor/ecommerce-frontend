@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {CategoryServiceService} from "../../../api/services/category-service.service";
-import {CategoryResponse} from "../../../api/models/category-response";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {CategoryEditDialogComponent} from "../category-edit-dialog/category-edit-dialog.component";
-import {SubCategoryResponse} from "../../../api/models/sub-category-response";
 import {TorlesDialogComponent} from "../../../core/torles-dialog/torles-dialog.component";
+import {CategoryDto} from "../../../api/models/category-dto";
+import {CategoryControllerService} from "../../../api/services/category-controller.service";
+
 
 @Component({
     selector: 'app-category-list',
@@ -14,9 +14,9 @@ import {TorlesDialogComponent} from "../../../core/torles-dialog/torles-dialog.c
     standalone: false
 })
 export class CategoryListComponent implements OnInit {
-  protected categories: CategoryResponse[] = [];
+  protected categories: CategoryDto[] = [];
 
-  constructor(private categoryService: CategoryServiceService, private dialogService: MatDialog, private snackService: MatSnackBar) {
+  constructor(private categoryService: CategoryControllerService, private dialogService: MatDialog, private snackService: MatSnackBar) {
   }
 
   ngOnInit(): void {
@@ -24,26 +24,35 @@ export class CategoryListComponent implements OnInit {
   }
 
   updateCategories() {
+    //todo
+
+    /*
     this.categoryService.getAll2().subscribe(categories => {
       this.categories = categories;
     })
+
+     */
   }
 
-  deleteCategory(category: CategoryResponse) {
+  deleteCategory(category: CategoryDto) {
     const ref = this.dialogService.open(TorlesDialogComponent);
     ref.afterClosed().subscribe( value => {
       if(value) {
+        /*
+
         this.categoryService.delete1({id: category.id!}).subscribe(_ => {
           this.snackService.open("Sikeres törlés.", undefined, {
             duration: 2000,
           });
           this.updateCategories();
         })
+        */
+
       }
     })
   }
 
-  editCategory(category: CategoryResponse) {
+  editCategory(category: CategoryDto) {
     const ref = this.dialogService.open(CategoryEditDialogComponent, {
       data: {
         category: category,
@@ -57,7 +66,7 @@ export class CategoryListComponent implements OnInit {
     })
   }
 
-  addSubcategory(category: CategoryResponse) {
+  addSubcategory(category: CategoryDto) {
     const ref = this.dialogService.open(CategoryEditDialogComponent, {
       data: {
         category: category,
@@ -70,18 +79,25 @@ export class CategoryListComponent implements OnInit {
       }
     });
   }
-
-  deleteSubCategory(subCategory: SubCategoryResponse) {
+//todo oo
+  deleteSubCategory(subCategory: CategoryDto) {
     const ref = this.dialogService.open(TorlesDialogComponent);
     ref.afterClosed().subscribe( value => {
       if(value) {
+
+        /*
+
+
         this.categoryService.deleteSubCategory({id:subCategory.id!}).subscribe( _ => {
           this.snackService.open("Sikeres törlés", undefined, {
             duration: 2000,
           });
           this.updateCategories();
         });
+        */
       }
+
+
     });
   }
 }

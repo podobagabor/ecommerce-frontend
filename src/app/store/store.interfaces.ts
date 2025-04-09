@@ -1,5 +1,5 @@
-import {UserResponse} from "../api/models/user-response";
+import {UserDtoDetailed} from "../api/models/user-dto-detailed";
 
 export interface UserState {
-  user?: UserResponse
+  user?: UserDtoDetailed
 }

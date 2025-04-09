@@ -1,16 +1,16 @@
 import {createFeatureSelector, createSelector} from "@ngrx/store";
-import {ProductResponse} from "../api/models/product-response";
 import {UserState} from "./store.interfaces";
-import {CartItemResponse} from "../api/models/cart-item-response";
+import {CartElementDto} from "../api/models/cart-element-dto";
+import {ProductDto} from "../api/models/product-dto";
 
-export const products = createFeatureSelector<Array<ProductResponse>>('products');
+export const products = createFeatureSelector<Array<ProductDto>>('products');
 
 export const savedProductsIDs = createFeatureSelector<
-  Array<string>
+  Array<number>
 >('savedProductIDs');
 
 export const cartProducts = createFeatureSelector<
-  CartItemResponse[]
+  CartElementDto[]
 >('cardProduct');
 
 export const selectUserState = createFeatureSelector<

@@ -1,26 +1,26 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {UserServiceService} from "../../../api/services/user-service.service";
-import {ProductResponse} from "../../../api/models/product-response";
 import {CookieService} from "ngx-cookie-service";
 import {AuthenticationService} from "../../../services/authentication.service";
 import {SavedActions} from "../../../store/saved-state/saved.actions";
 import {Store} from "@ngrx/store";
 import {savedProducts} from "../../../store/app.selectors";
 import {Subscription} from "rxjs";
+import {SavedControllerService} from "../../../api/services/saved-controller.service";
+import {ProductDto} from "../../../api/models/product-dto";
 
 @Component({
-    selector: 'app-saved-products',
-    templateUrl: './saved-products.component.html',
-    styleUrl: './saved-products.component.scss',
-    standalone: false
+  selector: 'app-saved-products',
+  templateUrl: './saved-products.component.html',
+  styleUrl: './saved-products.component.scss',
+  standalone: false
 })
 export class SavedProductsComponent implements OnInit, OnDestroy {
-  protected savedItems: ProductResponse[] = [];
+  protected savedItems: ProductDto[] = [];
   protected _savedItems = this.store.select(savedProducts)
   protected hasUser: boolean = false;
   protected subscription?: Subscription;
 
-  constructor(private store: Store, private userService: UserServiceService, private cookieService: CookieService, private authenticationService: AuthenticationService) {
+  constructor(private store: Store, private savedService: SavedControllerService, private cookieService: CookieService, private authenticationService: AuthenticationService) {
   }
 
   ngOnInit(): void {
@@ -28,17 +28,21 @@ export class SavedProductsComponent implements OnInit, OnDestroy {
       this.savedItems = saved
     })
     if (this.authenticationService.getCurrentUser().value) {
-      this.userService.getSaved().subscribe(value => {
+      this.savedService.getSavedOfUser().subscribe(value => {
         this.hasUser = true;
       })
     }
   }
 
-  removeFromSaved($event: string) {
+  removeFromSaved($event: number) {
     this.store.dispatch(SavedActions.removeProduct({productId: $event}))
+    //Todo
+    /*
     if (this.hasUser) {
-      this.userService.removeSaved({body: [$event]})
+      this.savedService.removeProductFromSaved({body: [$event]})
     }
+
+     */
   }
 
   ngOnDestroy(): void {

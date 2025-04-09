@@ -1,44 +1,39 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ProductServiceService} from "../../../api/services/product-service.service";
-import {UserServiceService} from "../../../api/services/user-service.service";
-import {CookieService} from "ngx-cookie-service";
-import {SubCategoryResponse} from "../../../api/models/sub-category-response";
-import {CategoryServiceService} from "../../../api/services/category-service.service";
-import {ActivatedRoute} from "@angular/router";
-import {CategoryResponse} from "../../../api/models/category-response";
-import {PageProductResponse} from "../../../api/models/page-product-response";
 import {PageEvent} from "@angular/material/paginator";
-import {BrandResponse} from "../../../api/models/brand-response";
 import {Store} from "@ngrx/store";
 import {savedProductsIDs, selectUser} from "../../../store/app.selectors";
 import {SavedActions} from "../../../store/saved-state/saved.actions";
-import {ProductsActions} from "../../../store/products-state/products.actions";
 import {Subscription} from "rxjs";
+import {PageProductDto} from "../../../api/models/page-product-dto";
+import {BrandDto} from "../../../api/models/brand-dto";
+import {CategoryDto} from "../../../api/models/category-dto";
 
 @Component({
-    selector: 'app-products-list',
-    templateUrl: './products-list.component.html',
-    styleUrls: ['./products-list.component.scss'],
-    standalone: false
+  selector: 'app-products-list',
+  templateUrl: './products-list.component.html',
+  styleUrls: ['./products-list.component.scss'],
+  standalone: false
 })
 export class ProductsListComponent implements OnInit, OnDestroy {
 
-  protected products: PageProductResponse = {};
+  protected products: PageProductDto = {};
   protected _savedProducts = this.store.select(savedProductsIDs)
-  protected savedProducts: string[] = []
+  protected savedProducts: number[] = []
   protected currentUser = this.store.select(selectUser)
   protected hasUser: boolean = false;
-  protected brands: { brand: BrandResponse, selected: boolean }[] = [];
-  protected categories: { category: SubCategoryResponse, selected: boolean }[] = [];
+  protected brands: { brand: BrandDto, selected: boolean }[] = [];
+  protected categories: { category: CategoryDto, selected: boolean }[] = [];
   protected price: { min: number, max: number } = {min: 0, max: 120000};
   protected discount: { min: number, max: number } = {min: 0, max: 100};
-  protected category?: CategoryResponse;
+  protected category?: CategoryDto;
   protected subscription?: Subscription;
 
-  constructor(private store: Store, private productService: ProductServiceService, private userService: UserServiceService, private cookieService: CookieService, private categoryService: CategoryServiceService, private activatedRoute: ActivatedRoute) {
+  constructor(private store: Store) {
   }
 
   ngOnInit(): void {
+    //todo
+    /*
     let userSubscription = this.currentUser.subscribe(user => {
       this.hasUser = !!user;
     })
@@ -51,6 +46,10 @@ export class ProductsListComponent implements OnInit, OnDestroy {
       const category = params['category'];
       const subcategory = params['subCategory'];
       if (category) {
+
+
+
+
         localStorage.setItem('query', category);
         this.categoryService.getAll2().subscribe(value => {
           let categoryItem: CategoryResponse | undefined = value.find(cat => cat.name === category);
@@ -81,9 +80,11 @@ export class ProductsListComponent implements OnInit, OnDestroy {
         };
       });
     })
+     */
   }
 
   getProducts() {
+    /*
     this.productService.getAll({
       categories: [this.category?.name!],
       brands: this.brands.filter(brand => brand.selected).map(brand => brand.brand.name!),
@@ -98,14 +99,16 @@ export class ProductsListComponent implements OnInit, OnDestroy {
       this.products = products;
       this.store.dispatch(ProductsActions.loadProducts({products: products.content || []}))
     })
+
+     */
   }
 
 
-  addToSaved($event: string) {
+  addToSaved($event: number) {
     this.store.dispatch(SavedActions.addProduct({productId: $event}))
   }
 
-  removeFromSaved($event: string) {
+  removeFromSaved($event: number) {
     this.store.dispatch(SavedActions.removeProduct({productId: $event}))
   }
 

@@ -1,19 +1,17 @@
-import {Component, OnInit} from '@angular/core';
-import {AuthServiceService} from "../../../api/services/auth-service.service";
+import {Component} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {CookieService} from "ngx-cookie-service";
-import {UserServiceService} from "../../../api/services/user-service.service";
 import {MatDialog} from "@angular/material/dialog";
 import {Router} from "@angular/router";
 import {AuthenticationService} from "../../../services/authentication.service";
 
 @Component({
-    selector: 'app-login',
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.scss'],
-    standalone: false
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss'],
+  standalone: false
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
 
   protected loginForm = new FormGroup({
     email: new FormControl<string>('', Validators.required),
@@ -21,7 +19,7 @@ export class LoginComponent implements OnInit {
   })
   protected errorMessage: string = '';
 
-  constructor(private loginService: AuthServiceService, private cookieService: CookieService, private userService: UserServiceService, private dialog: MatDialog, private router: Router, private authenticationService: AuthenticationService) {
+  constructor(private cookieService: CookieService, private dialog: MatDialog, private router: Router, private authenticationService: AuthenticationService) {
   }
 
   login() {
@@ -32,9 +30,4 @@ export class LoginComponent implements OnInit {
       this.errorMessage = value;
     })
   }
-
-  ngOnInit(): void {
-
-  }
-
 }
