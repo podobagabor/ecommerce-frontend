@@ -1,19 +1,75 @@
-import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import {CookieService} from "ngx-cookie-service";
+import {Injectable} from '@angular/core';
+import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
+import {BehaviorSubject, catchError, Observable, switchMap, take, throwError} from 'rxjs';
+import {filter} from "rxjs/operators";
+import {TokenService} from "../services/TokenService/token.service";
+import {Store} from "@ngrx/store";
+import {UserActions} from "../store/user-state/user.actions";
 
 @Injectable()
 export class AuthHeaderInterceptor implements HttpInterceptor {
 
-  constructor(private cookieService: CookieService) {}
+  private isRefreshing = false;
 
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    const token = this.cookieService.get("accessToken");
-    let clonedRequest = request;
-    if(token) {
-      clonedRequest = request.clone({ headers: request.headers.set('Authorization',"Bearer " + token)});
+  private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+
+  constructor(private tokenService: TokenService, private store: Store) {
+  }
+
+
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    let token = this.tokenService.getAccessToken();
+    if (token) {
+      request = this.addAuthHeader(request, token);
     }
-    return next.handle(clonedRequest);
+
+    return next.handle(request).pipe(
+      catchError(error => {
+        if (error instanceof HttpErrorResponse && error.status === 401) {
+          return this.handleUnauthorized(request, next);
+        } else {
+          return throwError(error);
+        }
+      })
+    );
+  }
+
+
+  private addAuthHeader(request: HttpRequest<any>, token: string) {
+    return request.clone({
+      setHeaders: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+  }
+
+
+  private handleUnauthorized(request: HttpRequest<any>, next: HttpHandler) {
+
+    if (!this.isRefreshing) {
+      this.isRefreshing = true;
+      this.refreshTokenSubject.next(null);
+
+      return this.tokenService.getNewToken().pipe(
+        switchMap((user: any) => {
+          this.isRefreshing = false;
+          this.refreshTokenSubject.next(user.accessToken);
+          return next.handle(this.addAuthHeader(request, user.accessToken));
+        }),
+        catchError((err) => {
+          this.isRefreshing = false;
+          this.store.dispatch(UserActions.logout());
+          return throwError(err);
+        })
+      );
+    } else {
+      return this.refreshTokenSubject.pipe(
+        filter(token => token != null),
+        take(1),
+        switchMap(accessToken => {
+          return next.handle(this.addAuthHeader(request, accessToken));
+        })
+      );
+    }
   }
 }

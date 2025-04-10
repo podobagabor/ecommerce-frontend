@@ -22,8 +22,8 @@ import { modifyUser } from '../fn/user-controller/modify-user';
 import { ModifyUser$Params } from '../fn/user-controller/modify-user';
 import { requestPasswordChange } from '../fn/user-controller/request-password-change';
 import { RequestPasswordChange$Params } from '../fn/user-controller/request-password-change';
-import { requestPasswordChange1 } from '../fn/user-controller/request-password-change-1';
-import { RequestPasswordChange1$Params } from '../fn/user-controller/request-password-change-1';
+import { setNewPassword } from '../fn/user-controller/set-new-password';
+import { SetNewPassword$Params } from '../fn/user-controller/set-new-password';
 import { UserDto } from '../models/user-dto';
 import { UserDtoDetailed } from '../models/user-dto-detailed';
 import { validateUserEmail } from '../fn/user-controller/validate-user-email';
@@ -60,8 +60,33 @@ export class UserControllerService extends BaseService {
     );
   }
 
+  /** Path part for operation `setNewPassword()` */
+  static readonly SetNewPasswordPath = '/api/user/setNewPassword';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `setNewPassword()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  setNewPassword$Response(params: SetNewPassword$Params, context?: HttpContext): Observable<StrictHttpResponse<ActionResponseDto>> {
+    return setNewPassword(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `setNewPassword$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  setNewPassword(params: SetNewPassword$Params, context?: HttpContext): Observable<ActionResponseDto> {
+    return this.setNewPassword$Response(params, context).pipe(
+      map((r: StrictHttpResponse<ActionResponseDto>): ActionResponseDto => r.body)
+    );
+  }
+
   /** Path part for operation `requestPasswordChange()` */
-  static readonly RequestPasswordChangePath = '/api/user/setNewPassword';
+  static readonly RequestPasswordChangePath = '/api/user/passwordChangeRequest';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -81,31 +106,6 @@ export class UserControllerService extends BaseService {
    */
   requestPasswordChange(params: RequestPasswordChange$Params, context?: HttpContext): Observable<ActionResponseDto> {
     return this.requestPasswordChange$Response(params, context).pipe(
-      map((r: StrictHttpResponse<ActionResponseDto>): ActionResponseDto => r.body)
-    );
-  }
-
-  /** Path part for operation `requestPasswordChange1()` */
-  static readonly RequestPasswordChange1Path = '/api/user/passwordChangeRequest';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `requestPasswordChange1()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  requestPasswordChange1$Response(params: RequestPasswordChange1$Params, context?: HttpContext): Observable<StrictHttpResponse<ActionResponseDto>> {
-    return requestPasswordChange1(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `requestPasswordChange1$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  requestPasswordChange1(params: RequestPasswordChange1$Params, context?: HttpContext): Observable<ActionResponseDto> {
-    return this.requestPasswordChange1$Response(params, context).pipe(
       map((r: StrictHttpResponse<ActionResponseDto>): ActionResponseDto => r.body)
     );
   }

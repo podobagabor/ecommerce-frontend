@@ -12,11 +12,9 @@ export class HttpErrorInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
         catchError((err) =>{
-          console.log('külsü')
           if(err.error.error[0].ReasonStatus === 4012) {
             this.authService.refreshToken({Authorization: this.cookieService.get('refreshToken')}).pipe(
               catchError( (err) => {
-                console.log('belső');
                 if(err.error.error[0].ReasonStatus === 4012) {
 
                 }

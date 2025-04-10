@@ -50,6 +50,7 @@ export class ChangePasswordComponent implements OnInit {
 
   authorize() {
     //todo ránézni
+    /*
     this.userService.getCurrentUser().subscribe(user => {
       this.currentUser = user;
       this.authService.login(
@@ -59,5 +60,9 @@ export class ChangePasswordComponent implements OnInit {
         this.isAuthorized = !!value.accessToken;
       })
     })
+
+     */
   }
-}
+
+
+  }

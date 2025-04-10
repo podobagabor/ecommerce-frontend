@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthServiceService} from "../../../services/api/services/auth-service.service";
+import {UserControllerService} from "../../../api/services/user-controller.service";
 
 @Component({
     selector: 'app-forgot-password',
@@ -15,12 +16,12 @@ export class ForgotPasswordComponent {
     email: new FormControl<string>('',Validators.required),
   })
   isEmailUnknown: boolean = false;
-  constructor(private authService: AuthServiceService) {
+  constructor(private userService: UserControllerService) {
   }
 
   forgotPassword() {
     this.isEmailUnknown = false;
-    this.authService.forgottenPassword({body: { email: this.forgotPasswordForm.value.email!}}).subscribe( value => {
+    this.userService({body: { email: this.forgotPasswordForm.value.email!}}).subscribe( value => {
       //todo: ez is
       /*if() {
         this.isEmailUnknown = true;

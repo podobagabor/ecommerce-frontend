@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { KeyCloakService } from './key-cloak.service';
+import { TokenService } from './token.service';
 
-describe('KeyCloakService', () => {
-  let service: KeyCloakService;
+describe('TokenService', () => {
+  let service: TokenService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(KeyCloakService);
+    service = TestBed.inject(TokenService);
   });
 
   it('should be created', () => {

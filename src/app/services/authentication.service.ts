@@ -4,14 +4,14 @@ import {CookieService} from "ngx-cookie-service";
 import {Store} from "@ngrx/store";
 import {UserActions} from "../store/user-state/user.actions";
 import {SavedActions} from "../store/saved-state/saved.actions";
-import {ProductsActions} from "../store/products-state/products.actions";
 import {CartActions} from "../store/cart-state/cart.actions";
 
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {UserControllerService} from "../api/services/user-controller.service";
 import {KeycloakLoginResponse} from "./KeycloakLoginResponse";
 import {UserDtoDetailed} from "../api/models/user-dto-detailed";
-import {ProductControllerService} from "../api/services/product-controller.service";
+import {map} from "rxjs/operators";
+import {selectUser} from "../store/app.selectors";
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,9 @@ export class AuthenticationService {
   protected currentUser = new BehaviorSubject<UserDtoDetailed | undefined>(undefined);
 
 
-  constructor(private userService: UserControllerService, private productService: ProductControllerService, private store: Store, private cookieService: CookieService,
+  constructor(private userService: UserControllerService,
+              //private productService: ProductControllerService,
+              private store: Store, private cookieService: CookieService,
               private http: HttpClient) {
     if (this.cookieService.get("accessToken") !== '') {
       this.userService.getCurrentUser().subscribe(user => {
@@ -37,6 +39,11 @@ export class AuthenticationService {
         this.store.dispatch(CartActions.init({
           products: user.cartItems || []
         }))
+        this.store.select(selectUser).subscribe(value => {
+          if (!value && !this.currentUser.value) {
+            this.logout();
+          }
+        })
       })
     } else {
       if (localStorage.getItem("saved")) {
@@ -47,13 +54,24 @@ export class AuthenticationService {
       }
 
     }
+    /*
     this.productService.getProductsByParams().subscribe(products => {
       this.store.dispatch(ProductsActions.loadProducts({products: products.content || []}))
     })
+
+     */
   }
 
   getCurrentUser() {
     return this.currentUser;
+  }
+
+  getAccessToken(): string | null {
+    return this.cookieService.get('accessToken') || null;
+  }
+
+  getRefreshToken(): string | null {
+    return this.cookieService.get('refreshToken') || null;
   }
 
   login(email: string, password: string): Promise<any> {
@@ -69,12 +87,10 @@ export class AuthenticationService {
         })
       ).subscribe(value => {
         if (typeof value !== "string") {
-          console.log(value.access_token)
           this.cookieService.set("accessToken", value.access_token);
           this.cookieService.set("refreshToken", value.refresh_token);
           this.userService.getCurrentUser().subscribe(user => {
             this.currentUser?.next(user);
-            console.log(user);
             this.store.dispatch(UserActions.login({
                 user: user
               }
@@ -93,6 +109,57 @@ export class AuthenticationService {
       })
     })
 
+  }
+
+  /*
+  getNewToken(): Promise<any> {
+    const refreshToken = this.cookieService.get("refreshToken");
+    const refreshRequest = new HttpParams()
+      .set("grant_type", "refresh_token")
+      .set("client_id", "ecommerce-rest-api")
+      .set("refresh_token", refreshToken);
+    return new Promise<any>((resolve, reject) => {
+      this.http.post<KeycloakLoginResponse>("/realms/ecommerce/protocol/openid-connect/token", refreshRequest).pipe(
+        catchError((err) => {
+          return of("Hiba a bejelentkezéskor");
+        })).subscribe(value => {
+        if (typeof value !== "string") {
+          this.cookieService.set("accessToken", value.access_token);
+          this.cookieService.set("refreshToken", value.refresh_token);
+          resolve(true);
+        } else {
+          reject(value)
+        }
+      })
+    })
+  }
+
+   */
+
+  getNewToken(): Observable<KeycloakLoginResponse | string> {
+    const refreshToken = this.cookieService.get("refreshToken");
+    const refreshRequest = new HttpParams()
+      .set("grant_type", "refresh_token")
+      .set("client_id", "ecommerce-rest-api")
+      .set("refresh_token", refreshToken);
+    return this.http.post<KeycloakLoginResponse>("/realms/ecommerce/protocol/openid-connect/token", refreshRequest).pipe(
+      catchError((err) => {
+        return of("Hiba a bejelentkezéskor");
+      }),
+      map(value => {
+        if (typeof value !== "string") {
+          this.cookieService.set("accessToken", value.access_token);
+          this.cookieService.set("refreshToken", value.refresh_token);
+        }
+        return value
+      }))
+  }
+
+  isTokenExpired(token: string): boolean {
+    if (!token) return false;
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const expiry = payload.exp * 1000;
+    return Date.now() > expiry - 60 * 1000;
   }
 
   register(email: string, password: string, firstName: string, lastName: string, phoneNumber: string, gender: "MALE" | "FEMALE"): Observable<any> {
@@ -153,8 +220,12 @@ export class AuthenticationService {
 
 
   logout() {
+    this.logoutWithoutDispatchingAction()
+    this.store.dispatch(UserActions.logout());
+  }
+
+  logoutWithoutDispatchingAction() {
     this.cookieService.deleteAll();
     this.currentUser?.next(undefined);
-    this.store.dispatch(UserActions.logout())
   }
 }

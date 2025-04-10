@@ -43,6 +43,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
         })
       }
     })
+    this.currentUser$.subscribe( user => {})
   }
 
   login() {
