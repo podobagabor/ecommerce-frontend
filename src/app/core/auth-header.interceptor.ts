@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
 import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
-import {BehaviorSubject, catchError, Observable, switchMap, take, throwError} from 'rxjs';
+import {BehaviorSubject, catchError, Observable, of, switchMap, take, throwError} from 'rxjs';
 import {filter} from "rxjs/operators";
 import {TokenService} from "../services/TokenService/token.service";
 import {Store} from "@ngrx/store";
 import {UserActions} from "../store/user-state/user.actions";
+import {KeycloakLoginResponse} from "../services/KeycloakLoginResponse";
 
 @Injectable()
 export class AuthHeaderInterceptor implements HttpInterceptor {
@@ -51,10 +52,15 @@ export class AuthHeaderInterceptor implements HttpInterceptor {
       this.refreshTokenSubject.next(null);
 
       return this.tokenService.getNewToken().pipe(
-        switchMap((user: any) => {
+        switchMap((keycloakResponse: KeycloakLoginResponse | string) => {
           this.isRefreshing = false;
-          this.refreshTokenSubject.next(user.accessToken);
-          return next.handle(this.addAuthHeader(request, user.accessToken));
+          if(typeof keycloakResponse === "object") {
+            this.refreshTokenSubject.next(keycloakResponse.access_token);
+            return next.handle(this.addAuthHeader(request, keycloakResponse.access_token));
+          } else {
+            //Todo
+            return next.handle(this.addAuthHeader(request, ""));
+          }
         }),
         catchError((err) => {
           this.isRefreshing = false;

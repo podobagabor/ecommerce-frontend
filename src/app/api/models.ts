@@ -20,3 +20,4 @@ export { SortObject } from './models/sort-object';
 export { UserCreateDto } from './models/user-create-dto';
 export { UserDto } from './models/user-dto';
 export { UserDtoDetailed } from './models/user-dto-detailed';
+export { UserModifyDto } from './models/user-modify-dto';

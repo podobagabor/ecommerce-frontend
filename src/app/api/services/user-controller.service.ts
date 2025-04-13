@@ -44,7 +44,7 @@ export class UserControllerService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  modifyUser$Response(params: ModifyUser$Params, context?: HttpContext): Observable<StrictHttpResponse<UserDto>> {
+  modifyUser$Response(params: ModifyUser$Params, context?: HttpContext): Observable<StrictHttpResponse<UserDtoDetailed>> {
     return modifyUser(this.http, this.rootUrl, params, context);
   }
 
@@ -54,9 +54,9 @@ export class UserControllerService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  modifyUser(params: ModifyUser$Params, context?: HttpContext): Observable<UserDto> {
+  modifyUser(params: ModifyUser$Params, context?: HttpContext): Observable<UserDtoDetailed> {
     return this.modifyUser$Response(params, context).pipe(
-      map((r: StrictHttpResponse<UserDto>): UserDto => r.body)
+      map((r: StrictHttpResponse<UserDtoDetailed>): UserDtoDetailed => r.body)
     );
   }
 

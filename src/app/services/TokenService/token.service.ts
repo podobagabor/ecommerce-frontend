@@ -46,8 +46,4 @@ export class TokenService {
         return value
       }))
   }
-
-  logout() {
-
-  }
 }

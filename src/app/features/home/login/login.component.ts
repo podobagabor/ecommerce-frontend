@@ -23,9 +23,11 @@ export class LoginComponent {
   }
 
   login() {
+    this.cookieService.deleteAll();
     this.authenticationService.login(this.loginForm.value.email!, this.loginForm.value.password!).then(_ => {
       this.router.navigateByUrl('/home');
       this.dialog.closeAll();
+      console.log("van")
     }).catch(value => {
       this.errorMessage = value;
     })

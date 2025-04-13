@@ -8,13 +8,14 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { UserDto } from '../../models/user-dto';
+import { UserDtoDetailed } from '../../models/user-dto-detailed';
+import { UserModifyDto } from '../../models/user-modify-dto';
 
 export interface ModifyUser$Params {
-      body: UserDto
+      body: UserModifyDto
 }
 
-export function modifyUser(http: HttpClient, rootUrl: string, params: ModifyUser$Params, context?: HttpContext): Observable<StrictHttpResponse<UserDto>> {
+export function modifyUser(http: HttpClient, rootUrl: string, params: ModifyUser$Params, context?: HttpContext): Observable<StrictHttpResponse<UserDtoDetailed>> {
   const rb = new RequestBuilder(rootUrl, modifyUser.PATH, 'put');
   if (params) {
     rb.body(params.body, 'application/json');
@@ -25,7 +26,7 @@ export function modifyUser(http: HttpClient, rootUrl: string, params: ModifyUser
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<UserDto>;
+      return r as StrictHttpResponse<UserDtoDetailed>;
     })
   );
 }

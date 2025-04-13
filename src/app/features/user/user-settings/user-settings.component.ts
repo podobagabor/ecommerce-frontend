@@ -6,9 +6,12 @@ import {ChangePasswordComponent} from "../change-password/change-password.compon
 import {Router} from "@angular/router";
 import {CookieService} from "ngx-cookie-service";
 import {AuthenticationService} from "../../../services/authentication.service";
-import {AddressRequest} from "../../../services/api/models/address-request";
 import {UserControllerService} from "../../../api/services/user-controller.service";
 import {UserDtoDetailed} from "../../../api/models/user-dto-detailed";
+import {Store} from "@ngrx/store";
+import {selectUser} from "../../../store/app.selectors";
+import {Address} from "../../../api/models/address";
+import {UserActions} from "../../../store/user-state/user.actions";
 
 @Component({
   selector: 'app-user-settings',
@@ -19,25 +22,13 @@ import {UserDtoDetailed} from "../../../api/models/user-dto-detailed";
 export class UserSettingsComponent implements OnInit {
 
   protected currentUser?: UserDtoDetailed;
-  protected billingAddressIsTheSame: boolean = false;
   protected emailChanged: boolean = false;
-  protected hasBillingAddress: boolean = false;
   protected userShippingAddressForm = new FormGroup({
     country: new FormControl<string>('', Validators.required),
-    zipCode: new FormControl<number | undefined>(undefined, Validators.required),
+    zipCode: new FormControl<string | undefined>(undefined, Validators.required),
     city: new FormControl<string>('', Validators.required),
     street: new FormControl<string>('', Validators.required),
-    streetNumber: new FormControl<number | undefined>(undefined, Validators.required),
-    floor: new FormControl<string>(''),
-  })
-
-  protected userBillingAddressForm = new FormGroup({
-    itsTheSame: new FormControl<boolean>(false),
-    country: new FormControl<string>('', Validators.required),
-    zipCode: new FormControl<number | undefined>(undefined, Validators.required),
-    city: new FormControl<string>('', Validators.required),
-    street: new FormControl<string>('', Validators.required),
-    streetNumber: new FormControl<number | undefined>(undefined, Validators.required),
+    streetNumber: new FormControl<string | undefined>(undefined, Validators.required),
     floor: new FormControl<string>(''),
   })
 
@@ -49,13 +40,13 @@ export class UserSettingsComponent implements OnInit {
     gender: new FormControl<'MALE' | 'FEMALE'>('MALE'),
   })
 
-  constructor(private userService: UserControllerService, private snackService: MatSnackBar, private dialog: MatDialog, private router: Router, private cookieService: CookieService, private authenticationService: AuthenticationService) {
+  constructor(private store: Store, private userService: UserControllerService, private snackService: MatSnackBar, private dialog: MatDialog, private router: Router, private cookieService: CookieService, private authenticationService: AuthenticationService) {
   }
 
   ngOnInit(): void {
-    this.getCurrentUser();
-    this.userBillingAddressForm.controls.itsTheSame.valueChanges.subscribe(value => {
-      this.billingAddressIsTheSame = value!
+    this.store.select(selectUser).subscribe(user => {
+      this.currentUser = user;
+      this.setValues();
     })
   }
 
@@ -63,84 +54,47 @@ export class UserSettingsComponent implements OnInit {
     const ref = this.dialog.open(ChangePasswordComponent);
   }
 
-  getCurrentUser() {
-    this.userService.getCurrentUser().subscribe(value => {
-      this.currentUser = value;
-      //todo
-      /*
-      if (value) {
-        this.userSettingsForm.patchValue({
-          email: value.email,
-          gender: value.gender,
-          phoneNumber: value.t,
-          familyName: value.lastname,
-          firstName: value.firstname,
-        })
-        if (value.shippingAddress) {
-          this.userShippingAddressForm.patchValue({
-            city: value.shippingAddress.city,
-            floor: value.shippingAddress.floorNumber,
-            street: value.shippingAddress.street,
-            zipCode: value.shippingAddress.zipCode,
-            streetNumber: value.shippingAddress.streetNumber,
-            country: value.shippingAddress.country,
-          });
-        }
-        if (value.billingAddress) {
-          this.hasBillingAddress = true;
-          this.userBillingAddressForm.patchValue({
-            city: value.billingAddress.city,
-            floor: value.billingAddress.floorNumber,
-            street: value.billingAddress.street,
-            zipCode: value.billingAddress.zipCode,
-            streetNumber: value.billingAddress.streetNumber,
-            country: value.billingAddress.country,
-          });
-        }
-      }
-
-       */
+  setValues() {
+    this.userSettingsForm.patchValue({
+      email: this.currentUser?.email || '',
+      gender: this.currentUser?.gender || "MALE",
+      phoneNumber: this.currentUser?.phone || '',
+      familyName: this.currentUser?.lastName || '',
+      firstName: this.currentUser?.firsName || '',
     })
+    if (this.currentUser?.address) {
+      this.userShippingAddressForm.patchValue({
+        city: this.currentUser.address.city || '',
+        street: this.currentUser.address.street || '',
+        zipCode: this.currentUser.address.postalCode || '',
+        streetNumber: this.currentUser.address.number || '',
+        country: this.currentUser.address.country || '',
+      });
+    }
   }
 
   save() {
-    let shippingAddress: AddressRequest | undefined = undefined;
-    let billingAddress: AddressRequest | undefined = undefined;
+    let address: Address | undefined = undefined;
     if (this.userShippingAddressForm.valid) {
-      shippingAddress = {
+      address = {
         country: this.userShippingAddressForm.value.country!,
         city: this.userShippingAddressForm.value.city!,
-        streetNumber: this.userShippingAddressForm.value.streetNumber!,
-        zipCode: this.userShippingAddressForm.value.zipCode!,
-        floorNumber: this.userShippingAddressForm.value.floor ?? '',
-        street: this.userShippingAddressForm.value.street ?? '',
+        number: this.userShippingAddressForm.value.streetNumber!,
+        postalCode: this.userShippingAddressForm.value.zipCode!,
+        street: this.userShippingAddressForm.value.street!,
       }
-    }
-    if (!this.billingAddressIsTheSame && this.userBillingAddressForm.valid) {
-      billingAddress = {
-        country: this.userBillingAddressForm.value.country!,
-        city: this.userBillingAddressForm.value.city!,
-        streetNumber: this.userBillingAddressForm.value.streetNumber!,
-        zipCode: this.userBillingAddressForm.value.zipCode!,
-        floorNumber: this.userBillingAddressForm.value.floor ?? '',
-        street: this.userBillingAddressForm.value.street ?? '',
-      }
-    } else if (this.userShippingAddressForm.valid && this.billingAddressIsTheSame) {
-      billingAddress = shippingAddress;
     }
     if (this.currentUser?.email !== this.userSettingsForm.value.email) {
       this.emailChanged = true;
     }
-    //todo
     this.userService.modifyUser({
       body: {
-        //billingAddress: billingAddress,
         gender: this.userSettingsForm.value.gender!,
-        //  shippingAddress: shippingAddress,
+        address: address,
         email: this.userSettingsForm.value.email!,
-        //  phoneNumber: this.userSettingsForm.value.phoneNumber!,
+        phone: this.userSettingsForm.value.phoneNumber!,
         lastName: this.userSettingsForm.value.familyName!,
-        firsName: this.userSettingsForm.value.firstName!
+        firstName: this.userSettingsForm.value.firstName!,
       }
     }).subscribe(value => {
       if (value) {
@@ -150,6 +104,7 @@ export class UserSettingsComponent implements OnInit {
             duration: 3000
           })
         } else {
+          this.store.dispatch(UserActions.modified({user: value}))
           this.snackService.open("Sikeres adatmódosítás.", undefined, {
             duration: 3000
           })
