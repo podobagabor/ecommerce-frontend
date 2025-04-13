@@ -11,6 +11,7 @@ export interface UserDto {
   gender?: 'MALE' | 'FEMALE';
   id?: string;
   lastName?: string;
+  phone?: string;
   role?: 'ADMIN' | 'USER' | 'SUPER_ADMIN';
   savedNumber?: number;
 }

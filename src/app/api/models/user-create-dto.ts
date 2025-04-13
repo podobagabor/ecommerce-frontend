@@ -11,5 +11,6 @@ export interface UserCreateDto {
   id?: string;
   lastName?: string;
   password?: string;
+  phone?: string;
   role?: 'ADMIN' | 'USER' | 'SUPER_ADMIN';
 }

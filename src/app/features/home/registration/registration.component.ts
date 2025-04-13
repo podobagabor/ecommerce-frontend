@@ -34,22 +34,6 @@ export class RegistrationComponent implements OnInit {
     })
   }
 
-  /*
-  registrate() {
-    this.authService.register({body: {
-      gender: this.registrationForm.value.gender!,
-        email: this.registrationForm.value.email!,
-        phoneNumber: this.registrationForm.value.phoneNumber!,
-        firstname: this.registrationForm.value.firstName!,
-        lastname: this.registrationForm.value.familyName!,
-        password: this.registrationForm.value.passwordFirst!,
-      }}).subscribe( value => {
-        this.registrated = true;
-    })
-  }
-
-   */
-
   registration() {
     this.userService.createUser({
       body: {
@@ -61,6 +45,7 @@ export class RegistrationComponent implements OnInit {
         firstName: this.registrationForm.value.firstName!,
         lastName: this.registrationForm.value.familyName!,
         role: "USER",
+        phone: this.registrationForm.value.phoneNumber!,
       }
     }).subscribe(_ => this.registrated = true)
   }

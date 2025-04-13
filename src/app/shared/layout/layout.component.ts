@@ -33,12 +33,12 @@ export class LayoutComponent implements OnInit, OnDestroy {
       const confirmEmail = params['emailVerification'];
       if (forgotPassword) {
         this.dialog.open(NewPasswordComponent, {
-          data: {userId: params['id']},
+          data: {userToken: params['userToken']},
           disableClose: true,
         })
       } else if (confirmEmail) {
         this.dialog.open(EmailVerifyComponent, {
-          data: {userId: params['id']},
+          data: {userToken: params['userToken']},
           disableClose: true,
         })
       }

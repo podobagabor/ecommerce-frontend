@@ -11,7 +11,8 @@ import {UserControllerService} from "../../../api/services/user-controller.servi
 })
 export class NewPasswordComponent implements OnInit {
   protected passwordsNotCorrect: boolean = false;
-  protected userId?: string;
+  protected userToken?: string;
+  protected passwordChanged :  boolean = false;
   protected newPasswordForm = new FormGroup({
     password1: new FormControl<string>('', Validators.required),
     password2: new FormControl<string>('', Validators.required),
@@ -19,7 +20,7 @@ export class NewPasswordComponent implements OnInit {
 
   constructor(private userService: UserControllerService, private dialog: MatDialog, @Inject(MAT_DIALOG_DATA) private data: any) {
     if(data) {
-      this.userId = data['userId'];
+      this.userToken = data['userToken'];
     }
   }
 
@@ -31,17 +32,13 @@ export class NewPasswordComponent implements OnInit {
 
 
   newPassword() {
-    //TODO
-    /*
-    this.userService.newPassword({
+    this.userService.setNewPassword({
       body: {
-        id: this.userId!,
-        password: this.newPasswordForm.value.password2!
+        token: this.userToken,
+        newPassword: this.newPasswordForm.value.password2!
       }
     }).subscribe(_ => {
       this.dialog.closeAll();
     })
-
-     */
   }
 }
