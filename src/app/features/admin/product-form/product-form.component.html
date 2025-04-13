@@ -23,14 +23,6 @@
         </mat-autocomplete>
         <input matInput type="text" [matAutocomplete]="auto1" formControlName="category">
       </mat-form-field>
-      <mat-form-field class="two-form__form">
-        <mat-label>Alkategória</mat-label>
-        <mat-autocomplete #auto2="matAutocomplete" [displayWith]="displayCategory">
-          <mat-option *ngFor="let subCategory of filteredSubCategories"
-                      [value]="subCategory">{{subCategory.name}}</mat-option>
-        </mat-autocomplete>
-        <input matInput type="text" [matAutocomplete]="auto2" formControlName="subCategory">
-      </mat-form-field>
     </div>
     <div class="two-form" [formGroup]="productForm">
       <mat-form-field class="two-form__form">

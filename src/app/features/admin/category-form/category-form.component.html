@@ -7,6 +7,54 @@
       <mat-label>Kategória megnevezése</mat-label>
       <input matInput type="text" formControlName="name">
     </mat-form-field>
+    <mat-form-field>
+      <mat-label>Alkategóriák</mat-label>
+      <mat-chip-grid #chipGrid>
+        @for (category of subCategories; track category.id) {
+          <mat-chip-row (removed)="remove(category)">
+            {{ category.name }}
+            <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+        }
+      </mat-chip-grid>
+      <input
+        formControlName="subCategory"
+        name="subCategory"
+        #subCategoryInput
+        [matChipInputFor]="chipGrid"
+        [matAutocomplete]="subCategoriesAutocomplete"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+      />
+      <mat-autocomplete #subCategoriesAutocomplete="matAutocomplete"
+                        (optionSelected)="selected($event); subCategoryInput.value = ''">
+        @for (category of filteredCategories; track category.id) {
+          <mat-option [value]="category">{{ category.name }}</mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Szülő kategória</mat-label>
+      <input
+        matInput
+        formControlName="parentCategory"
+        name="parentCategory"
+        [matAutocomplete]="parentCategoriesAutocomplete"
+      />
+      <mat-autocomplete #parentCategoriesAutocomplete="matAutocomplete" [displayWith]="displayCategory">
+        @for (category of filteredParentCategories; track category.id) {
+          <mat-option [value]="category">{{ category.name }}</mat-option>
+        }
+      </mat-autocomplete>
+      @if (categoryForm.controls.parentCategory.errors?.["notObject"]) {
+        <mat-error>Helytelen érték</mat-error>
+      }
+    </mat-form-field>
+    @if (categoryError) {
+      <p class="password-error">Ugyanaz a kategória nem tartozhat mindkét csoporthoz.</p>
+    }
   </section>
-  <button [disabled]="categoryForm.invalid" (click)="createCategory()" class="my-button-form">Kategória létrehozása</button>
+  <button [disabled]="categoryForm.invalid" (click)="createCategory()" class="my-button-form">Kategória létrehozása
+  </button>
 </main>

@@ -13,7 +13,6 @@ import {CategoryControllerService} from "../../../api/services/category-controll
   standalone: false
 })
 export class ProductFormComponent implements OnInit {
-//todo sub sima categoryt kezeli
   protected editingMode: boolean = false;
   protected id: string = "";
   protected displayedColumnsIllustration = ["fileName", "actions"];

@@ -292,4 +292,7 @@ mat-expansion-panel-header:focus {
   background-color: var(--light-primary) !important;
 }
 
+.password-error {
+  color: var(--warn);
+}
 
