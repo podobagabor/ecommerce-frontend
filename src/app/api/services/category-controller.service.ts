@@ -11,6 +11,7 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { CategoryDetailedDto } from '../models/category-detailed-dto';
 import { CategoryDto } from '../models/category-dto';
 import { createCategory } from '../fn/category-controller/create-category';
 import { CreateCategory$Params } from '../fn/category-controller/create-category';
@@ -20,6 +21,8 @@ import { getAllCategories } from '../fn/category-controller/get-all-categories';
 import { GetAllCategories$Params } from '../fn/category-controller/get-all-categories';
 import { getCategoryById } from '../fn/category-controller/get-category-by-id';
 import { GetCategoryById$Params } from '../fn/category-controller/get-category-by-id';
+import { getMainCategories } from '../fn/category-controller/get-main-categories';
+import { GetMainCategories$Params } from '../fn/category-controller/get-main-categories';
 import { modifyCategory } from '../fn/category-controller/modify-category';
 import { ModifyCategory$Params } from '../fn/category-controller/modify-category';
 
@@ -101,6 +104,31 @@ export class CategoryControllerService extends BaseService {
   getCategoryById(params: GetCategoryById$Params, context?: HttpContext): Observable<CategoryDto> {
     return this.getCategoryById$Response(params, context).pipe(
       map((r: StrictHttpResponse<CategoryDto>): CategoryDto => r.body)
+    );
+  }
+
+  /** Path part for operation `getMainCategories()` */
+  static readonly GetMainCategoriesPath = '/api/category/main';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getMainCategories()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getMainCategories$Response(params?: GetMainCategories$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CategoryDetailedDto>>> {
+    return getMainCategories(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getMainCategories$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getMainCategories(params?: GetMainCategories$Params, context?: HttpContext): Observable<Array<CategoryDetailedDto>> {
+    return this.getMainCategories$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<CategoryDetailedDto>>): Array<CategoryDetailedDto> => r.body)
     );
   }
 

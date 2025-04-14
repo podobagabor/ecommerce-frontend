@@ -11,6 +11,7 @@ import { CategoryFormComponent } from './category-form/category-form.component';
 import { CategoryEditDialogComponent } from './category-edit-dialog/category-edit-dialog.component';
 import { OrderManageComponent } from './order-manage/order-manage.component';
 import {FormsModule} from "@angular/forms";
+import {MatTreeNode, MatTreeNodeDef, MatTreeNodePadding, MatTreeNodeToggle} from "@angular/material/tree";
 
 
 
@@ -29,7 +30,11 @@ import {FormsModule} from "@angular/forms";
     CommonModule,
     SharedModule,
     AdminRoutingModule,
-    FormsModule
+    FormsModule,
+    MatTreeNode,
+    MatTreeNodeDef,
+    MatTreeNodePadding,
+    MatTreeNodeToggle
   ]
 })
 export class AdminModule { }

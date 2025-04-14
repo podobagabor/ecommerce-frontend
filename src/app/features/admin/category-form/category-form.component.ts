@@ -29,7 +29,6 @@ export class CategoryFormComponent implements OnInit {
     subCategory: new FormControl<CategoryDto | string>(''),
   })
 
-
   constructor(private categoryService: CategoryControllerService, private router: Router, private snackService: MatSnackBar) {
   }
 
@@ -37,7 +36,8 @@ export class CategoryFormComponent implements OnInit {
     this.categoryService.getAllCategories().pipe(take(1)).subscribe(response => {
       this.categories = response;
       this.filteredCategories = [...this.categories];
-
+    })
+    this.categoryService.getMainCategories().pipe(take(1)).subscribe(response => {
       this.parentCategories = response;
       this.filteredParentCategories = [...this.parentCategories];
     })

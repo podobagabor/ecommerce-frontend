@@ -30,6 +30,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatMomentDateModule} from "@angular/material-moment-adapter";
+import {MatTree, MatTreeNode} from "@angular/material/tree";
 
 export const MY_FORMATS = {
   parse: {
@@ -52,7 +53,7 @@ export const MY_FORMATS = {
     MatAutocompleteModule, MatTableModule, MatDialogModule, MatTabsModule,
     MatTooltipModule, MatSelectModule, MatPaginatorModule, MatChipsModule,
     MatButtonToggleModule, MatSlideToggleModule, MatBadgeModule, MatCheckboxModule,
-    MatExpansionModule, DragDropModule, MatSortModule, MatRadioModule
+    MatExpansionModule, DragDropModule, MatSortModule, MatRadioModule, MatTree
   ],
   exports: [
     CommonModule,
@@ -62,7 +63,7 @@ export const MY_FORMATS = {
     MatAutocompleteModule, MatTableModule, MatDialogModule, MatTabsModule,
     MatTooltipModule, MatSelectModule, MatPaginatorModule, MatChipsModule,
     MatButtonToggleModule, MatSlideToggleModule, MatBadgeModule, MatCheckboxModule,
-    MatExpansionModule, DragDropModule, MatSortModule, MatRadioModule
+    MatExpansionModule, DragDropModule, MatSortModule, MatRadioModule, MatTree
   ],
   providers: [
     {
