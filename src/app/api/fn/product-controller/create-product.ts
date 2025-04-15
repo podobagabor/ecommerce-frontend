@@ -8,11 +8,12 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { ProductCreateDto } from '../../models/product-create-dto';
 import { ProductDto } from '../../models/product-dto';
 
 export interface CreateProduct$Params {
       body?: {
-'product': string;
+'product': ProductCreateDto;
 'images'?: Array<Blob>;
 }
 }
@@ -20,7 +21,7 @@ export interface CreateProduct$Params {
 export function createProduct(http: HttpClient, rootUrl: string, params?: CreateProduct$Params, context?: HttpContext): Observable<StrictHttpResponse<ProductDto>> {
   const rb = new RequestBuilder(rootUrl, createProduct.PATH, 'post');
   if (params) {
-    rb.body(params.body, 'application/json');
+    rb.body(params.body, 'multipart/form-data');
   }
 
   return http.request(

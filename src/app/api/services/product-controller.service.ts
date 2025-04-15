@@ -116,7 +116,7 @@ export class ProductControllerService extends BaseService {
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createProduct()` instead.
    *
-   * This method sends `application/json` and handles request body of type `application/json`.
+   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
    */
   createProduct$Response(params?: CreateProduct$Params, context?: HttpContext): Observable<StrictHttpResponse<ProductDto>> {
     return createProduct(this.http, this.rootUrl, params, context);
@@ -126,7 +126,7 @@ export class ProductControllerService extends BaseService {
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `createProduct$Response()` instead.
    *
-   * This method sends `application/json` and handles request body of type `application/json`.
+   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
    */
   createProduct(params?: CreateProduct$Params, context?: HttpContext): Observable<ProductDto> {
     return this.createProduct$Response(params, context).pipe(

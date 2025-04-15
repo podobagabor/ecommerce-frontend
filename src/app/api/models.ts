@@ -17,6 +17,7 @@ export { OrderDto } from './models/order-dto';
 export { OrderItemDto } from './models/order-item-dto';
 export { PageableObject } from './models/pageable-object';
 export { PageProductDto } from './models/page-product-dto';
+export { ProductCreateDto } from './models/product-create-dto';
 export { ProductDto } from './models/product-dto';
 export { SortObject } from './models/sort-object';
 export { UserCreateDto } from './models/user-create-dto';
