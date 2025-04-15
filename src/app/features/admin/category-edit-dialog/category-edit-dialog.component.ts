@@ -2,62 +2,70 @@ import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA} from "@angular/material/dialog";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {CategoryResponse} from "../../../services/api/models/category-response";
 import {CategoryControllerService} from "../../../api/services/category-controller.service";
+import {CategoryDetailedDto} from "../../../api/models/category-detailed-dto";
+import {CategoryDto} from "../../../api/models/category-dto";
+import {take} from "rxjs";
 
 @Component({
-    selector: 'app-category-edit-dialog',
-    templateUrl: './category-edit-dialog.component.html',
-    styleUrl: './category-edit-dialog.component.scss',
-    standalone: false
+  selector: 'app-category-edit-dialog',
+  templateUrl: './category-edit-dialog.component.html',
+  styleUrl: './category-edit-dialog.component.scss',
+  standalone: false
 })
 export class CategoryEditDialogComponent {
 
-  protected category?: CategoryResponse;
+  protected category?: CategoryDetailedDto;
+  protected categories: CategoryDto[] = [];
+  protected filteredCategories: CategoryDto[] = [];
   protected addingSubCategoryMode: boolean = false;
   protected categoryForm = new FormGroup({
-    name: new FormControl<string>('',Validators.required),
+    name: new FormControl<string>('', Validators.required),
+    parent: new FormControl<number | CategoryDto | undefined>(undefined),
   })
 
   constructor(@Inject(MAT_DIALOG_DATA) private data: any, private categoryService: CategoryControllerService, private snackService: MatSnackBar) {
-    const category = data.category;
-    const addingMode = data.addSubCategory;
-    if(addingMode) {
-      this.addingSubCategoryMode = addingMode;
+    console.log(data)
+    if (data.category) {
+      this.category = data.category;
+      this.categoryForm.controls.name.patchValue(data.category.name);
     }
-    if (category) {
-      this.category = category;
-      if(!this.addingSubCategoryMode) {
-        this.categoryForm.controls.name.patchValue(category.name);
-      }
+    if (data.categories) {
+      this.categories = [...data.categories];
+      this.filteredCategories = [...data.categories];
+    }
+    if (data.parent) {
+      this.categoryForm.controls.parent.patchValue(data.parent);
     }
   }
 
   saveCategory() {
-
-
-    /*
-
-
-    if(this.addingSubCategoryMode) {
-      this.categoryService.addSubCategory({id: this.category?.id!, body: {
-        name: this.categoryForm.value.name!,
-        }}).subscribe( _ => {
-          this.snackService.open("Sikeres alkategória hozzáadás", undefined, {
-            duration: 2000,
-          });
-      })
-    } else {
-      this.categoryService.update1({id: this.category?.id!, body: {
-        name: this.categoryForm.value.name!,
-        }}).subscribe( _ => {
-        this.snackService.open("Sikeres módosítás", undefined, {
+    console.log(this.categoryForm.value.parent)
+    if (this.category) {
+      this.categoryService.modifyCategory({
+        body: {
+          name: this.category?.name,
+          id: this.category?.id,
+          subCategoryIds: this.category?.subCategories?.map(category => category.id!!),
+          parentCategoryId: (this.categoryForm.value.parent as CategoryDto).id || undefined,
+        }
+      }).subscribe(_ => {
+        this.snackService.open("Sikeres kategória módosítás", undefined, {
           duration: 2000,
         });
       })
     }
+  }
 
-    */
+  displayCategory(category?: CategoryDto): string {
+    return category?.name || "";
+  }
 
+  deleteCategory() {
+    if (this.category) {
+      this.categoryService.deleteCategory({id: this.category.id}).pipe(take(1)).subscribe(response => {
+        this.snackService.open(response.success ? "Sikeres törlés." : (response.message || "Hiba történt."), undefined, {duration: 2000,});
+      })
+    }
   }
 }

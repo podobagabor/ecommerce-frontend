@@ -55,6 +55,6 @@
       <p class="password-error">Ugyanaz a kategória nem tartozhat mindkét csoporthoz.</p>
     }
   </section>
-  <button [disabled]="categoryForm.invalid" (click)="createCategory()" class="my-button-form">Kategória létrehozása
+  <button [disabled]="categoryError || categoryForm.invalid" (click)="createCategory()" class="my-button-form">Kategória létrehozása
   </button>
 </main>

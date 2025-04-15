@@ -1,24 +1,11 @@
 <main class="my-main">
   <h1>Kategóriák</h1>
+  <p>Az adott kategória szerkesztéséhez kattints duplán a nevére</p>
   <mat-tree #tree [dataSource]="categories" [childrenAccessor]="childrenAccessor">
-    <!-- This is the tree node template for leaf nodes -->
     <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
-      <!-- use a disabled button to provide padding for tree leaf -->
       <button mat-icon-button disabled></button>
-      <button matTooltip="Alma" (click)="editCategory(node,$event)" mat-button>{{node.name}}</button>
-      <div class="category-panel-actions">
-        <button (click)="deleteCategory(node)" mat-icon-button color="warn">
-          <mat-icon>delete</mat-icon>
-        </button>
-        <button (click)="editCategory(node,$event)" mat-icon-button>
-          <mat-icon>edit</mat-icon>
-        </button>
-        <button (click)="addSubcategory(node)" mat-icon-button>
-          <mat-icon>add_circle</mat-icon>
-        </button>
-      </div>
+      <button (click)="$event.stopPropagation()" (dblclick)="editCategory(node,$event)" mat-button>{{node.name}}</button>
     </mat-tree-node>
-    <!-- This is the tree node template for expandable nodes -->
     <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding matTreeNodeToggle
                    [cdkTreeNodeTypeaheadLabel]="node.name">
       <button mat-icon-button matTreeNodeToggle
@@ -30,39 +17,4 @@
      <button (click)="$event.stopPropagation()" (dblclick)="editCategory(node,$event)" mat-button>{{node.name}}</button>
     </mat-tree-node>
   </mat-tree>
-  @for (category of categories; track category.id) {
-    <mat-accordion>
-      <mat-expansion-panel hideToggle>
-        <mat-expansion-panel-header class="panel-header">
-          <div class="category-panel-container">
-            <p class="category-panel-text">{{ category.name }}</p>
-            <div class="category-panel-actions">
-              <button (click)="deleteCategory(category)" mat-icon-button color="warn">
-                <mat-icon>delete</mat-icon>
-              </button>
-              <button (click)="editCategory(category,$event)" mat-icon-button>
-                <mat-icon>edit</mat-icon>
-              </button>
-              <button (click)="addSubcategory(category)" mat-icon-button>
-                <mat-icon>add_circle</mat-icon>
-              </button>
-            </div>
-          </div>
-        </mat-expansion-panel-header>
-        @if (category.subCategories?.length) {
-          <div>
-            @for (subCategory of category.subCategories; track subCategory.id) {
-              <div class="category-panel-subCategory">
-                <p>{{ subCategory.name }}</p>
-                <button (click)="deleteCategory(subCategory)" mat-icon-button color="warn">
-                  <mat-icon>delete</mat-icon>
-                </button>
-              </div>
-            }
-          </div>
-        }
-        <p *ngIf="!category.subCategories?.length">Nincsenek alkategóriák.</p>
-      </mat-expansion-panel>
-    </mat-accordion>
-  }
 </main>

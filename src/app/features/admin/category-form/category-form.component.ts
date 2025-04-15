@@ -34,7 +34,8 @@ export class CategoryFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.categoryService.getAllCategories().pipe(take(1)).subscribe(response => {
-      this.categories = response;
+      console.log(response);
+      this.categories = response.filter(category => category.parentCategoryId === null);
       this.filteredCategories = [...this.categories];
     })
     this.categoryService.getMainCategories().pipe(take(1)).subscribe(response => {
@@ -43,7 +44,7 @@ export class CategoryFormComponent implements OnInit {
     })
     this.categoryForm.controls.subCategory.valueChanges.subscribe(value => {
       if (typeof value === 'string') {
-        this.filteredCategories = [...this.categories.filter(c => c.name!!.toLowerCase().includes(value.toLowerCase()))];
+        this.filteredCategories = [...this.categories.filter(c => c.name?.toLowerCase().includes(value.toLowerCase()))];
       }
     })
 
