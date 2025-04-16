@@ -13,7 +13,7 @@ import {ProductDto} from "../../../api/models/product-dto";
 })
 export class ProductListComponent implements OnInit{
   protected products: PageProductDto = {};
-  protected displayedColumnsProduct = ["category","subCategory","brand","name","quantity","price","discount","actions"];
+  protected displayedColumnsProduct = ["category","brand","name","quantity","price","discount","actions"];
   constructor(private productService: ProductControllerService, private snackService: MatSnackBar) {
   }
 
@@ -30,9 +30,10 @@ export class ProductListComponent implements OnInit{
     })
   }
   updateList() {
-    this.productService.getProductsByParams({size: this.products.size,
-    page: this.products.size}).subscribe( products => {
+    this.productService.getProductsByParams({size: this.products.pageable?.pageSize,
+    page: this.products.pageable?.pageNumber}).subscribe(products => {
       this.products = products;
+      console.log(products);
     })
   }
 

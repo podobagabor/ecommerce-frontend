@@ -27,11 +27,38 @@ import { PageProductDto } from '../models/page-product-dto';
 import { ProductDto } from '../models/product-dto';
 import { reduceProductCount } from '../fn/product-controller/reduce-product-count';
 import { ReduceProductCount$Params } from '../fn/product-controller/reduce-product-count';
+import { updateProduct } from '../fn/product-controller/update-product';
+import { UpdateProduct$Params } from '../fn/product-controller/update-product';
 
 @Injectable({ providedIn: 'root' })
 export class ProductControllerService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
+  }
+
+  /** Path part for operation `updateProduct()` */
+  static readonly UpdateProductPath = '/api/product/update';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateProduct()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateProduct$Response(params?: UpdateProduct$Params, context?: HttpContext): Observable<StrictHttpResponse<ProductDto>> {
+    return updateProduct(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateProduct$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateProduct(params?: UpdateProduct$Params, context?: HttpContext): Observable<ProductDto> {
+    return this.updateProduct$Response(params, context).pipe(
+      map((r: StrictHttpResponse<ProductDto>): ProductDto => r.body)
+    );
   }
 
   /** Path part for operation `reduceProductCount()` */

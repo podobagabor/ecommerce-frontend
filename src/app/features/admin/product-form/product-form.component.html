@@ -13,7 +13,7 @@
     <div class="two-form" [formGroup]="productForm">
       <mat-form-field class="two-form__form">
         <mat-label>Kategória</mat-label>
-        <mat-autocomplete #auto1="matAutocomplete" [displayWith]="displayCategory">
+        <mat-autocomplete #auto1="matAutocomplete" [displayWith]="displayObjectWithName">
           <mat-option *ngFor="let category of filteredCategories"
                       [value]="category">{{category.name}}</mat-option>
         </mat-autocomplete>
@@ -33,7 +33,12 @@
     <div class="two-form" [formGroup]="productForm">
       <mat-form-field class="two-form__form">
         <mat-label>Márka</mat-label>
-        <input matInput type="text" formControlName="brand">
+        <input matInput type="text" [matAutocomplete]="brandAuto"  formControlName="brand">
+        <mat-autocomplete #brandAuto="matAutocomplete" [displayWith]="displayObjectWithName">
+          @for (brand of filteredBrands; track brand.id) {
+            <mat-option [value]="brand">{{brand.name}}</mat-option>
+          }
+        </mat-autocomplete>
       </mat-form-field>
       <mat-form-field class="two-form__form">
         <mat-label>Raktárkészlet</mat-label>

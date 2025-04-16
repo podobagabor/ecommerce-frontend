@@ -6,8 +6,9 @@ import {CategoryDto} from "../../../api/models/category-dto";
 import {ProductControllerService} from "../../../api/services/product-controller.service";
 import {CategoryControllerService} from "../../../api/services/category-controller.service";
 import {BrandDto} from "../../../api/models/brand-dto";
-import {ProductDto} from "../../../api/models/product-dto";
 import {ProductCreateDto} from "../../../api/models/product-create-dto";
+import {catchError, of, take} from "rxjs";
+import {BrandControllerService} from "../../../api/services/brand-controller.service";
 
 @Component({
   selector: 'app-product-form',
@@ -17,7 +18,7 @@ import {ProductCreateDto} from "../../../api/models/product-create-dto";
 })
 export class ProductFormComponent implements OnInit {
   protected editingMode: boolean = false;
-  protected id: string = "";
+  protected productId?: number = undefined;
   protected displayedColumnsIllustration = ["fileName", "actions"];
   protected productForm = new FormGroup({
     productName: new FormControl<string>('', Validators.required),
@@ -27,22 +28,21 @@ export class ProductFormComponent implements OnInit {
     brand: new FormControl<string | BrandDto>('', Validators.required),
     quantity: new FormControl<number | undefined>(undefined, Validators.required),
     description: new FormControl<string>('', Validators.required),
-    type: new FormControl<string>('', Validators.required),
   })
   protected illustrationImages: File[] = [];
   protected categories: CategoryDto[] = [];
   protected filteredCategories: CategoryDto[] = [];
-  protected subCategories: CategoryDto[] = [];
-  protected filteredSubCategories: CategoryDto[] = [];
+  protected brands: BrandDto[] = [];
+  protected filteredBrands: BrandDto[] = [];
 
-  constructor(private productService: ProductControllerService, private snackService: MatSnackBar, private router: Router, private activatedRoute: ActivatedRoute, private categoryService: CategoryControllerService) {
+  constructor(private productService: ProductControllerService, private brandService: BrandControllerService, private snackService: MatSnackBar, private router: Router, private activatedRoute: ActivatedRoute, private categoryService: CategoryControllerService) {
   }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
       const productId = params["productId"];
       if (productId) {
-        this.id = productId;
+        this.productId = productId;
         this.editingMode = true;
         this.productService.getProductById({id: productId}).subscribe(value => {
           this.categoryService.getAllCategories().subscribe(categories => {
@@ -70,6 +70,11 @@ export class ProductFormComponent implements OnInit {
       }
     })
 
+    this.brandService.getBrandList().pipe(take(1)).subscribe( brandsResponse => {
+        this.brands = brandsResponse;
+        this.filteredBrands = [...this.brands];
+    } )
+
     this.categoryService.getAllCategories().subscribe(value => {
       this.categories = value;
       this.filteredCategories = value;
@@ -82,6 +87,12 @@ export class ProductFormComponent implements OnInit {
         this.filteredCategories = [...this.categories];
       }
     });
+
+    this.productForm.controls.brand.valueChanges.subscribe(value => {
+      if(typeof value === 'string') {
+        this.filteredBrands = this.brands.filter(brand => brand.name?.toLowerCase().includes(value.toLowerCase()));
+      }
+    })
   }
 
   fileUpload($event: any) {
@@ -92,14 +103,59 @@ export class ProductFormComponent implements OnInit {
     this.illustrationImages = [...this.illustrationImages];
   }
 
-  displayCategory(category: CategoryDto | CategoryDto | string): string {
-    if (typeof category === 'string') {
-      return category;
+  displayObjectWithName(object: CategoryDto | BrandDto | string): string {
+    if (typeof object === 'string') {
+      return object;
     } else {
-      return category.name!;
+      return object.name!;
     }
   }
 
+
+  updateProduct() {
+
+    /*
+
+    if(this.productId) {
+      const product: ProductModifyDto = {
+        brandId: (this.productForm.value.brand as BrandDto).id,
+        count: this.productForm.value.quantity || 0,
+        name: this.productForm.value.productName || "",
+        discountPercentage: this.productForm.value.discount || undefined,
+        description: this.productForm.value.description!,
+        price: this.productForm.value.price!,
+        id: this.productId || 0,
+        images:
+      };
+      if (this.editingMode) {
+        this.productService.updateProduct({
+          body: product
+        }).subscribe(value => {
+          this.router.navigateByUrl("/admin/productList");
+        })
+      } else {
+        this.productService.create({
+          body: product
+        }).pipe(
+          catchError(err => {
+            //TODO: státuszkód
+            if (err.error.error[0].ReasonStatus === 4016) {
+              return of("Hiba a létrehozás során.")
+            } else {
+              return of("Váratlan hiba történt.")
+            }
+          })
+        ).subscribe(value => {
+          this.snackService.open("Sikeres termék létrehozás", undefined, {
+            duration: 3000,
+          });
+          this.router.navigateByUrl("/admin/productList");
+        })
+      }
+    }
+
+     */
+  }
 
   createProduct() {
     const product: ProductCreateDto = {
@@ -109,32 +165,24 @@ export class ProductFormComponent implements OnInit {
       discountPercentage: this.productForm.value.discount || undefined,
       description: this.productForm.value.description!,
       price: this.productForm.value.price!,
+      categoryId: (this.productForm.value.category as CategoryDto).id
     };
-    if (this.editingMode) {
-      this.productService.({
-        id: this.id, body: product
-      }).subscribe(value => {
-        this.router.navigateByUrl("/admin/productList");
+    this.productService.createProduct({
+      body: {
+        product: product,
+        images: this.illustrationImages
+      }
+    }).pipe(
+      catchError(err => {
+        //TODO: státuszkód
+        return of("Váratlan hiba történt: " + err.message);
       })
-    } else {
-      this.productService.create({
-        body: product
-      }).pipe(
-        catchError(err => {
-          //TODO: státuszkód
-          if (err.error.error[0].ReasonStatus === 4016) {
-            return of("Hiba a létrehozás során.")
-          } else {
-            return of("Váratlan hiba történt.")
-          }
-        })
-      ).subscribe(value => {
-        this.snackService.open("Sikeres termék létrehozás", undefined, {
-          duration: 3000,
-        });
-        this.router.navigateByUrl("/admin/productList");
-      })
-    }
+    ).subscribe(_ => {
+      this.snackService.open("Sikeres termék létrehozás", undefined, {
+        duration: 3000,
+      });
+      this.router.navigateByUrl("/admin/productList");
+    })
   }
 
   deleteImage(element: File) {
