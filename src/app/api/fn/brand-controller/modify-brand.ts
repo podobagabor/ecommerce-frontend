@@ -11,13 +11,16 @@ import { RequestBuilder } from '../../request-builder';
 import { BrandDto } from '../../models/brand-dto';
 
 export interface ModifyBrand$Params {
-      body: BrandDto
+      body?: {
+'brand': BrandDto;
+'newImage'?: Blob;
+}
 }
 
-export function modifyBrand(http: HttpClient, rootUrl: string, params: ModifyBrand$Params, context?: HttpContext): Observable<StrictHttpResponse<BrandDto>> {
+export function modifyBrand(http: HttpClient, rootUrl: string, params?: ModifyBrand$Params, context?: HttpContext): Observable<StrictHttpResponse<BrandDto>> {
   const rb = new RequestBuilder(rootUrl, modifyBrand.PATH, 'put');
   if (params) {
-    rb.body(params.body, 'application/json');
+    rb.body(params.body, 'multipart/form-data');
   }
 
   return http.request(

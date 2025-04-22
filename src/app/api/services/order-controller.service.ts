@@ -19,11 +19,14 @@ import { deleteOrderById } from '../fn/order-controller/delete-order-by-id';
 import { DeleteOrderById$Params } from '../fn/order-controller/delete-order-by-id';
 import { getAllOrder } from '../fn/order-controller/get-all-order';
 import { GetAllOrder$Params } from '../fn/order-controller/get-all-order';
+import { getAllOrder1 } from '../fn/order-controller/get-all-order-1';
+import { GetAllOrder1$Params } from '../fn/order-controller/get-all-order-1';
 import { getOrderDtoById } from '../fn/order-controller/get-order-dto-by-id';
 import { GetOrderDtoById$Params } from '../fn/order-controller/get-order-dto-by-id';
 import { getOrderOfUser } from '../fn/order-controller/get-order-of-user';
 import { GetOrderOfUser$Params } from '../fn/order-controller/get-order-of-user';
 import { OrderDto } from '../models/order-dto';
+import { PageOrderDto } from '../models/page-order-dto';
 
 @Injectable({ providedIn: 'root' })
 export class OrderControllerService extends BaseService {
@@ -78,6 +81,31 @@ export class OrderControllerService extends BaseService {
   createOrder(params: CreateOrder$Params, context?: HttpContext): Observable<OrderDto> {
     return this.createOrder$Response(params, context).pipe(
       map((r: StrictHttpResponse<OrderDto>): OrderDto => r.body)
+    );
+  }
+
+  /** Path part for operation `getAllOrder()` */
+  static readonly GetAllOrderPath = '/api/order';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAllOrder()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllOrder$Response(params?: GetAllOrder$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<OrderDto>>> {
+    return getAllOrder(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getAllOrder$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllOrder(params?: GetAllOrder$Params, context?: HttpContext): Observable<Array<OrderDto>> {
+    return this.getAllOrder$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<OrderDto>>): Array<OrderDto> => r.body)
     );
   }
 
@@ -156,28 +184,28 @@ export class OrderControllerService extends BaseService {
     );
   }
 
-  /** Path part for operation `getAllOrder()` */
-  static readonly GetAllOrderPath = '/api/order/all';
+  /** Path part for operation `getAllOrder1()` */
+  static readonly GetAllOrder1Path = '/api/order/list';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAllOrder()` instead.
+   * To access only the response body, use `getAllOrder1()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAllOrder$Response(params?: GetAllOrder$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<OrderDto>>> {
-    return getAllOrder(this.http, this.rootUrl, params, context);
+  getAllOrder1$Response(params?: GetAllOrder1$Params, context?: HttpContext): Observable<StrictHttpResponse<PageOrderDto>> {
+    return getAllOrder1(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getAllOrder$Response()` instead.
+   * To access the full response (for headers, for example), `getAllOrder1$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAllOrder(params?: GetAllOrder$Params, context?: HttpContext): Observable<Array<OrderDto>> {
-    return this.getAllOrder$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<OrderDto>>): Array<OrderDto> => r.body)
+  getAllOrder1(params?: GetAllOrder1$Params, context?: HttpContext): Observable<PageOrderDto> {
+    return this.getAllOrder1$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageOrderDto>): PageOrderDto => r.body)
     );
   }
 

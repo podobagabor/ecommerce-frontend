@@ -8,22 +8,20 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { BrandCreateDto } from '../../models/brand-create-dto';
 import { BrandDto } from '../../models/brand-dto';
 
 export interface CreateBrand$Params {
-  name: string;
-  description: string;
       body?: {
-'image': Blob;
+'brand': BrandCreateDto;
+'image'?: Blob;
 }
 }
 
-export function createBrand(http: HttpClient, rootUrl: string, params: CreateBrand$Params, context?: HttpContext): Observable<StrictHttpResponse<BrandDto>> {
+export function createBrand(http: HttpClient, rootUrl: string, params?: CreateBrand$Params, context?: HttpContext): Observable<StrictHttpResponse<BrandDto>> {
   const rb = new RequestBuilder(rootUrl, createBrand.PATH, 'post');
   if (params) {
-    rb.query('name', params.name, {});
-    rb.query('description', params.description, {});
-    rb.body(params.body, 'application/json');
+    rb.body(params.body, 'multipart/form-data');
   }
 
   return http.request(

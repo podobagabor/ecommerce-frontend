@@ -12,13 +12,16 @@ import { ProductDto } from '../../models/product-dto';
 import { ProductModifyDto } from '../../models/product-modify-dto';
 
 export interface UpdateProduct$Params {
-      body?: ProductModifyDto
+      body?: {
+'productModifyDto': ProductModifyDto;
+'newImages'?: Array<Blob>;
+}
 }
 
 export function updateProduct(http: HttpClient, rootUrl: string, params?: UpdateProduct$Params, context?: HttpContext): Observable<StrictHttpResponse<ProductDto>> {
   const rb = new RequestBuilder(rootUrl, updateProduct.PATH, 'put');
   if (params) {
-    rb.body(params.body, 'application/json');
+    rb.body(params.body, 'multipart/form-data');
   }
 
   return http.request(

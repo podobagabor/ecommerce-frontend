@@ -11,19 +11,24 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { ActionResponseDto } from '../models/action-response-dto';
 import { BrandDto } from '../models/brand-dto';
+import { BrandSimpleDto } from '../models/brand-simple-dto';
 import { createBrand } from '../fn/brand-controller/create-brand';
 import { CreateBrand$Params } from '../fn/brand-controller/create-brand';
 import { deleteBrand } from '../fn/brand-controller/delete-brand';
 import { DeleteBrand$Params } from '../fn/brand-controller/delete-brand';
 import { getBrandById } from '../fn/brand-controller/get-brand-by-id';
 import { GetBrandById$Params } from '../fn/brand-controller/get-brand-by-id';
-import { getBrandList } from '../fn/brand-controller/get-brand-list';
-import { GetBrandList$Params } from '../fn/brand-controller/get-brand-list';
+import { getBrandPageable } from '../fn/brand-controller/get-brand-pageable';
+import { GetBrandPageable$Params } from '../fn/brand-controller/get-brand-pageable';
+import { getBrands } from '../fn/brand-controller/get-brands';
+import { GetBrands$Params } from '../fn/brand-controller/get-brands';
 import { modifyBrand } from '../fn/brand-controller/modify-brand';
 import { ModifyBrand$Params } from '../fn/brand-controller/modify-brand';
 import { modifyBrand1 } from '../fn/brand-controller/modify-brand-1';
 import { ModifyBrand1$Params } from '../fn/brand-controller/modify-brand-1';
+import { PageBrandDto } from '../models/page-brand-dto';
 
 @Injectable({ providedIn: 'root' })
 export class BrandControllerService extends BaseService {
@@ -38,9 +43,9 @@ export class BrandControllerService extends BaseService {
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `modifyBrand()` instead.
    *
-   * This method sends `application/json` and handles request body of type `application/json`.
+   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
    */
-  modifyBrand$Response(params: ModifyBrand$Params, context?: HttpContext): Observable<StrictHttpResponse<BrandDto>> {
+  modifyBrand$Response(params?: ModifyBrand$Params, context?: HttpContext): Observable<StrictHttpResponse<BrandDto>> {
     return modifyBrand(this.http, this.rootUrl, params, context);
   }
 
@@ -48,9 +53,9 @@ export class BrandControllerService extends BaseService {
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `modifyBrand$Response()` instead.
    *
-   * This method sends `application/json` and handles request body of type `application/json`.
+   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
    */
-  modifyBrand(params: ModifyBrand$Params, context?: HttpContext): Observable<BrandDto> {
+  modifyBrand(params?: ModifyBrand$Params, context?: HttpContext): Observable<BrandDto> {
     return this.modifyBrand$Response(params, context).pipe(
       map((r: StrictHttpResponse<BrandDto>): BrandDto => r.body)
     );
@@ -88,9 +93,9 @@ export class BrandControllerService extends BaseService {
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `createBrand()` instead.
    *
-   * This method sends `application/json` and handles request body of type `application/json`.
+   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
    */
-  createBrand$Response(params: CreateBrand$Params, context?: HttpContext): Observable<StrictHttpResponse<BrandDto>> {
+  createBrand$Response(params?: CreateBrand$Params, context?: HttpContext): Observable<StrictHttpResponse<BrandDto>> {
     return createBrand(this.http, this.rootUrl, params, context);
   }
 
@@ -98,11 +103,36 @@ export class BrandControllerService extends BaseService {
    * This method provides access only to the response body.
    * To access the full response (for headers, for example), `createBrand$Response()` instead.
    *
-   * This method sends `application/json` and handles request body of type `application/json`.
+   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
    */
-  createBrand(params: CreateBrand$Params, context?: HttpContext): Observable<BrandDto> {
+  createBrand(params?: CreateBrand$Params, context?: HttpContext): Observable<BrandDto> {
     return this.createBrand$Response(params, context).pipe(
       map((r: StrictHttpResponse<BrandDto>): BrandDto => r.body)
+    );
+  }
+
+  /** Path part for operation `getBrands()` */
+  static readonly GetBrandsPath = '/api/brand';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getBrands()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getBrands$Response(params?: GetBrands$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<BrandSimpleDto>>> {
+    return getBrands(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getBrands$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getBrands(params?: GetBrands$Params, context?: HttpContext): Observable<Array<BrandSimpleDto>> {
+    return this.getBrands$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<BrandSimpleDto>>): Array<BrandSimpleDto> => r.body)
     );
   }
 
@@ -131,28 +161,28 @@ export class BrandControllerService extends BaseService {
     );
   }
 
-  /** Path part for operation `getBrandList()` */
-  static readonly GetBrandListPath = '/api/brand/list';
+  /** Path part for operation `getBrandPageable()` */
+  static readonly GetBrandPageablePath = '/api/brand/list';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getBrandList()` instead.
+   * To access only the response body, use `getBrandPageable()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getBrandList$Response(params?: GetBrandList$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<BrandDto>>> {
-    return getBrandList(this.http, this.rootUrl, params, context);
+  getBrandPageable$Response(params?: GetBrandPageable$Params, context?: HttpContext): Observable<StrictHttpResponse<PageBrandDto>> {
+    return getBrandPageable(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getBrandList$Response()` instead.
+   * To access the full response (for headers, for example), `getBrandPageable$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getBrandList(params?: GetBrandList$Params, context?: HttpContext): Observable<Array<BrandDto>> {
-    return this.getBrandList$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<BrandDto>>): Array<BrandDto> => r.body)
+  getBrandPageable(params?: GetBrandPageable$Params, context?: HttpContext): Observable<PageBrandDto> {
+    return this.getBrandPageable$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageBrandDto>): PageBrandDto => r.body)
     );
   }
 
@@ -165,7 +195,7 @@ export class BrandControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  deleteBrand$Response(params: DeleteBrand$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+  deleteBrand$Response(params: DeleteBrand$Params, context?: HttpContext): Observable<StrictHttpResponse<ActionResponseDto>> {
     return deleteBrand(this.http, this.rootUrl, params, context);
   }
 
@@ -175,9 +205,9 @@ export class BrandControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  deleteBrand(params: DeleteBrand$Params, context?: HttpContext): Observable<boolean> {
+  deleteBrand(params: DeleteBrand$Params, context?: HttpContext): Observable<ActionResponseDto> {
     return this.deleteBrand$Response(params, context).pipe(
-      map((r: StrictHttpResponse<boolean>): boolean => r.body)
+      map((r: StrictHttpResponse<ActionResponseDto>): ActionResponseDto => r.body)
     );
   }
 

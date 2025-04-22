@@ -22,6 +22,10 @@
         felvétele</strong></a>
       <a *ngIf="user.role === 'ADMIN'" routerLink="/admin/productList" class="action-menu-label-link"><strong>Termék
         lista</strong></a>
+      <a *ngIf="user.role === 'ADMIN'" routerLink="/admin/brandCreate" class="action-menu-label-link"><strong>Brand
+        létrehozása</strong></a>
+      <a *ngIf="user.role === 'ADMIN'" routerLink="/admin/brandList" class="action-menu-label-link"><strong>Brand
+        lista</strong></a>
       <a *ngIf="user.role === 'ADMIN'" routerLink="/admin/articleCreate" class="action-menu-label-link"><strong>Blog
         felvétele</strong></a>
       <a *ngIf="user.role === 'ADMIN'" routerLink="/admin/categoryCreate" class="action-menu-label-link"><strong>Kategória

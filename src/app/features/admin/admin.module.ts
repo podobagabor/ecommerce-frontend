@@ -12,6 +12,8 @@ import { CategoryEditDialogComponent } from './category-edit-dialog/category-edi
 import { OrderManageComponent } from './order-manage/order-manage.component';
 import {FormsModule} from "@angular/forms";
 import {MatTreeNode, MatTreeNodeDef, MatTreeNodePadding, MatTreeNodeToggle} from "@angular/material/tree";
+import { BrandFormComponent } from './brand-form/brand-form.component';
+import { BrandListComponent } from './brand-list/brand-list.component';
 
 
 
@@ -24,7 +26,9 @@ import {MatTreeNode, MatTreeNodeDef, MatTreeNodePadding, MatTreeNodeToggle} from
     CategoryListComponent,
     CategoryFormComponent,
     CategoryEditDialogComponent,
-    OrderManageComponent
+    OrderManageComponent,
+    BrandFormComponent,
+    BrandListComponent
   ],
   imports: [
     CommonModule,

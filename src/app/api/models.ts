@@ -4,7 +4,9 @@
 
 export { ActionResponseDto } from './models/action-response-dto';
 export { Address } from './models/address';
+export { BrandCreateDto } from './models/brand-create-dto';
 export { BrandDto } from './models/brand-dto';
+export { BrandSimpleDto } from './models/brand-simple-dto';
 export { CartElementCreateDto } from './models/cart-element-create-dto';
 export { CartElementDto } from './models/cart-element-dto';
 export { CategoryBasicDto } from './models/category-basic-dto';
@@ -17,6 +19,8 @@ export { OrderCreateDto } from './models/order-create-dto';
 export { OrderDto } from './models/order-dto';
 export { OrderItemDto } from './models/order-item-dto';
 export { PageableObject } from './models/pageable-object';
+export { PageBrandDto } from './models/page-brand-dto';
+export { PageOrderDto } from './models/page-order-dto';
 export { PageProductDto } from './models/page-product-dto';
 export { ProductCreateDto } from './models/product-create-dto';
 export { ProductDto } from './models/product-dto';

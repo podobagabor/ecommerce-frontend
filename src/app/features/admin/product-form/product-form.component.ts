@@ -9,6 +9,16 @@ import {BrandDto} from "../../../api/models/brand-dto";
 import {ProductCreateDto} from "../../../api/models/product-create-dto";
 import {catchError, of, take} from "rxjs";
 import {BrandControllerService} from "../../../api/services/brand-controller.service";
+import {environment} from "../../../../environment";
+import {ProductModifyDto} from "../../../api/models/product-modify-dto";
+import {ImageModifyDto} from "../../../api/models/image-modify-dto";
+import {BrandSimpleDto} from "../../../api/models/brand-simple-dto";
+
+export interface StoredFile {
+  file: File;
+  url?: string;
+  deleted: boolean;
+}
 
 @Component({
   selector: 'app-product-form',
@@ -30,10 +40,15 @@ export class ProductFormComponent implements OnInit {
     description: new FormControl<string>('', Validators.required),
   })
   protected illustrationImages: File[] = [];
+  private _storedImages: StoredFile[] = [];
+  protected get storedImages(): StoredFile[] {
+    return this._storedImages.filter(image => !image.deleted)
+  }
+
   protected categories: CategoryDto[] = [];
   protected filteredCategories: CategoryDto[] = [];
-  protected brands: BrandDto[] = [];
-  protected filteredBrands: BrandDto[] = [];
+  protected brands: BrandSimpleDto[] = [];
+  protected filteredBrands: BrandSimpleDto[] = [];
 
   constructor(private productService: ProductControllerService, private brandService: BrandControllerService, private snackService: MatSnackBar, private router: Router, private activatedRoute: ActivatedRoute, private categoryService: CategoryControllerService) {
   }
@@ -55,25 +70,29 @@ export class ProductFormComponent implements OnInit {
               productName: value.name,
               quantity: value.count,
               category: value.category,
-              brand: value.brand?.name,
+              brand: value.brand,
             });
           });
-          const images: Promise<File>[] = value.images?.map((url, idx) => {
-            return fetch(url).then(res => res.blob().then(blob => {
-              return new File([blob], idx.toString() + ".image.jpg");
+          const images: Promise<StoredFile>[] = value.images?.map((url, idx) => {
+            return fetch(environment.backendUrl + url).then(res => res.blob().then(blob => {
+              return {
+                file: new File([blob], idx.toString() + ".image.jpg"),
+                url: url,
+                deleted: false,
+              }
             }))
           }) || [];
           Promise.all(images).then(value => {
-            this.illustrationImages = [...value];
+            this._storedImages = value;
           })
         })
       }
     })
 
-    this.brandService.getBrandList().pipe(take(1)).subscribe( brandsResponse => {
-        this.brands = brandsResponse;
-        this.filteredBrands = [...this.brands];
-    } )
+    this.brandService.getBrands().pipe(take(1)).subscribe(brandsResponse => {
+      this.brands = brandsResponse;
+      this.filteredBrands = [...this.brands];
+    })
 
     this.categoryService.getAllCategories().subscribe(value => {
       this.categories = value;
@@ -89,7 +108,7 @@ export class ProductFormComponent implements OnInit {
     });
 
     this.productForm.controls.brand.valueChanges.subscribe(value => {
-      if(typeof value === 'string') {
+      if (typeof value === 'string') {
         this.filteredBrands = this.brands.filter(brand => brand.name?.toLowerCase().includes(value.toLowerCase()));
       }
     })
@@ -98,9 +117,18 @@ export class ProductFormComponent implements OnInit {
   fileUpload($event: any) {
     let tempList: File[] = [...$event.target.files];
     tempList.forEach(element => {
-      this.illustrationImages.push(element);
+      if (this.editingMode) {
+        this._storedImages.push({
+          file: element,
+          url: undefined,
+          deleted: false,
+        })
+      } else {
+        this.illustrationImages.push(element);
+      }
     });
-    this.illustrationImages = [...this.illustrationImages];
+    if (this.editingMode) this._storedImages = [...this.storedImages];
+    else this.illustrationImages = [...this.illustrationImages];
   }
 
   displayObjectWithName(object: CategoryDto | BrandDto | string): string {
@@ -113,10 +141,9 @@ export class ProductFormComponent implements OnInit {
 
 
   updateProduct() {
-
-    /*
-
-    if(this.productId) {
+    const images = this.processImages();
+    console.log(images);
+    if (this.productId) {
       const product: ProductModifyDto = {
         brandId: (this.productForm.value.brand as BrandDto).id,
         count: this.productForm.value.quantity || 0,
@@ -125,36 +152,20 @@ export class ProductFormComponent implements OnInit {
         description: this.productForm.value.description!,
         price: this.productForm.value.price!,
         id: this.productId || 0,
-        images:
+        images: images.storedImages,
+        categoryId: (this.productForm.value.category as CategoryDto).id,
       };
-      if (this.editingMode) {
-        this.productService.updateProduct({
-          body: product
-        }).subscribe(value => {
-          this.router.navigateByUrl("/admin/productList");
-        })
-      } else {
-        this.productService.create({
-          body: product
-        }).pipe(
-          catchError(err => {
-            //TODO: státuszkód
-            if (err.error.error[0].ReasonStatus === 4016) {
-              return of("Hiba a létrehozás során.")
-            } else {
-              return of("Váratlan hiba történt.")
-            }
-          })
-        ).subscribe(value => {
-          this.snackService.open("Sikeres termék létrehozás", undefined, {
-            duration: 3000,
-          });
-          this.router.navigateByUrl("/admin/productList");
-        })
-      }
+      console.log(product);
+      console.log(images.newImages);
+      this.productService.updateProduct({
+        body: {
+          newImages: images.newImages,
+          productModifyDto: product
+        }
+      }).subscribe(value => {
+        this.router.navigateByUrl("/admin/productList");
+      })
     }
-
-     */
   }
 
   createProduct() {
@@ -186,7 +197,29 @@ export class ProductFormComponent implements OnInit {
   }
 
   deleteImage(element: File) {
+    if (this.editingMode) {
+      const imageElement = this._storedImages.find(value => value.file == element);
+      if (imageElement) {
+        imageElement.deleted = true;
+      }
+    }
     this.illustrationImages = this.illustrationImages.filter(image => image !== element)
+  }
+
+  processImages(): { storedImages: ImageModifyDto[], newImages: File[] } {
+    let storedImages: ImageModifyDto[] = [];
+    let newImages: File[] = [];
+    this._storedImages.forEach(value => {
+      if (!value.url) {
+        newImages.push(value.file);
+      } else {
+        storedImages.push(value);
+      }
+    })
+    return {
+      storedImages: storedImages,
+      newImages: newImages
+    }
   }
 
   downloadImage(element: File) {

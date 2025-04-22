@@ -28,4 +28,4 @@ export function getAllOrder(http: HttpClient, rootUrl: string, params?: GetAllOr
   );
 }
 
-getAllOrder.PATH = '/api/order/all';
+getAllOrder.PATH = '/api/order';

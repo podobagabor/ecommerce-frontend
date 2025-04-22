@@ -8,6 +8,8 @@ import {ProductListComponent} from "./product-list/product-list.component";
 import {CategoryListComponent} from "./category-list/category-list.component";
 import {CategoryFormComponent} from "./category-form/category-form.component";
 import {OrderManageComponent} from "./order-manage/order-manage.component";
+import {BrandFormComponent} from "./brand-form/brand-form.component";
+import {BrandListComponent} from "./brand-list/brand-list.component";
 
 const routes: Routes = [
   {
@@ -22,6 +24,9 @@ const routes: Routes = [
       {path: 'categoryList', component: CategoryListComponent},
       {path: 'categoryCreate', component: CategoryFormComponent},
       {path: 'orders', component: OrderManageComponent},
+      {path: 'brandCreate', component: BrandFormComponent},
+      {path: 'brand/:brandId', component: BrandFormComponent},
+      {path: 'brandList', component: BrandListComponent},
     ]
   },
 ];

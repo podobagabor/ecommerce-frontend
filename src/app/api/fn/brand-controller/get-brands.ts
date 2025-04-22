@@ -8,13 +8,13 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { BrandDto } from '../../models/brand-dto';
+import { BrandSimpleDto } from '../../models/brand-simple-dto';
 
-export interface GetBrandList$Params {
+export interface GetBrands$Params {
 }
 
-export function getBrandList(http: HttpClient, rootUrl: string, params?: GetBrandList$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<BrandDto>>> {
-  const rb = new RequestBuilder(rootUrl, getBrandList.PATH, 'get');
+export function getBrands(http: HttpClient, rootUrl: string, params?: GetBrands$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<BrandSimpleDto>>> {
+  const rb = new RequestBuilder(rootUrl, getBrands.PATH, 'get');
   if (params) {
   }
 
@@ -23,9 +23,9 @@ export function getBrandList(http: HttpClient, rootUrl: string, params?: GetBran
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<BrandDto>>;
+      return r as StrictHttpResponse<Array<BrandSimpleDto>>;
     })
   );
 }
 
-getBrandList.PATH = '/api/brand/list';
+getBrands.PATH = '/api/brand';

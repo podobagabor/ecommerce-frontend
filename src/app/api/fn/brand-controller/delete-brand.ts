@@ -8,12 +8,13 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { ActionResponseDto } from '../../models/action-response-dto';
 
 export interface DeleteBrand$Params {
   id: number;
 }
 
-export function deleteBrand(http: HttpClient, rootUrl: string, params: DeleteBrand$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+export function deleteBrand(http: HttpClient, rootUrl: string, params: DeleteBrand$Params, context?: HttpContext): Observable<StrictHttpResponse<ActionResponseDto>> {
   const rb = new RequestBuilder(rootUrl, deleteBrand.PATH, 'delete');
   if (params) {
     rb.path('id', params.id, {});
@@ -24,7 +25,7 @@ export function deleteBrand(http: HttpClient, rootUrl: string, params: DeleteBra
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: String((r as HttpResponse<any>).body) === 'true' }) as StrictHttpResponse<boolean>;
+      return r as StrictHttpResponse<ActionResponseDto>;
     })
   );
 }

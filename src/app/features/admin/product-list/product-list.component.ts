@@ -33,13 +33,14 @@ export class ProductListComponent implements OnInit{
     this.productService.getProductsByParams({size: this.products.pageable?.pageSize,
     page: this.products.pageable?.pageNumber}).subscribe(products => {
       this.products = products;
-      console.log(products);
     })
   }
 
   page($event: PageEvent) {
-    this.products.pageable!.pageNumber = $event.pageIndex;
-    this.products.pageable!.pageSize = $event.pageSize;
-    this.updateList();
+    if(this.products.pageable) {
+      this.products.pageable.pageNumber = $event.pageIndex;
+      this.products.pageable.pageSize = $event.pageSize;
+      this.updateList();
+    }
   }
 }

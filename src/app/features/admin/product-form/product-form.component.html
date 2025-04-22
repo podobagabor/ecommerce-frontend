@@ -9,8 +9,6 @@
         <mat-label>Terméknév</mat-label>
         <input matInput type="text" formControlName="productName">
       </mat-form-field>
-    </div>
-    <div class="two-form" [formGroup]="productForm">
       <mat-form-field class="two-form__form">
         <mat-label>Kategória</mat-label>
         <mat-autocomplete #auto1="matAutocomplete" [displayWith]="displayObjectWithName">
@@ -19,6 +17,9 @@
         </mat-autocomplete>
         <input matInput type="text" [matAutocomplete]="auto1" formControlName="category">
       </mat-form-field>
+    </div>
+    <div class="two-form" [formGroup]="productForm">
+
     </div>
     <div class="two-form" [formGroup]="productForm">
       <mat-form-field class="two-form__form">
@@ -56,31 +57,58 @@
       <button (click)="fileUploader.click()" class="my-button-form">Feltöltés</button>
     </div>
   </section>
-  <h2 *ngIf="illustrationImages.length">Feltöltött illusztrációk</h2>
-  <div class="my-table" *ngIf="illustrationImages.length">
-    <div class="table">
-      <table mat-table [dataSource]="illustrationImages">
-        <ng-container matColumnDef="fileName">
-          <th mat-header-cell *matHeaderCellDef> Név</th>
-          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-        </ng-container>
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef></th>
-          <td mat-cell *matCellDef="let element">
-            <div fxLayout="row" fxLayoutAlign="end">
-              <button (click)="deleteImage(element)" mat-icon-button color="warn">
-                <mat-icon>delete</mat-icon>
-              </button>
-              <button (click)="downloadImage(element)" mat-icon-button color="accent">
-                <mat-icon>download</mat-icon>
-              </button>
-            </div>
-          </td>
-        </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumnsIllustration"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumnsIllustration;"></tr>
-      </table>
+  @if (illustrationImages.length || storedImages.length) {
+    <h2>Feltöltött illusztrációk</h2>
+    <div class="my-table">
+      <div class="table">
+        @if (illustrationImages.length) {
+          <table mat-table [dataSource]="illustrationImages">
+            <ng-container matColumnDef="fileName">
+              <th mat-header-cell *matHeaderCellDef> Név</th>
+              <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+            </ng-container>
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let element">
+                <div fxLayout="row" fxLayoutAlign="end">
+                  <button (click)="deleteImage(element)" mat-icon-button color="warn">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                  <button (click)="downloadImage(element)" mat-icon-button color="accent">
+                    <mat-icon>download</mat-icon>
+                  </button>
+                </div>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsIllustration"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsIllustration;"></tr>
+          </table>
+
+        } @else if (storedImages.length) {
+          <table mat-table [dataSource]="storedImages">
+            <ng-container matColumnDef="fileName">
+              <th mat-header-cell *matHeaderCellDef> Név</th>
+              <td mat-cell *matCellDef="let element"> {{element.file.name}} </td>
+            </ng-container>
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let element">
+                <div fxLayout="row" fxLayoutAlign="end">
+                  <button (click)="deleteImage(element.file)" mat-icon-button color="warn">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                  <button (click)="downloadImage(element.file)" mat-icon-button color="accent">
+                    <mat-icon>download</mat-icon>
+                  </button>
+                </div>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsIllustration"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsIllustration;"></tr>
+          </table>
+        }
+      </div>
     </div>
-  </div>
-  <button [disabled]="productForm.invalid" (click)="createProduct()" class="my-button-form">{{editingMode ? "Termék módosítása" : "Termék létrehozása"}}</button>
+  }
+  <button [disabled]="productForm.invalid" (click)="editingMode ? updateProduct() : createProduct() " class="my-button-form">{{editingMode ? "Termék módosítása" : "Termék létrehozása"}}</button>
 </div>

@@ -12,6 +12,5 @@ export interface ProductModifyDto {
   id?: number;
   images?: Array<ImageModifyDto>;
   name?: string;
-  newImages?: Array<Blob>;
   price?: number;
 }
