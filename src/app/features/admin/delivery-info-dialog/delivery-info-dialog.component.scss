@@ -1,0 +1,11 @@
+.delivery-info-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 1rem;
+  &__column {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+}

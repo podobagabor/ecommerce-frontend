@@ -1,38 +1,65 @@
 <main class="my-main">
-  <h1>Termékek</h1>
-  <!--<mat-accordion *ngFor="let order of orders.content">
-    <mat-expansion-panel hideToggle>
-      <mat-expansion-panel-header class="panel-header">
-        <div class="orders-panel-container">
-          <p class="order-panel-text">{{order.orderDate | date}}</p>
-          <p class="order-panel-text">Összeg: {{order.totalPrice |number}} Ft</p>
-          <div class="order-panel-actions">
-            <select [(ngModel)]="order.status" (change)="statusChanged($event,order)">
-              <option [value]="'CANCELLED'">Lemondva</option>
-              <option [value]="'CREATED'">Létrehozva</option>
-              <option [value]="'FINISHED'">Teljesítve</option>
-              <option [value]="'PACKAGED'">Csomagolva</option>
-              <option [value]="'PAYED'">Fizetve</option>
-              <option [value]="'SHIPPED'">Kiszállítva</option>
-              <option [value]="'SHIPPING'">Szállítás</option>
-              <option [value]="'WAITING_FOR_REFUND'">Viszzatérítés alatt</option>
-            </select>
-          </div>
-        </div>
-      </mat-expansion-panel-header>
-      <mat-card class="product-element" *ngFor="let item of order.products">
-        <p class="product-name">
-          {{item.product?.brand?.name}} {{item.product?.name}}
-        </p>
-        <p class="product-price">{{item.count}} db</p>
-        <p class="product-price">{{item.product?.price! * item.count! | number}}Ft</p>
-        <div class="product-image">
-          <img
-            [src]="item.product?.imageUrls?.[0]">
-        </div>
-      </mat-card>
-    </mat-expansion-panel>
-  </mat-accordion>-->
+  <div  class="header-with-searchbar">
+    <h1>Rendelések</h1>
+    <div [formGroup]="orderSearchForm" class="searchbar">
+      <mat-form-field>
+        <mat-select formControlName="status">
+          <mat-option [value]="undefined">Nincs szűrő</mat-option>
+          <mat-option [value]="'CANCELLED'">Lemondva</mat-option>
+          <mat-option [value]="'CREATED'">Létrehozva</mat-option>
+          <mat-option [value]="'IN_PROGRESS'">Folyamatban</mat-option>
+          <mat-option [value]="'UNDER_DELIVERY'">Szállítás alatt</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Keresés</mat-label>
+        <input matInput formControlName="id">
+      </mat-form-field>
+      <button (click)="loadOrders()" class="my-button-form">Keresés</button>
+    </div>
+  </div>
 
+  @for (order of orders.content; track order.id) {
+    <mat-accordion>
+      <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header class="panel-header">
+          <div class="orders-panel-container">
+            <!-- <p class="order-panel-text">{{order.orderDate | date}}</p>e -->
+            <p class="order-panel-text">{{ order.id }} </p>
+            <p class="order-panel-text">Összeg: {{ getTotalPrice(order) |number }} Ft</p>
+            <div class="order-panel-actions">
+              <button (click)="showDeliveryInfo(order,$event)" class="shipping-icon" mat-icon-button color="accent">
+                <mat-icon >
+                  local_shipping
+                </mat-icon>
+              </button>
+              <select [(ngModel)]="order.status" (change)="statusChanged($event,order)">
+                <option [value]="'CANCELLED'">Lemondva</option>
+                <option [value]="'CREATED'">Létrehozva</option>
+                <option [value]="'IN_PROGRESS'">Folyamatban</option>
+                <option [value]="'UNDER_DELIVERY'">Szállítás alatt</option>
+              </select>
+            </div>
+          </div>
+        </mat-expansion-panel-header>
+        <mat-card class="product-element" *ngFor="let item of order.items">
+          <p class="product-name">
+            {{ item.product?.brand?.name }} {{ item.product?.name }}
+          </p>
+          <p class="product-price">{{ item.quantity }} db</p>
+          <p class="product-price">{{ item.product?.price! * item.quantity! | number }}Ft</p>
+          <div class="product-image">
+            <img
+              [src]="item.product?.images?.[0]">
+          </div>
+        </mat-card>
+      </mat-expansion-panel>
+    </mat-accordion>
+  }
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]" [length]="orders.totalElements!" [pageIndex]="orders.number!"
+                 [pageSize]="orders.size!" (page)="page($event)" showFirstLastButtons
+                 aria-label="Select page of periodic elements">
+  </mat-paginator>
 </main>
 

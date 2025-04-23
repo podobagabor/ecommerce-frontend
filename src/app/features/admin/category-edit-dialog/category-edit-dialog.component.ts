@@ -5,7 +5,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {CategoryControllerService} from "../../../api/services/category-controller.service";
 import {CategoryDetailedDto} from "../../../api/models/category-detailed-dto";
 import {CategoryDto} from "../../../api/models/category-dto";
-import {take} from "rxjs";
+import {catchError, take, throwError} from "rxjs";
 
 @Component({
   selector: 'app-category-edit-dialog',
@@ -25,7 +25,6 @@ export class CategoryEditDialogComponent {
   })
 
   constructor(@Inject(MAT_DIALOG_DATA) private data: any, private categoryService: CategoryControllerService, private snackService: MatSnackBar) {
-    console.log(data)
     if (data.category) {
       this.category = data.category;
       this.categoryForm.controls.name.patchValue(data.category.name);
@@ -40,16 +39,19 @@ export class CategoryEditDialogComponent {
   }
 
   saveCategory() {
-    console.log(this.categoryForm.value.parent)
     if (this.category) {
       this.categoryService.modifyCategory({
         body: {
           name: this.category?.name,
           id: this.category?.id,
-          subCategoryIds: this.category?.subCategories?.map(category => category.id!!),
           parentCategoryId: (this.categoryForm.value.parent as CategoryDto).id || undefined,
         }
-      }).subscribe(_ => {
+      }).pipe(catchError(err => {
+        this.snackService.open("Sikertelen módosítás", undefined, {
+          duration: 2000,
+        });
+        return throwError(err);
+      })).subscribe(_ => {
         this.snackService.open("Sikeres kategória módosítás", undefined, {
           duration: 2000,
         });

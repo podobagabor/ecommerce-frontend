@@ -48,4 +48,4 @@ export function getProductsByParams(http: HttpClient, rootUrl: string, params?: 
   );
 }
 
-getProductsByParams.PATH = '/api/product/list';
+getProductsByParams.PATH = '/api/product/public/list';

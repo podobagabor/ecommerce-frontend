@@ -4,6 +4,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {ReactiveFormsModule} from '@angular/forms';
 import {CategoryMenuComponent} from './layout/category-menu/category-menu.component';
 import {CustomMaterialModule} from "../custom-material/custom-material.module";
+import { CategoryMenuItemComponent } from './layout/category-menu-item/category-menu-item.component';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import {CustomMaterialModule} from "../custom-material/custom-material.module";
     CustomMaterialModule,
   ],
   declarations: [
-    CategoryMenuComponent
+    CategoryMenuComponent,
+    CategoryMenuItemComponent
   ]
 })
 export class SharedModule {

@@ -26,8 +26,6 @@ import { getBrands } from '../fn/brand-controller/get-brands';
 import { GetBrands$Params } from '../fn/brand-controller/get-brands';
 import { modifyBrand } from '../fn/brand-controller/modify-brand';
 import { ModifyBrand$Params } from '../fn/brand-controller/modify-brand';
-import { modifyBrand1 } from '../fn/brand-controller/modify-brand-1';
-import { ModifyBrand1$Params } from '../fn/brand-controller/modify-brand-1';
 import { PageBrandDto } from '../models/page-brand-dto';
 
 @Injectable({ providedIn: 'root' })
@@ -57,31 +55,6 @@ export class BrandControllerService extends BaseService {
    */
   modifyBrand(params?: ModifyBrand$Params, context?: HttpContext): Observable<BrandDto> {
     return this.modifyBrand$Response(params, context).pipe(
-      map((r: StrictHttpResponse<BrandDto>): BrandDto => r.body)
-    );
-  }
-
-  /** Path part for operation `modifyBrand1()` */
-  static readonly ModifyBrand1Path = '/api/brand/modifyImage/{id}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `modifyBrand1()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  modifyBrand1$Response(params: ModifyBrand1$Params, context?: HttpContext): Observable<StrictHttpResponse<BrandDto>> {
-    return modifyBrand1(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `modifyBrand1$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  modifyBrand1(params: ModifyBrand1$Params, context?: HttpContext): Observable<BrandDto> {
-    return this.modifyBrand1$Response(params, context).pipe(
       map((r: StrictHttpResponse<BrandDto>): BrandDto => r.body)
     );
   }

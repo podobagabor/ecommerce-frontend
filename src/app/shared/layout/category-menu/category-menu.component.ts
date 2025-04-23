@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {CategoryResponse} from "../../../services/api/models/category-response";
 import {CategoryControllerService} from "../../../api/services/category-controller.service";
+import {take} from "rxjs";
+import {CategoryDetailedDto} from "../../../api/models/category-detailed-dto";
 
 @Component({
   selector: 'app-category-menu',
@@ -10,20 +11,15 @@ import {CategoryControllerService} from "../../../api/services/category-controll
 })
 export class CategoryMenuComponent implements OnInit {
 
-  protected categories: CategoryResponse[] = [];
+  protected categories: CategoryDetailedDto[] = [];
 
   constructor(private categoryService: CategoryControllerService) {
   }
 
   ngOnInit(): void {
-    //todo
-
-    /*
-    this.categoryService.getAll2().subscribe( value => {
-      this.categories = value;
+    this.categoryService.getMainCategories().pipe(take(1)).subscribe(categories => {
+      this.categories = categories;
     })
-
-     */
   }
 
 }

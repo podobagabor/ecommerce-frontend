@@ -4,10 +4,12 @@
 
 import { Address } from '../models/address';
 import { OrderItemDto } from '../models/order-item-dto';
+import { UserDto } from '../models/user-dto';
 export interface OrderDto {
   billingAddress?: Address;
   id?: number;
   items?: Array<OrderItemDto>;
   shippingAddress?: Address;
-  status?: 'CREATED' | 'IN_PROGRESS' | 'UNDER_DELIVERY' | 'COMPLETED';
+  status?: 'CANCELLED' | 'CREATED' | 'IN_PROGRESS' | 'UNDER_DELIVERY' | 'COMPLETED';
+  user?: UserDto;
 }

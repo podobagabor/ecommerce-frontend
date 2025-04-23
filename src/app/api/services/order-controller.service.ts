@@ -19,10 +19,10 @@ import { deleteOrderById } from '../fn/order-controller/delete-order-by-id';
 import { DeleteOrderById$Params } from '../fn/order-controller/delete-order-by-id';
 import { getAllOrder } from '../fn/order-controller/get-all-order';
 import { GetAllOrder$Params } from '../fn/order-controller/get-all-order';
-import { getAllOrder1 } from '../fn/order-controller/get-all-order-1';
-import { GetAllOrder1$Params } from '../fn/order-controller/get-all-order-1';
 import { getOrderDtoById } from '../fn/order-controller/get-order-dto-by-id';
 import { GetOrderDtoById$Params } from '../fn/order-controller/get-order-dto-by-id';
+import { getOrderListPage } from '../fn/order-controller/get-order-list-page';
+import { GetOrderListPage$Params } from '../fn/order-controller/get-order-list-page';
 import { getOrderOfUser } from '../fn/order-controller/get-order-of-user';
 import { GetOrderOfUser$Params } from '../fn/order-controller/get-order-of-user';
 import { OrderDto } from '../models/order-dto';
@@ -184,27 +184,27 @@ export class OrderControllerService extends BaseService {
     );
   }
 
-  /** Path part for operation `getAllOrder1()` */
-  static readonly GetAllOrder1Path = '/api/order/list';
+  /** Path part for operation `getOrderListPage()` */
+  static readonly GetOrderListPagePath = '/api/order/list';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAllOrder1()` instead.
+   * To access only the response body, use `getOrderListPage()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAllOrder1$Response(params?: GetAllOrder1$Params, context?: HttpContext): Observable<StrictHttpResponse<PageOrderDto>> {
-    return getAllOrder1(this.http, this.rootUrl, params, context);
+  getOrderListPage$Response(params?: GetOrderListPage$Params, context?: HttpContext): Observable<StrictHttpResponse<PageOrderDto>> {
+    return getOrderListPage(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getAllOrder1$Response()` instead.
+   * To access the full response (for headers, for example), `getOrderListPage$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAllOrder1(params?: GetAllOrder1$Params, context?: HttpContext): Observable<PageOrderDto> {
-    return this.getAllOrder1$Response(params, context).pipe(
+  getOrderListPage(params?: GetOrderListPage$Params, context?: HttpContext): Observable<PageOrderDto> {
+    return this.getOrderListPage$Response(params, context).pipe(
       map((r: StrictHttpResponse<PageOrderDto>): PageOrderDto => r.body)
     );
   }

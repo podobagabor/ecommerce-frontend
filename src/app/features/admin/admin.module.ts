@@ -14,6 +14,7 @@ import {FormsModule} from "@angular/forms";
 import {MatTreeNode, MatTreeNodeDef, MatTreeNodePadding, MatTreeNodeToggle} from "@angular/material/tree";
 import { BrandFormComponent } from './brand-form/brand-form.component';
 import { BrandListComponent } from './brand-list/brand-list.component';
+import { DeliveryInfoDialogComponent } from './delivery-info-dialog/delivery-info-dialog.component';
 
 
 
@@ -28,7 +29,8 @@ import { BrandListComponent } from './brand-list/brand-list.component';
     CategoryEditDialogComponent,
     OrderManageComponent,
     BrandFormComponent,
-    BrandListComponent
+    BrandListComponent,
+    DeliveryInfoDialogComponent
   ],
   imports: [
     CommonModule,

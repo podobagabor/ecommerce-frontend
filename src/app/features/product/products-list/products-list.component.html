@@ -37,6 +37,9 @@
       </mat-paginator>
     </div>
     <section class="card-container">
+      @if (emptyCategory) {
+        <p>Nincs az adott kategóriában termék. A többi közül viszont válogathatsz:</p>
+      }
       <app-product-card [hasUser]="hasUser" [savedProducts]="savedProducts" (addSaved)="addToSaved($event)"
                         (removeSaved)="removeFromSaved($event)" [product]="product"
                         *ngFor="let product of products.content"></app-product-card>

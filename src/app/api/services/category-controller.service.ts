@@ -12,6 +12,7 @@ import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
 import { ActionResponseDto } from '../models/action-response-dto';
+import { CategoryCreateDataDto } from '../models/category-create-data-dto';
 import { CategoryDetailedDto } from '../models/category-detailed-dto';
 import { CategoryDto } from '../models/category-dto';
 import { createCategory } from '../fn/category-controller/create-category';
@@ -22,6 +23,10 @@ import { getAllCategories } from '../fn/category-controller/get-all-categories';
 import { GetAllCategories$Params } from '../fn/category-controller/get-all-categories';
 import { getCategoryById } from '../fn/category-controller/get-category-by-id';
 import { GetCategoryById$Params } from '../fn/category-controller/get-category-by-id';
+import { getCategoryCreateData } from '../fn/category-controller/get-category-create-data';
+import { GetCategoryCreateData$Params } from '../fn/category-controller/get-category-create-data';
+import { getCategoryDetailedById } from '../fn/category-controller/get-category-detailed-by-id';
+import { GetCategoryDetailedById$Params } from '../fn/category-controller/get-category-detailed-by-id';
 import { getMainCategories } from '../fn/category-controller/get-main-categories';
 import { GetMainCategories$Params } from '../fn/category-controller/get-main-categories';
 import { modifyCategory } from '../fn/category-controller/modify-category';
@@ -155,6 +160,56 @@ export class CategoryControllerService extends BaseService {
   getAllCategories(params?: GetAllCategories$Params, context?: HttpContext): Observable<Array<CategoryDto>> {
     return this.getAllCategories$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<CategoryDto>>): Array<CategoryDto> => r.body)
+    );
+  }
+
+  /** Path part for operation `getCategoryDetailedById()` */
+  static readonly GetCategoryDetailedByIdPath = '/api/category/detailed/{id}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getCategoryDetailedById()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCategoryDetailedById$Response(params: GetCategoryDetailedById$Params, context?: HttpContext): Observable<StrictHttpResponse<CategoryDetailedDto>> {
+    return getCategoryDetailedById(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getCategoryDetailedById$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCategoryDetailedById(params: GetCategoryDetailedById$Params, context?: HttpContext): Observable<CategoryDetailedDto> {
+    return this.getCategoryDetailedById$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CategoryDetailedDto>): CategoryDetailedDto => r.body)
+    );
+  }
+
+  /** Path part for operation `getCategoryCreateData()` */
+  static readonly GetCategoryCreateDataPath = '/api/category/createData';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getCategoryCreateData()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCategoryCreateData$Response(params?: GetCategoryCreateData$Params, context?: HttpContext): Observable<StrictHttpResponse<CategoryCreateDataDto>> {
+    return getCategoryCreateData(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getCategoryCreateData$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCategoryCreateData(params?: GetCategoryCreateData$Params, context?: HttpContext): Observable<CategoryCreateDataDto> {
+    return this.getCategoryCreateData$Response(params, context).pipe(
+      map((r: StrictHttpResponse<CategoryCreateDataDto>): CategoryCreateDataDto => r.body)
     );
   }
 

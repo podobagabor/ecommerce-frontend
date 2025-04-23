@@ -3,10 +3,17 @@ import {PageEvent} from "@angular/material/paginator";
 import {Store} from "@ngrx/store";
 import {savedProductsIDs, selectUser} from "../../../store/app.selectors";
 import {SavedActions} from "../../../store/saved-state/saved.actions";
-import {Subscription} from "rxjs";
+import {Subscription, take} from "rxjs";
 import {PageProductDto} from "../../../api/models/page-product-dto";
 import {BrandDto} from "../../../api/models/brand-dto";
 import {CategoryDto} from "../../../api/models/category-dto";
+import {ActivatedRoute} from "@angular/router";
+import {CategoryControllerService} from "../../../api/services/category-controller.service";
+import {CategoryDetailedDto} from "../../../api/models/category-detailed-dto";
+import {ProductControllerService} from "../../../api/services/product-controller.service";
+import {ProductsActions} from "../../../store/products-state/products.actions";
+import {BrandControllerService} from "../../../api/services/brand-controller.service";
+import {BrandSimpleDto} from "../../../api/models/brand-simple-dto";
 
 @Component({
   selector: 'app-products-list',
@@ -21,58 +28,47 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   protected savedProducts: number[] = []
   protected currentUser = this.store.select(selectUser)
   protected hasUser: boolean = false;
-  protected brands: { brand: BrandDto, selected: boolean }[] = [];
-  protected categories: { category: CategoryDto, selected: boolean }[] = [];
+  protected brands: { brand: BrandSimpleDto, selected: boolean }[] = [];
+  protected categories: { category: CategoryDetailedDto, selected: boolean }[] = [];
   protected price: { min: number, max: number } = {min: 0, max: 120000};
   protected discount: { min: number, max: number } = {min: 0, max: 100};
   protected category?: CategoryDto;
   protected subscription?: Subscription;
-
-  constructor(private store: Store) {
+  protected emptyCategory: boolean = false;
+  constructor(private brandService: BrandControllerService,private productService: ProductControllerService,private store: Store, private activatedRoute: ActivatedRoute, private categoryService: CategoryControllerService) {
   }
 
   ngOnInit(): void {
-    //todo
-    /*
     let userSubscription = this.currentUser.subscribe(user => {
       this.hasUser = !!user;
     })
     let savedSubscription = this._savedProducts.subscribe(saved => {
       this.savedProducts = saved
     })
+    this.getProducts()
     this.subscription?.add(userSubscription);
     this.subscription?.add(savedSubscription)
+
     this.activatedRoute.queryParams.subscribe(params => {
-      const category = params['category'];
-      const subcategory = params['subCategory'];
-      if (category) {
-
-
-
-
-        localStorage.setItem('query', category);
-        this.categoryService.getAll2().subscribe(value => {
-          let categoryItem: CategoryResponse | undefined = value.find(cat => cat.name === category);
-          if (categoryItem) {
-            this.category = categoryItem;
-            this.categories = categoryItem.subCategories?.map(subCat => {
-              return {
-                category: subCat!,
-                selected: false,
-              };
-            }) || [];
+      const categoryId = params['categoryId'];
+      if (categoryId) {
+        localStorage.setItem('query', categoryId);
+        this.categoryService.getCategoryDetailedById({id: categoryId}).pipe(take(1)).subscribe(value => {
+          if(!value.subCategories) {
+            this.emptyCategory = true;
           }
-          if (subcategory) {
-            let currentCat = this.categories.find(subcat => subcat.category.name === subcategory);
-            if (currentCat) {
-              currentCat.selected = true;
-            }
-          }
+          this.categories = value.subCategories?.map(subCat => {
+            return {
+              category: subCat,
+              selected: false,
+            };
+          }) || [];
           this.getProducts();
         })
       }
     })
-    this.productService.getBrands().subscribe(value => {
+
+    this.brandService.getBrands().subscribe(value => {
       this.brands = value.map(brand => {
         return {
           brand: brand,
@@ -80,27 +76,21 @@ export class ProductsListComponent implements OnInit, OnDestroy {
         };
       });
     })
-     */
   }
 
   getProducts() {
-    /*
-    this.productService.getAll({
-      categories: [this.category?.name!],
-      brands: this.brands.filter(brand => brand.selected).map(brand => brand.brand.name!),
+    this.productService.getProductsByParams({
+      categoryId: this.categories.filter( value => value.selected).map(category => category.category.id),
+      brandId:  this.brands.filter( value => value.selected).map(brand => brand.brand.id),
       maxPrice: this.price.max,
       minPrice: this.price.min,
-      subCategories: this.categories.filter(cat => cat.selected).map(cat => cat.category.name!),
-      minDiscountPercentage: this.discount.min,
-      maxDiscountPercentage: this.discount.max,
+      discount: undefined,
       page: this.products.number,
       size: this.products.size,
     }).subscribe(products => {
       this.products = products;
       this.store.dispatch(ProductsActions.loadProducts({products: products.content || []}))
     })
-
-     */
   }
 
 

@@ -12,7 +12,7 @@ import { OrderDto } from '../../models/order-dto';
 
 export interface ChangeOrderStatus$Params {
   id: number;
-  status: 'CREATED' | 'IN_PROGRESS' | 'UNDER_DELIVERY' | 'COMPLETED';
+  status: 'CANCELLED' | 'CREATED' | 'IN_PROGRESS' | 'UNDER_DELIVERY' | 'COMPLETED';
 }
 
 export function changeOrderStatus(http: HttpClient, rootUrl: string, params: ChangeOrderStatus$Params, context?: HttpContext): Observable<StrictHttpResponse<OrderDto>> {

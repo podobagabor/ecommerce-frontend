@@ -162,7 +162,7 @@ export class ProductControllerService extends BaseService {
   }
 
   /** Path part for operation `getProductById()` */
-  static readonly GetProductByIdPath = '/api/product/{id}';
+  static readonly GetProductByIdPath = '/api/product/public/{id}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -187,7 +187,7 @@ export class ProductControllerService extends BaseService {
   }
 
   /** Path part for operation `getProductsByParams()` */
-  static readonly GetProductsByParamsPath = '/api/product/list';
+  static readonly GetProductsByParamsPath = '/api/product/public/list';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.

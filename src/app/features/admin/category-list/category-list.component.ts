@@ -84,7 +84,6 @@ export class CategoryListComponent implements OnInit {
     const ref = this.dialogService.open(CategoryEditDialogComponent, {
       data: {
         category: category,
-        addSubCategory: true,
         categories: this.allCategory.filter(categoryElement => {
           return (categoryElement.id !== category.id && categoryElement.parentCategoryId !== category.id && !this.isDescendant(categoryElement.id,category.id));
         }),
@@ -98,30 +97,14 @@ export class CategoryListComponent implements OnInit {
     });
   }
 
-  deleteSubCategory(subCategory: CategoryDto) {
-    const ref = this.dialogService.open(TorlesDialogComponent);
-    ref.afterClosed().subscribe(value => {
-      if (value) {
-        this.categoryService.deleteCategory({id: subCategory.id!}).pipe(
-          take(1)
-        ).subscribe(_ => {
-          this.snackService.open("Sikeres törlés", undefined, {
-            duration: 2000,
-          });
-          this.updateCategories();
-        });
-      }
-    });
-  }
-
   loadAllCategory(): Promise<CategoryDto[]> {
     return new Promise<any>((resolve, reject) => {
-      this.categoryService.getAllCategories().pipe(take(1),
+      this.categoryService.getCategoryCreateData().pipe(take(1),
         catchError(err => {
           reject(err)
           return of(err)
         })).subscribe(categories => {
-        this.allCategory = [...categories];
+        this.allCategory = [...categories?.parentCategories];
         resolve(categories);
       })
     })

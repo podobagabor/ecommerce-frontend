@@ -10,8 +10,8 @@ import { RequestBuilder } from '../../request-builder';
 
 import { PageOrderDto } from '../../models/page-order-dto';
 
-export interface GetAllOrder1$Params {
-  status?: 'CREATED' | 'IN_PROGRESS' | 'UNDER_DELIVERY' | 'COMPLETED';
+export interface GetOrderListPage$Params {
+  status?: 'CANCELLED' | 'CREATED' | 'IN_PROGRESS' | 'UNDER_DELIVERY' | 'COMPLETED';
   id?: number;
   page?: number;
   size?: number;
@@ -19,8 +19,8 @@ export interface GetAllOrder1$Params {
   sortDirection?: 'ASC' | 'DESC';
 }
 
-export function getAllOrder1(http: HttpClient, rootUrl: string, params?: GetAllOrder1$Params, context?: HttpContext): Observable<StrictHttpResponse<PageOrderDto>> {
-  const rb = new RequestBuilder(rootUrl, getAllOrder1.PATH, 'get');
+export function getOrderListPage(http: HttpClient, rootUrl: string, params?: GetOrderListPage$Params, context?: HttpContext): Observable<StrictHttpResponse<PageOrderDto>> {
+  const rb = new RequestBuilder(rootUrl, getOrderListPage.PATH, 'get');
   if (params) {
     rb.query('status', params.status, {});
     rb.query('id', params.id, {});
@@ -40,4 +40,4 @@ export function getAllOrder1(http: HttpClient, rootUrl: string, params?: GetAllO
   );
 }
 
-getAllOrder1.PATH = '/api/order/list';
+getOrderListPage.PATH = '/api/order/list';

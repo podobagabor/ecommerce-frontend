@@ -9,9 +9,10 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 import { CategoryDto } from '../../models/category-dto';
+import { CategoryModifyDto } from '../../models/category-modify-dto';
 
 export interface ModifyCategory$Params {
-      body: CategoryDto
+      body: CategoryModifyDto
 }
 
 export function modifyCategory(http: HttpClient, rootUrl: string, params: ModifyCategory$Params, context?: HttpContext): Observable<StrictHttpResponse<CategoryDto>> {

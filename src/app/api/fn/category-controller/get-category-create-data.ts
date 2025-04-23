@@ -8,16 +8,14 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { ProductDto } from '../../models/product-dto';
+import { CategoryCreateDataDto } from '../../models/category-create-data-dto';
 
-export interface GetProductById$Params {
-  id: number;
+export interface GetCategoryCreateData$Params {
 }
 
-export function getProductById(http: HttpClient, rootUrl: string, params: GetProductById$Params, context?: HttpContext): Observable<StrictHttpResponse<ProductDto>> {
-  const rb = new RequestBuilder(rootUrl, getProductById.PATH, 'get');
+export function getCategoryCreateData(http: HttpClient, rootUrl: string, params?: GetCategoryCreateData$Params, context?: HttpContext): Observable<StrictHttpResponse<CategoryCreateDataDto>> {
+  const rb = new RequestBuilder(rootUrl, getCategoryCreateData.PATH, 'get');
   if (params) {
-    rb.path('id', params.id, {});
   }
 
   return http.request(
@@ -25,9 +23,9 @@ export function getProductById(http: HttpClient, rootUrl: string, params: GetPro
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<ProductDto>;
+      return r as StrictHttpResponse<CategoryCreateDataDto>;
     })
   );
 }
 
-getProductById.PATH = '/api/product/public/{id}';
+getCategoryCreateData.PATH = '/api/category/createData';

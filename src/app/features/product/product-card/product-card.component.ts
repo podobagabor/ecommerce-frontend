@@ -3,6 +3,7 @@ import {Router} from "@angular/router";
 import {Store} from "@ngrx/store";
 import {SavedActions} from "../../../store/saved-state/saved.actions";
 import {ProductDto} from "../../../api/models/product-dto";
+import {environment} from "../../../../environment";
 
 @Component({
   selector: 'app-product-card',
@@ -56,4 +57,6 @@ export class ProductCardComponent implements OnChanges, OnInit {
   goDetail() {
     this.router.navigateByUrl('/product/' + this.product?.id);
   }
+
+  protected readonly environment = environment;
 }
