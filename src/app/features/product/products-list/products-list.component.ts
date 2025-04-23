@@ -5,8 +5,6 @@ import {savedProductsIDs, selectUser} from "../../../store/app.selectors";
 import {SavedActions} from "../../../store/saved-state/saved.actions";
 import {Subscription, take} from "rxjs";
 import {PageProductDto} from "../../../api/models/page-product-dto";
-import {BrandDto} from "../../../api/models/brand-dto";
-import {CategoryDto} from "../../../api/models/category-dto";
 import {ActivatedRoute} from "@angular/router";
 import {CategoryControllerService} from "../../../api/services/category-controller.service";
 import {CategoryDetailedDto} from "../../../api/models/category-detailed-dto";
@@ -29,13 +27,18 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   protected currentUser = this.store.select(selectUser)
   protected hasUser: boolean = false;
   protected brands: { brand: BrandSimpleDto, selected: boolean }[] = [];
-  protected categories: { category: CategoryDetailedDto, selected: boolean }[] = [];
+  protected categories: {
+    category: CategoryDetailedDto,
+    selected: boolean,
+    subCategories: { category: CategoryDetailedDto, selected: boolean }[]
+  }[] = [];
   protected price: { min: number, max: number } = {min: 0, max: 120000};
-  protected discount: { min: number, max: number } = {min: 0, max: 100};
-  protected category?: CategoryDto;
+  protected discount: boolean = false;
+  protected category?: CategoryDetailedDto;
   protected subscription?: Subscription;
   protected emptyCategory: boolean = false;
-  constructor(private brandService: BrandControllerService,private productService: ProductControllerService,private store: Store, private activatedRoute: ActivatedRoute, private categoryService: CategoryControllerService) {
+
+  constructor(private brandService: BrandControllerService, private productService: ProductControllerService, private store: Store, private activatedRoute: ActivatedRoute, private categoryService: CategoryControllerService) {
   }
 
   ngOnInit(): void {
@@ -45,7 +48,6 @@ export class ProductsListComponent implements OnInit, OnDestroy {
     let savedSubscription = this._savedProducts.subscribe(saved => {
       this.savedProducts = saved
     })
-    this.getProducts()
     this.subscription?.add(userSubscription);
     this.subscription?.add(savedSubscription)
 
@@ -54,13 +56,20 @@ export class ProductsListComponent implements OnInit, OnDestroy {
       if (categoryId) {
         localStorage.setItem('query', categoryId);
         this.categoryService.getCategoryDetailedById({id: categoryId}).pipe(take(1)).subscribe(value => {
-          if(!value.subCategories) {
+          this.category = value;
+          if (!value.subCategories) {
             this.emptyCategory = true;
           }
-          this.categories = value.subCategories?.map(subCat => {
+          this.categories = value.subCategories?.map((subCat: CategoryDetailedDto) => {
             return {
               category: subCat,
               selected: false,
+              subCategories: subCat.subCategories?.map(category => {
+                return {
+                  category: category,
+                  selected: false,
+                }
+              }) || [],
             };
           }) || [];
           this.getProducts();
@@ -79,12 +88,13 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   }
 
   getProducts() {
+    const selectedCategories = this.getAllSelectedCategories();
     this.productService.getProductsByParams({
-      categoryId: this.categories.filter( value => value.selected).map(category => category.category.id),
-      brandId:  this.brands.filter( value => value.selected).map(brand => brand.brand.id),
+      categoryId: selectedCategories.length!! ? selectedCategories : this.getAllCategories(this.category),
+      brandId: this.brands.filter(value => value.selected).map(brand => brand.brand.id),
       maxPrice: this.price.max,
       minPrice: this.price.min,
-      discount: undefined,
+      discount: this.discount ? true : undefined,
       page: this.products.number,
       size: this.products.size,
     }).subscribe(products => {
@@ -92,7 +102,6 @@ export class ProductsListComponent implements OnInit, OnDestroy {
       this.store.dispatch(ProductsActions.loadProducts({products: products.content || []}))
     })
   }
-
 
   addToSaved($event: number) {
     this.store.dispatch(SavedActions.addProduct({productId: $event}))
@@ -110,5 +119,31 @@ export class ProductsListComponent implements OnInit, OnDestroy {
     this.products.pageable!.pageNumber = $event.pageIndex;
     this.products.pageable!.pageSize = $event.pageSize;
     this.getProducts();
+  }
+
+  getAllCategories(category: CategoryDetailedDto | undefined): number[] {
+    let categoryIds: number[] = [];
+    if (category) {
+      categoryIds.push(category.id);
+      category.subCategories?.forEach(value => {
+        categoryIds = categoryIds.concat(this.getAllCategories(value));
+      })
+    }
+    return categoryIds;
+  }
+
+  getAllSelectedCategories(): number[] {
+    let categoryIds: number[] = [];
+    this.categories.forEach(category => {
+      if (category.selected) {
+        categoryIds.push(category.category.id);
+      }
+      category.subCategories?.forEach(value => {
+        if (value.selected) {
+          categoryIds.push(value.category.id);
+        }
+      })
+    })
+    return categoryIds;
   }
 }

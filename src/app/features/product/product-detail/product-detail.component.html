@@ -7,10 +7,10 @@
 <main class="main-container">
   <section class="photo-container">
     <div class="photo">
-      <img [src]="image">
+      <img [src]="environment.backendUrl + image">
     </div>
     <div class="image-container">
-      <img (mouseenter)="showImage(image)" class="image" *ngFor="let image of product?.images" [src]="image">
+      <img (mouseenter)="showImage(image)" class="image" *ngFor="let image of product?.images" [src]="environment.backendUrl + image">
     </div>
   </section>
   <section class="information-container">

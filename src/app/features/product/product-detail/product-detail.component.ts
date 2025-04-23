@@ -11,6 +11,7 @@ import {UserControllerService} from "../../../api/services/user-controller.servi
 import {UserDtoDetailed} from "../../../api/models/user-dto-detailed";
 import {ProductDto} from "../../../api/models/product-dto";
 import {ProductControllerService} from "../../../api/services/product-controller.service";
+import {environment} from "../../../../environment";
 
 @Component({
   selector: 'app-product-detail',
@@ -29,14 +30,14 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   protected savedSubscription?: Subscription;
   protected userSubscription?: Subscription;
 
-  constructor(private store: Store, private userService: UserControllerService, private productService: ProductControllerService, private activatedRoute: ActivatedRoute, private router: Router, private cookieService: CookieService, private snackService: MatSnackBar) {
+  constructor(private store: Store, private productService: ProductControllerService, private activatedRoute: ActivatedRoute, private snackService: MatSnackBar) {
   }
 
   ngOnInit(): void {
-    const q = localStorage.getItem('query');
-    if (q) {
+    const query = localStorage.getItem('query');
+    if (query) {
       localStorage.clear()
-      this.query = q;
+      this.query = query;
     }
     this.activatedRoute.params.subscribe(params => {
       const productId = params['productId'];
@@ -80,6 +81,9 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
       });
     } else {
       this.store.dispatch(CartActions.addProduct({product: this.product!}))
+      this.snackService.open("Sikeresen hozzáadtad a kosárhoz.",undefined, {
+        duration: 3000,
+      })
     }
   }
 
@@ -91,4 +95,6 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     this.savedSubscription?.unsubscribe();
     this.userSubscription?.unsubscribe()
   }
+
+    protected readonly environment = environment;
 }

@@ -34,7 +34,7 @@ export class ProductFormComponent implements OnInit {
     productName: new FormControl<string>('', Validators.required),
     category: new FormControl<string | CategoryDto>('', Validators.required),
     price: new FormControl<number | undefined>(undefined, Validators.required),
-    discount: new FormControl<number | undefined>(undefined, Validators.required),
+    discount: new FormControl<number | undefined>(undefined),
     brand: new FormControl<string | BrandDto>('', Validators.required),
     quantity: new FormControl<number | undefined>(undefined, Validators.required),
     description: new FormControl<string>('', Validators.required),

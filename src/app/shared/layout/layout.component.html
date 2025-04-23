@@ -76,7 +76,7 @@
     </a>
   </div>
 </div>
-<app-category-menu class="category-menu" (mouseleave)="menuClosed()" *ngIf="categoryMenuOpen"></app-category-menu>
+<app-category-menu [categories]="categories" class="category-menu" (mouseleave)="menuClosed()" *ngIf="categoryMenuOpen"></app-category-menu>
 <router-outlet></router-outlet>
 
 

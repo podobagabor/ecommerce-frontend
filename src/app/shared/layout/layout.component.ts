@@ -4,13 +4,15 @@ import {LoginComponent} from "../../features/home/login/login.component";
 import {ActivatedRoute, Router} from "@angular/router";
 import {RegistrationComponent} from "../../features/home/registration/registration.component";
 import {ForgotPasswordComponent} from "../../features/home/forgot-password/forgot-password.component";
-import {Subscription} from "rxjs";
+import {Subscription, take} from "rxjs";
 import {CookieService} from "ngx-cookie-service";
 import {EmailVerifyComponent} from "../../features/home/email-verify/email-verify.component";
 import {NewPasswordComponent} from "../../features/home/new-password/new-password.component";
 import {AuthenticationService} from "../../services/authentication.service";
 import {Store} from "@ngrx/store";
 import {selectUser} from "../../store/app.selectors";
+import {CategoryControllerService} from "../../api/services/category-controller.service";
+import {CategoryDto} from "../../api/models/category-dto";
 
 @Component({
     selector: 'app-layout',
@@ -23,8 +25,9 @@ export class LayoutComponent implements OnInit, OnDestroy {
   protected currentUser$ = this.store.select(selectUser);
   protected categoryMenuOpen: boolean = false;
   protected subscription?: Subscription;
-
-  constructor(private store: Store, private dialog: MatDialog, private router: Router, private activatedRoute: ActivatedRoute, private cookieService: CookieService, private authenticationService: AuthenticationService) {
+  protected categories: CategoryDto[] = [];
+  constructor(private store: Store, private dialog: MatDialog, private router: Router, private activatedRoute: ActivatedRoute,private authenticationService: AuthenticationService,
+            private categoryService: CategoryControllerService) {
   }
 
   ngOnInit(): void {
@@ -44,6 +47,9 @@ export class LayoutComponent implements OnInit, OnDestroy {
       }
     })
     this.currentUser$.subscribe( user => {})
+    this.categoryService.getMainCategories().pipe(take(1)).subscribe(categories => {
+      this.categories = categories;
+    })
   }
 
   login() {

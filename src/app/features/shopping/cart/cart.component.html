@@ -4,7 +4,7 @@
     <h2>Kiválasztott termékek</h2>
     <mat-card class="cart-element" *ngFor="let item of cartItems">
       <p class="product-name">
-       {{item.productDto?.brand?.name}} {{item.productDto?.name}}
+        {{ item.productDto?.brand?.name }} {{ item.productDto?.name }}
       </p>
       <div class="qounatity-container">
         <button mat-icon-button (click)="reduce(item)">
@@ -12,49 +12,102 @@
             remove
           </mat-icon>
         </button>
-        <p class="product-price">{{item.quantity}} db</p>
+        <p class="product-price">{{ item.quantity }} db</p>
         <button mat-icon-button (click)="grow(item)">
           <mat-icon>
             add
           </mat-icon>
         </button>
       </div>
-      <p class="product-price">{{item.productDto?.price! * item.quantity! | number}}Ft</p>
+      <p class="product-price">{{ item.productDto?.price! * item.quantity! | number }}Ft</p>
       <div class="product-image">
         <img
-          [src]="item.productDto?.images?.[0]">
+          [src]="environment.backendUrl + item.productDto?.images?.[0]">
       </div>
     </mat-card>
     <h1 *ngIf="!cartItems.length" class="text-centered">Üres a kosarad</h1>
     <mat-card class="total-amount-container">
       <p class="total-amount">Fizetendő</p>
-      <p class="total-amount-sum">{{getSum() | number}} Ft</p>
+      <p class="total-amount-sum">{{ getSum() | number }} Ft</p>
     </mat-card>
   </section>
   <section class="user-adatok-container">
     <h2>Szükséges adatok</h2>
-    <div class="user-adatok">
-      <div class="adat-label">
-        <p>Név:</p>
-        <p>E-mail:</p>
-        <p>Tel:</p>
-        <p>Szállítási cím:</p>
-        <p>Számlázási cím:</p>
+    <form fxLayout="column" class="address-section" [formGroup]="userShippingAddressForm">
+      <h2>Szállítási cím</h2>
+      <div fxLayout="row" fxLayoutAlign="space-between">
+        <mat-form-field fxFlex="45%">
+          <mat-label>Ország</mat-label>
+          <input matInput type="text" formControlName="country">
+        </mat-form-field>
+        <mat-form-field fxFlex="45%">
+          <mat-label>Irányítószám</mat-label>
+          <input matInput type="text" formControlName="zipCode">
+        </mat-form-field>
       </div>
-      <div class="adat-value">
-        <p>{{currentUser?.lastName}} {{currentUser?.firsName}}</p>
-        <p>{{currentUser?.email}}</p>
-
-        <!-- <p>{{currentUser?.phoneNumber || "Nincs!"}}</p>
-        <p>{{currentUser?.shippingAddress ? (currentUser!.shippingAddress?.country + " " + currentUser!.shippingAddress?.zipCode + " " + currentUser!.shippingAddress?.city + " " + currentUser!.shippingAddress?.street + " " + currentUser!.shippingAddress?.streetNumber + " " + currentUser!.shippingAddress?.floorNumber) : "Nincs!"}}</p>
-        <p>{{currentUser?.billingAddress ? (currentUser!.billingAddress?.country + " " + currentUser!.billingAddress?.zipCode + " " + currentUser!.billingAddress?.city + " " + currentUser!.billingAddress?.street + " " + currentUser!.billingAddress?.streetNumber + " " + currentUser!.billingAddress?.floorNumber) : "Nincs!"}}</p>
-    -->
-
-         </div>
-    </div>
+      <div fxLayout="row" fxLayoutAlign="space-between">
+        <mat-form-field fxFlex="45%">
+          <mat-label>Város</mat-label>
+          <input matInput type="text" formControlName="city">
+        </mat-form-field>
+        <mat-form-field fxFlex="45%">
+          <mat-label>Út / Utca</mat-label>
+          <input matInput type="text" formControlName="street">
+        </mat-form-field>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="space-between">
+        <mat-form-field fxFlex="45%">
+          <mat-label>Házszám</mat-label>
+          <input matInput type="text" formControlName="streetNumber">
+        </mat-form-field>
+        <mat-form-field fxFlex="45%">
+          <mat-label>Emelet/Ajtó</mat-label>
+          <input matInput type="text" formControlName="floor">
+        </mat-form-field>
+      </div>
+    </form>
+  </section>
+  <section class="user-adatok-container">
+      <h2>Számlázási adatok</h2>
+      <mat-checkbox [(ngModel)]="billingAddressIsTheSame">Megegyezik a szállítási címmel.</mat-checkbox>
+    <form fxLayout="column" class="address-section" [formGroup]="userBillingAddressForm">
+      @if(!billingAddressIsTheSame) {
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <mat-form-field fxFlex="45%">
+            <mat-label>Ország</mat-label>
+            <input matInput type="text" formControlName="country">
+          </mat-form-field>
+          <mat-form-field fxFlex="45%">
+            <mat-label>Irányítószám</mat-label>
+            <input matInput type="text" formControlName="zipCode">
+          </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <mat-form-field fxFlex="45%">
+            <mat-label>Város</mat-label>
+            <input matInput type="text" formControlName="city">
+          </mat-form-field>
+          <mat-form-field fxFlex="45%">
+            <mat-label>Út / Utca</mat-label>
+            <input matInput type="text" formControlName="street">
+          </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <mat-form-field fxFlex="45%">
+            <mat-label>Házszám</mat-label>
+            <input matInput type="text" formControlName="streetNumber">
+          </mat-form-field>
+          <mat-form-field fxFlex="45%">
+            <mat-label>Emelet/Ajtó</mat-label>
+            <input matInput type="text" formControlName="floor">
+          </mat-form-field>
+        </div>
+      }
+    </form>
   </section>
   <div class="buton-container">
-    <a routerLink="/home/userSettings" *ngIf="!canOrder" class="my-button-accent-link">Adatok megadása</a>
-    <button (click)="order()" *ngIf="canOrder && cartItems.length" class="my-button-form full-size-button">Tovább a megrendeléshez</button>
+    <button (click)="order()" [disabled]="!cartItems.length || userShippingAddressForm.invalid || (!billingAddressIsTheSame && userBillingAddressForm.invalid)"  class="my-button-form full-size-button">Tovább a
+      megrendeléshez
+    </button>
   </div>
 </main>
