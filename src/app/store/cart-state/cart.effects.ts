@@ -12,8 +12,8 @@ export class CartEffects {
       ofType(CartActions.addProduct),
       withLatestFrom(this.store.select(cartProducts)),
       exhaustMap(([action, items]) => {
-        let item = items.find(item => item.productDto?.id === action.product.id)
-        if (item && item.quantity) {
+        let item = items.find(item =>item.productDto?.id === action.product.id)
+        if (item && item.quantity && item.quantity !== 1) {
           return this.cartService.changeQuantity({id: item.id!, quantity: item.quantity + 1})
         } else {
           return this.cartService.createCartElement({

@@ -26,6 +26,7 @@ import {userReducer} from "./store/user-state/user.reducer";
 import {EffectsModule} from '@ngrx/effects';
 import {CartEffects} from "./store/cart-state/cart.effects";
 import {SavedEffects} from "./store/saved-state/saved.effects";
+import {UserEffects} from "./store/user-state/user.effects";
 
 
 @NgModule({
@@ -56,7 +57,7 @@ import {SavedEffects} from "./store/saved-state/saved.effects";
       cardProduct: cartReducer,
       user: userReducer
     }, {}),
-    EffectsModule.forRoot([CartEffects, SavedEffects])],
+    EffectsModule.forRoot([CartEffects, SavedEffects,UserEffects])],
   providers: [{
     provide: HTTP_INTERCEPTORS,
     useClass: AuthHeaderInterceptor,

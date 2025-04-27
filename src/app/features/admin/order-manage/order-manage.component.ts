@@ -8,6 +8,7 @@ import {PageEvent} from "@angular/material/paginator";
 import {MatDialog} from "@angular/material/dialog";
 import {CategoryEditDialogComponent} from "../category-edit-dialog/category-edit-dialog.component";
 import {DeliveryInfoDialogComponent} from "../delivery-info-dialog/delivery-info-dialog.component";
+import {environment} from "../../../../environment";
 
 
 @Component({
@@ -79,4 +80,6 @@ export class OrderManageComponent implements OnInit {
       this.loadOrders();
     }
   }
+
+  protected readonly environment = environment;
 }

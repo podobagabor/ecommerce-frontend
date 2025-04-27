@@ -31,9 +31,7 @@ export class ProductCardComponent implements OnChanges, OnInit {
   }
 
   ngOnChanges(): void {
-    if (this.savedProducts.length) {
-      this.isSaved = this.savedProducts.some(id => this.product?.id === id)
-    }
+    this.isSaved = this.savedProducts.some(id => this.product?.id === id)
   }
 
   save(event: any) {

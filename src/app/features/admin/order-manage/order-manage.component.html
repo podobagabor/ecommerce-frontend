@@ -42,17 +42,19 @@
             </div>
           </div>
         </mat-expansion-panel-header>
-        <mat-card class="product-element" *ngFor="let item of order.items">
-          <p class="product-name">
-            {{ item.product?.brand?.name }} {{ item.product?.name }}
-          </p>
-          <p class="product-price">{{ item.quantity }} db</p>
-          <p class="product-price">{{ item.product?.price! * item.quantity! | number }}Ft</p>
-          <div class="product-image">
-            <img
-              [src]="item.product?.images?.[0]">
-          </div>
-        </mat-card>
+        <section class="product-list">
+          <mat-card class="product-element" *ngFor="let item of order.items">
+            <p class="product-name">
+              {{ item.product?.brand?.name }} {{ item.product?.name }}
+            </p>
+            <p class="product-price">{{ item.quantity }} db</p>
+            <p class="product-price">{{ item.product?.price! * item.quantity! | number }}Ft</p>
+            <div class="product-image">
+              <img
+                [src]="environment.backendUrl + item.product?.images?.[0]">
+            </div>
+          </mat-card>
+        </section>
       </mat-expansion-panel>
     </mat-accordion>
   }

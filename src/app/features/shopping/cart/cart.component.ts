@@ -25,7 +25,6 @@ export class CartComponent implements OnInit, OnDestroy {
   protected _cartItems = this.store.select(cartProducts)
   protected currentUser?: UserDtoDetailed;
   protected _currentUser = this.store.select(selectUser)
-  protected canOrder: boolean = false;
   protected billingAddressIsTheSame: boolean = false;
   private subscriptions: Subscription = new Subscription();
   protected userShippingAddressForm = new FormGroup({
@@ -50,7 +49,8 @@ export class CartComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const cartSubscription = this._cartItems.subscribe(cartItems => {
-      this.cartItems = []
+      this.cartItems = [];
+      console.log(cartItems);
       cartItems.forEach(item => {
         this.cartItems.push({...item})
       })
@@ -66,8 +66,6 @@ export class CartComponent implements OnInit, OnDestroy {
           country: this.currentUser.address.country || '',
         });
       }
-      //TODO
-      //this.canOrder = !!(this.currentUser?.shippingAddress && this.currentUser.billingAddress);
     })
     this.subscriptions.add(cartSubscription)
     this.subscriptions.add(userSubscription)

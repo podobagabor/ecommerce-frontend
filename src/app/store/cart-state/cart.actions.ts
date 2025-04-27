@@ -7,7 +7,7 @@ export const CartActions = createActionGroup({
   events: {
     'Add Product': props<{ product: ProductDto }>(),
     'Remove Product': props<{ productId: number }>(),
-    'Init': props<{ products: CartElementDto[] }>(),
+    'Init': props<{ cartElements: CartElementDto[] }>(),
     'Updated': emptyProps,
   }
 })

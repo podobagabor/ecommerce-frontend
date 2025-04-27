@@ -1,4 +1,4 @@
-import {createReducer, on} from "@ngrx/store";
+import {createReducer, INIT, on} from "@ngrx/store";
 import {UserActions} from "./user.actions";
 import {UserState} from "../store.interfaces";
 import {UserDtoDetailed} from "../../api/models/user-dto-detailed";
@@ -18,3 +18,5 @@ export const userReducer = createReducer(
     return {user: user}
   })
 )
+
+

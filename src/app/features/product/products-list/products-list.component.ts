@@ -46,7 +46,8 @@ export class ProductsListComponent implements OnInit, OnDestroy {
       this.hasUser = !!user;
     })
     let savedSubscription = this._savedProducts.subscribe(saved => {
-      this.savedProducts = saved
+      console.log("Products list:" + saved);
+      this.savedProducts = [...saved]
     })
     this.subscription?.add(userSubscription);
     this.subscription?.add(savedSubscription)

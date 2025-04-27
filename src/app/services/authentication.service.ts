@@ -21,9 +21,22 @@ export class AuthenticationService {
 
 
   constructor(private userService: UserControllerService,
-              //private productService: ProductControllerService,
               private store: Store, private cookieService: CookieService,
               private http: HttpClient) {
+
+    this.store.select(selectUser).subscribe(value => {
+      if (!value && !this.currentUser.value) {
+        this.logout();
+      } else if(value) {
+        this.store.dispatch(SavedActions.init({
+          productIds: value.savedItems?.map(product => product.id!!) || []
+        }))
+        this.store.dispatch(CartActions.init({
+          cartElements: value.cartItems || [],
+        }))
+      }
+    })
+    /*
     if (this.cookieService.get("accessToken") !== '') {
       this.userService.getCurrentUser().subscribe(user => {
         console.log(user);
@@ -33,17 +46,6 @@ export class AuthenticationService {
             user: user
           }
         ))
-        this.store.dispatch(SavedActions.init({
-          productIds: user.savedItems?.map(product => product.id!!) || []
-        }))
-        this.store.dispatch(CartActions.init({
-          products: user.cartItems || []
-        }))
-        this.store.select(selectUser).subscribe(value => {
-          if (!value && !this.currentUser.value) {
-            this.logout();
-          }
-        })
       })
     } else {
       if (localStorage.getItem("saved")) {
@@ -54,7 +56,6 @@ export class AuthenticationService {
       }
 
     }
-    /*
     this.productService.getProductsByParams().subscribe(products => {
       this.store.dispatch(ProductsActions.loadProducts({products: products.content || []}))
     })
@@ -90,17 +91,10 @@ export class AuthenticationService {
           this.cookieService.set("accessToken", value.access_token);
           this.cookieService.set("refreshToken", value.refresh_token);
           this.userService.getCurrentUser().subscribe(user => {
-            this.currentUser?.next(user);
             this.store.dispatch(UserActions.login({
                 user: user
               }
             ));
-            this.store.dispatch(CartActions.init({
-              products: user.cartItems || []
-            }))
-            this.store.dispatch(SavedActions.init({
-              productIds: user.savedItems?.map(product => product.id!!) || []
-            }))
             resolve(true);
           })
         } else {
@@ -110,6 +104,8 @@ export class AuthenticationService {
     })
 
   }
+
+
 
   /*
   getNewToken(): Promise<any> {

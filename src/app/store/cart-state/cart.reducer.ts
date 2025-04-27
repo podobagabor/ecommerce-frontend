@@ -6,7 +6,7 @@ export const initialState: CartElementDto[] = []
 
 export const cartReducer = createReducer(
   initialState,
-  on(CartActions.init, (_state, {products}) => products),
+  on(CartActions.init, (_state, {cartElements}) => cartElements),
 
   on(CartActions.addProduct, (state, {product}) => {
     let item = state.find(item => item.productDto?.id === product.id)
@@ -17,7 +17,7 @@ export const cartReducer = createReducer(
     } else {
       return [...state, {
         quantity: 1,
-        product: product
+        productDto: product
       }];
     }
   }),
