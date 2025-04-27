@@ -23,6 +23,8 @@
     "@angular/platform-browser-dynamic": "^19.2.4",
     "@angular/router": "^19.2.4",
     "@ngrx/effects": "^19.0.1",
+    "@ngrx/operators": "^19.1.0",
+    "@ngrx/signals": "^19.1.0",
     "@ngrx/store": "^19.0.1",
     "@openapitools/openapi-generator-cli": "^0.0.6",
     "@popperjs/core": "^2.11.8",
@@ -36,6 +38,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^19.2.5",
+    "@angular-devkit/core": "^19.2.9",
     "@angular/cli": "^19.2.5",
     "@angular/compiler-cli": "^19.2.4",
     "@angular/localize": "^19.2.4",

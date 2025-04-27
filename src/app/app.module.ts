@@ -19,7 +19,6 @@ import {AuthHeaderInterceptor} from "./core/auth-header.interceptor";
 import {NewPasswordComponent} from './features/home/new-password/new-password.component';
 import {ChangePasswordComponent} from './features/user/change-password/change-password.component';
 import {StoreModule} from '@ngrx/store';
-import {productsReducer} from "./store/products-state/products.reducer";
 import {savedReducer} from "./store/saved-state/saved.reducer";
 import {cartReducer} from "./store/cart-state/cart.reducer";
 import {userReducer} from "./store/user-state/user.reducer";
@@ -52,7 +51,6 @@ import {UserEffects} from "./store/user-state/user.effects";
     ApiModule.forRoot({rootUrl: 'http://localhost:4200'}),
     SharedModule,
     StoreModule.forRoot({
-      products: productsReducer,
       savedProductIDs: savedReducer,
       cardProduct: cartReducer,
       user: userReducer

@@ -34,11 +34,6 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    const query = localStorage.getItem('query');
-    if (query) {
-      localStorage.clear()
-      this.query = query;
-    }
     this.activatedRoute.params.subscribe(params => {
       const productId = params['productId'];
       if (productId) {

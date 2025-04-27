@@ -1,7 +1,7 @@
 <div class="main-container">
   <div class="category-column" *ngFor="let category of categories">
-    <a routerLink="/product/list" [queryParams]="{categoryId: category.id}"><strong>{{category.name}}</strong></a>
-    <a *ngFor="let subCategory of category.subCategories" routerLink="/product/list" [queryParams]="{categoryId: subCategory.id}">{{subCategory.name}}</a>
+    <a routerLink="/product/list" (click)="productStore.updateAllCategory(category.id)"><strong>{{category.name}}</strong></a>
+    <a *ngFor="let subCategory of category.subCategories" (click)="productStore.updateAllCategory(subCategory.id)" routerLink="/product/list">{{subCategory.name}}</a>
   </div>
   <div class="placeholder">
   </div>
