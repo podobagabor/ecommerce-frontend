@@ -10,8 +10,9 @@ import {CategoryControllerService} from "../../../api/services/category-controll
 import {CategoryDetailedDto} from "../../../api/models/category-detailed-dto";
 import {ProductControllerService} from "../../../api/services/product-controller.service";
 import {BrandControllerService} from "../../../api/services/brand-controller.service";
-import {BrandSimpleDto} from "../../../api/models/brand-simple-dto";
 import {ProductStore} from "../../../store/products-signal-state/products.store";
+import {BrandStore} from "../../../store/brand-signal-state/brand.store";
+import {CategoryStore} from "../../../store/category-state/category.store";
 
 @Component({
   selector: 'app-products-list',
@@ -21,12 +22,14 @@ import {ProductStore} from "../../../store/products-signal-state/products.store"
 })
 export class ProductsListComponent implements OnInit, OnDestroy {
   readonly productStore = inject(ProductStore);
+  readonly brandStore = inject(BrandStore);
+  readonly categoryStore = inject(CategoryStore);
+
   protected products: PageProductDto = {};
   protected _savedProducts = this.store.select(savedProductsIDs)
   protected savedProducts: number[] = []
   protected currentUser = this.store.select(selectUser)
   protected hasUser: boolean = false;
-  protected brands: { brand: BrandSimpleDto, selected: boolean }[] = [];
   protected categories: {
     category: CategoryDetailedDto,
     selected: boolean,
@@ -49,44 +52,29 @@ export class ProductsListComponent implements OnInit, OnDestroy {
       this.savedProducts = [...saved]
     })
     this.subscription?.add(userSubscription);
-    this.subscription?.add(savedSubscription)
-
-
-    this.brandService.getBrands().subscribe(value => {
-      this.brands = value.map(brand => {
-        return {
-          brand: brand,
-          selected: false,
-        };
-      });
-    })
+    this.subscription?.add(savedSubscription);
+    if (!this.brandStore.brands().length) {
+      this.brandStore.loadBrands("");
+    }
+    this.getProducts();
   }
 
   getProducts() {
-    /*
-    const selectedCategories = this.getAllSelectedCategories();
-    this.productService.getProductsByParams({
-      categoryId: selectedCategories.length!! ? selectedCategories : this.getAllCategories(this.category),
-      brandId: this.brands.filter(value => value.selected).map(brand => brand.brand.id),
-      maxPrice: this.price.max,
-      minPrice: this.price.min,
-      discount: this.discount ? true : undefined,
-      page: this.products.number,
-      size: this.products.size,
-    }).subscribe(products => {
-      this.products = products;
-      this.store.dispatch(ProductsActions.loadProducts({products: products.content || []}))
-    })
-     */
+    console.log("brand");
+    console.log(this.brandStore.brands().filter(value => value.selected).map(brand => brand.brand.id));
+    console.log("category");
+    console.log(this.categoryStore.categoryFilters());
     this.productStore.loadProducts({
-      brandId: this.brands.filter(value => value.selected).map(brand => brand.brand.id),
+      brandId: this.brandStore.brands().filter(value => value.selected).map(brand => brand.brand.id),
       maxPrice: this.price.max,
       minPrice: this.price.min,
       discount: this.discount ? true : undefined,
       page: this.products.number,
       size: this.products.size,
+      categoryId: this.categoryStore.categoryFilters(),
     })
   }
+
 
   addToSaved($event: number) {
     this.store.dispatch(SavedActions.addProduct({productId: $event}))
@@ -104,31 +92,5 @@ export class ProductsListComponent implements OnInit, OnDestroy {
     this.products.pageable!.pageNumber = $event.pageIndex;
     this.products.pageable!.pageSize = $event.pageSize;
     this.getProducts();
-  }
-
-  getAllCategories(category: CategoryDetailedDto | undefined): number[] {
-    let categoryIds: number[] = [];
-    if (category) {
-      categoryIds.push(category.id);
-      category.subCategories?.forEach(value => {
-        categoryIds = categoryIds.concat(this.getAllCategories(value));
-      })
-    }
-    return categoryIds;
-  }
-
-  getAllSelectedCategories(): number[] {
-    let categoryIds: number[] = [];
-    this.categories.forEach(category => {
-      if (category.selected) {
-        categoryIds.push(category.category.id);
-      }
-      category.subCategories?.forEach(value => {
-        if (value.selected) {
-          categoryIds.push(value.category.id);
-        }
-      })
-    })
-    return categoryIds;
   }
 }

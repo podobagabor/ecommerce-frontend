@@ -1,7 +1,6 @@
-import {Component, inject, Input, OnInit} from '@angular/core';
-import {CategoryControllerService} from "../../../api/services/category-controller.service";
+import {Component, inject, Input} from '@angular/core';
 import {CategoryDetailedDto} from "../../../api/models/category-detailed-dto";
-import {ProductStore} from "../../../store/products-signal-state/products.store";
+import {CategoryStore} from "../../../store/category-state/category.store";
 
 @Component({
   selector: 'app-category-menu',
@@ -10,6 +9,6 @@ import {ProductStore} from "../../../store/products-signal-state/products.store"
   standalone: false
 })
 export class CategoryMenuComponent {
-  readonly productStore = inject(ProductStore);
+  readonly categoryStore = inject(CategoryStore);
   @Input({required: true}) categories?: CategoryDetailedDto[];
 }

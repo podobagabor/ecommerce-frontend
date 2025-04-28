@@ -3,18 +3,26 @@
     <h2>Szűrő</h2>
     <h3>Márka</h3>
     <section class="filter-list">
-      @for (brand of brands; track brand.brand.id) {
-        <mat-checkbox [(ngModel)]="brand.selected">{{brand.brand.name}}</mat-checkbox>
+      @for (brand of brandStore.brands(); track brand.brand.id) {
+        <mat-checkbox (change)="brandStore.selectBrand(brand.brand.id,$event.checked)"
+                      [checked]="brand.selected">{{ brand.brand.name }}
+        </mat-checkbox>
       }
     </section>
     <h3>Kategória</h3>
     <section class="filter-list">
-      @for(category of productStore.allSubCategory(); track category.category.id) {
-        <mat-checkbox [checked]="category.selected" (change)="productStore.updateSelectedCategory(category.category.id,$event.checked)">{{category.category.name}}</mat-checkbox>
-        @if(category.subCategories.length) {
+      @for (category of categoryStore.categories(); track category.category.id) {
+        <mat-checkbox [checked]="category.selected"
+                      (change)="categoryStore.updateSelectedCategory(category.category.id,$event.checked)">{{ category.category.name }}
+        </mat-checkbox>
+        @if (category.subCategories.length) {
           <ul>
             @for (subCategory of category.subCategories; track subCategory.category.id) {
-              <li><mat-checkbox [checked]="subCategory.selected" (change)="productStore.updateSelectedCategory(subCategory.category.id,$event.checked)">{{subCategory.category.name}}</mat-checkbox></li>
+              <li>
+                <mat-checkbox [checked]="subCategory.selected"
+                              (change)="categoryStore.updateSelectedCategory(subCategory.category.id,$event.checked)">{{ subCategory.category.name }}
+                </mat-checkbox>
+              </li>
             }
           </ul>
         }

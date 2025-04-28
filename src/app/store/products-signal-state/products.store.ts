@@ -7,6 +7,7 @@ import {tapResponse} from "@ngrx/operators";
 import {PageProductDto} from "../../api/models/page-product-dto";
 import {CategoryDetailedDto} from "../../api/models/category-detailed-dto";
 import {CategoryControllerService} from "../../api/services/category-controller.service";
+import {BrandControllerService} from "../../api/services/brand-controller.service";
 
 export interface ProductFilter {
   name?: string;
@@ -23,7 +24,8 @@ type ProductState = {
   products: PageProductDto,
   isLoading: boolean,
   mainCategory: CategoryDetailedDto,
-  allSubCategory: {
+  availableCategoriesIdList: number[],
+  availableCategoriesTree: {
     category: CategoryDetailedDto,
     selected: boolean,
     subCategories: { category: CategoryDetailedDto, selected: boolean }[]
@@ -33,9 +35,10 @@ type ProductState = {
 
 const initialProductState: ProductState = {
   mainCategory: {id: 0},
+  availableCategoriesIdList: [],
   isLoading: false,
   products: {},
-  allSubCategory: [],
+  availableCategoriesTree: [],
   filter: {
     query: {},
     page: 0,
@@ -46,14 +49,12 @@ const initialProductState: ProductState = {
 export const ProductStore = signalStore(
   {providedIn: 'root'},
   withState(initialProductState),
-  withMethods((store, productService = inject(ProductControllerService), categoryService = inject(CategoryControllerService)) => ({
+  withMethods((store, productService = inject(ProductControllerService), brandService = inject(BrandControllerService), categoryService = inject(CategoryControllerService)) => ({
     loadProducts: rxMethod<ProductFilter>(
       pipe(
         tap(() => patchState(store, {isLoading: true})),
         switchMap((value) => {
-          const currentStore = getState(store);
-          let selectedCategories = currentStore.allSubCategory.
-          return productService.getProductsByParams(value).pipe(
+          return productService.getProductsByParams({...value}).pipe(
             tapResponse({
               next: (products) => {
                 patchState(store, {products: products})
@@ -67,81 +68,11 @@ export const ProductStore = signalStore(
         })
       )
     ),
-    updateAllCategory: rxMethod<number>(
-      pipe(
-        tap(() => patchState(store, {isLoading: true})),
-        switchMap((categoryId) => {
-          return categoryService.getCategoryDetailedById({id: categoryId}).pipe(
-            tap(value => {
-              const categories = value.subCategories?.map((subCat: CategoryDetailedDto) => {
-                return {
-                  category: subCat,
-                  selected: false,
-                  subCategories: subCat.subCategories?.map(category => {
-                    return {
-                      category: category,
-                      selected: false,
-                    }
-                  }) || [],
-                };
-              }) || [];
-              patchState(store, {allSubCategory: categories, mainCategory: value});
-            })
-          )
-        }),
-        switchMap((value) => {
-          console.log("switch")
-          return productService.getProductsByParams({
-            categoryId: getAllCategories(value)
-          }).pipe(
-            tapResponse({
-              next: (products) => {
-                patchState(store, {products: products})
-              },
-              error: error => {
-                console.error(error)
-              },
-              finalize: () => patchState(store, {isLoading: false}),
-            })
-          )
-        })
-      )),
     updateQuery(query: ProductFilter) {
       patchState(store, (state) => ({...state, filter: {...state.filter, query}}));
     },
     updateProducts(products: PageProductDto) {
       patchState(store, (state) => ({...state, products: {...products}}))
-    },
-    updateCategories(updatedCategoryList: number[]) {
-      store.allSubCategory().forEach((subCategory) => {
-      })
-      patchState(store, (state) => ({
-        ...state,
-        filter: {...state.filter, query: {...state.filter.query, categoryId: updatedCategoryList}}
-      }));
-    },
-    updateSelectedCategory(categoryId: number, selected: boolean) {
-      const currentState = getState(store);
-      currentState.allSubCategory.forEach((subCategory) => {
-        if (subCategory.category.id === categoryId) {
-          subCategory.selected = selected;
-          subCategory.subCategories = subCategory.subCategories.map(subCategory => {
-            return {...subCategory, selected: selected}
-          });
-        } else {
-          const selectedCategory = subCategory.subCategories?.find(subCategory => subCategory.category.id === categoryId);
-          if (selectedCategory) {
-            selectedCategory.selected = selected;
-            if (selectedCategory.category.subCategories)
-              selectedCategory.category.subCategories = selectedCategory.category.subCategories.map(subCategory => {
-                return {...subCategory, selected: selected}
-              });
-          }
-        }
-      });
-      patchState(store, (state) => ({
-        ...state, allSubCategory: currentState.allSubCategory
-      }))
     }
   })),
   withHooks({
@@ -158,13 +89,4 @@ export const ProductStore = signalStore(
   }),
 )
 
-export function getAllCategories(category: CategoryDetailedDto | undefined): number[] {
-  let categoryIds: number[] = [];
-  if (category) {
-    categoryIds.push(category.id);
-    category.subCategories?.forEach(value => {
-      categoryIds = categoryIds.concat(getAllCategories(value));
-    })
-  }
-  return categoryIds;
-}
+
