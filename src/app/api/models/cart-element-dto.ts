@@ -4,7 +4,7 @@
 
 import { ProductDto } from '../models/product-dto';
 export interface CartElementDto {
-  id?: number;
-  productDto?: ProductDto;
-  quantity?: number;
+  id: number;
+  productDto: ProductDto;
+  quantity: number;
 }

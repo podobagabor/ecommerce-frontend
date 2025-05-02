@@ -51,7 +51,7 @@ import {UserEffects} from "./store/user-state/user.effects";
     ApiModule.forRoot({rootUrl: 'http://localhost:4200'}),
     SharedModule,
     StoreModule.forRoot({
-      savedProductIDs: savedReducer,
+      savedProducts: savedReducer,
       cardProduct: cartReducer,
       user: userReducer
     }, {}),

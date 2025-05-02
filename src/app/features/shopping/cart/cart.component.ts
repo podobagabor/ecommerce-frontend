@@ -22,9 +22,9 @@ import {Address} from "../../../api/models/address";
 })
 export class CartComponent implements OnInit, OnDestroy {
   protected cartItems: CartElementDto[] = [];
-  protected _cartItems = this.store.select(cartProducts)
+  protected $cartItems = this.store.select(cartProducts)
   protected currentUser?: UserDtoDetailed;
-  protected _currentUser = this.store.select(selectUser)
+  protected $currentUser = this.store.select(selectUser)
   protected billingAddressIsTheSame: boolean = false;
   private subscriptions: Subscription = new Subscription();
   protected userShippingAddressForm = new FormGroup({
@@ -48,14 +48,10 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    const cartSubscription = this._cartItems.subscribe(cartItems => {
-      this.cartItems = [];
-      console.log(cartItems);
-      cartItems.forEach(item => {
-        this.cartItems.push({...item})
-      })
+    const cartSubscription = this.$cartItems.subscribe(cartItems => {
+      this.cartItems = [...cartItems];
     })
-    const userSubscription = this._currentUser.subscribe(user => {
+    const userSubscription = this.$currentUser.subscribe(user => {
       this.currentUser = user;
       if (this.currentUser && this.currentUser.address) {
         this.userShippingAddressForm.patchValue({
@@ -73,13 +69,11 @@ export class CartComponent implements OnInit, OnDestroy {
 
 
   reduce(item: CartElementDto) {
-    item.quantity = item.quantity! - 1;
-    this.store.dispatch(CartActions.removeProduct({productId: item.productDto?.id!}))
+    this.store.dispatch(CartActions.deleteCartElementFromUser({cartElement: item}))
   }
 
   grow(item: CartElementDto) {
-    item.quantity = item.quantity! + 1;
-    this.store.dispatch(CartActions.addProduct({product: item.productDto!}))
+    this.store.dispatch(CartActions.saveCartElement({product: item.productDto}))
   }
 
   getSum(): number {

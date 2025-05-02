@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {Store} from "@ngrx/store";
 import {SavedActions} from "../../../store/saved-state/saved.actions";
@@ -11,15 +11,11 @@ import {environment} from "../../../../environment";
   styleUrls: ['./product-card.component.scss'],
   standalone: false
 })
-export class ProductCardComponent implements OnChanges, OnInit {
+export class ProductCardComponent implements OnInit {
 
   @Input({required: true}) product?: ProductDto;
-  @Input() hasUser: boolean = false;
-  @Input() savedProducts: number[] = [];
+  @Input() isSaved: boolean = false;
   @Input() savedMode: boolean = false
-  @Output() addSaved = new EventEmitter<number>();
-  @Output() removeSaved = new EventEmitter<number>();
-  protected isSaved: boolean = false
 
   constructor(private router: Router, private store: Store) {
   }
@@ -30,24 +26,13 @@ export class ProductCardComponent implements OnChanges, OnInit {
     }
   }
 
-  ngOnChanges(): void {
-    this.isSaved = this.savedProducts.some(id => this.product?.id === id)
-  }
-
   save(event: any) {
     event.stopPropagation();
-    if (this.hasUser) {
+    if(this.product) {
       if (this.isSaved) {
-        this.store.dispatch(SavedActions.removeProduct({productId: this.product?.id!}))
+        this.store.dispatch(SavedActions.removeProduct({productId: this.product?.id!}));
       } else {
-        this.store.dispatch(SavedActions.addProduct({productId: this.product?.id!}))
-      }
-
-    } else {
-      if (!this.isSaved) {
-        this.addSaved.emit(this.product?.id);
-      } else {
-        this.removeSaved.emit(this.product?.id);
+        this.store.dispatch(SavedActions.saveProduct({product: this.product}));
       }
     }
   }

@@ -2,7 +2,7 @@ import {getState, patchState, signalStore, withHooks, withMethods, withState} fr
 import {effect, inject} from "@angular/core";
 import {ProductControllerService} from "../../api/services/product-controller.service";
 import {rxMethod} from '@ngrx/signals/rxjs-interop';
-import {pipe, switchMap, tap} from "rxjs";
+import {debounceTime, pipe, switchMap, tap} from "rxjs";
 import {tapResponse} from "@ngrx/operators";
 import {PageProductDto} from "../../api/models/page-product-dto";
 import {CategoryDetailedDto} from "../../api/models/category-detailed-dto";
@@ -57,6 +57,7 @@ export const ProductStore = signalStore(
           return productService.getProductsByParams({...value}).pipe(
             tapResponse({
               next: (products) => {
+                console.log("loadProducts");
                 patchState(store, {products: products})
               },
               error: error => {
@@ -69,9 +70,13 @@ export const ProductStore = signalStore(
       )
     ),
     updateQuery(query: ProductFilter) {
+      console.log("updateQuery");
+
       patchState(store, (state) => ({...state, filter: {...state.filter, query}}));
     },
     updateProducts(products: PageProductDto) {
+      console.log("updateProducts");
+
       patchState(store, (state) => ({...state, products: {...products}}))
     }
   })),

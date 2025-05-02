@@ -15,37 +15,13 @@ import {ProductDto} from "../../../api/models/product-dto";
   standalone: false
 })
 export class SavedProductsComponent implements OnInit, OnDestroy {
-  protected savedItems: ProductDto[] = [];
-  protected _savedItems = this.store.select(savedProducts)
-  protected hasUser: boolean = false;
-  protected subscription?: Subscription;
-
+  protected $savedItems = this.store.select(savedProducts)
   constructor(private store: Store, private savedService: SavedControllerService, private cookieService: CookieService, private authenticationService: AuthenticationService) {
   }
 
   ngOnInit(): void {
-    this.subscription = this._savedItems.subscribe(saved => {
-      this.savedItems = saved
-    })
-    if (this.authenticationService.getCurrentUser().value) {
-      this.savedService.getSavedOfUser().subscribe(value => {
-        this.hasUser = true;
-      })
-    }
-  }
-
-  removeFromSaved($event: number) {
-    this.store.dispatch(SavedActions.removeProduct({productId: $event}))
-    //Todo
-    /*
-    if (this.hasUser) {
-      this.savedService.removeProductFromSaved({body: [$event]})
-    }
-
-     */
   }
 
   ngOnDestroy(): void {
-    this.subscription?.unsubscribe()
   }
 }

@@ -5,9 +5,9 @@ import {ProductDto} from "../api/models/product-dto";
 
 export const products = createFeatureSelector<Array<ProductDto>>('products');
 
-export const savedProductsIDs = createFeatureSelector<
-  Array<number>
->('savedProductIDs');
+export const savedProducts = createFeatureSelector<
+  Array<ProductDto>
+>('savedProducts');
 
 export const cartProducts = createFeatureSelector<
   CartElementDto[]
@@ -16,14 +16,6 @@ export const cartProducts = createFeatureSelector<
 export const selectUserState = createFeatureSelector<
   UserState
 >('user');
-
-export const savedProducts = createSelector(
-  products,
-  savedProductsIDs,
-  (products, savedProductsIDs) => {
-    return savedProductsIDs.map((id) => products.find((product) => product.id === id)!);
-  }
-);
 
 export const selectUser = createSelector(
   selectUserState,

@@ -57,9 +57,10 @@
       @if (emptyCategory) {
         <p>Nincs az adott kategóriában termék. A többi közül viszont válogathatsz:</p>
       }
-      <app-product-card [hasUser]="hasUser" [savedProducts]="savedProducts" (addSaved)="addToSaved($event)"
-                        (removeSaved)="removeFromSaved($event)" [product]="product"
-                        *ngFor="let product of productStore.products().content"></app-product-card>
+      @for (product of productStore.products().content; track product.id) {
+        <app-product-card [product]="product"
+                           [isSaved]="isSaved(product)"></app-product-card>
+      }
     </section>
   </mat-sidenav-content>
 </mat-sidenav-container>

@@ -1,17 +1,15 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {CookieService} from "ngx-cookie-service";
+import {ActivatedRoute} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Store} from "@ngrx/store";
-import {savedProductsIDs, selectUser} from "../../../store/app.selectors";
 import {SavedActions} from "../../../store/saved-state/saved.actions";
 import {CartActions} from "../../../store/cart-state/cart.actions";
 import {Subscription} from "rxjs";
-import {UserControllerService} from "../../../api/services/user-controller.service";
 import {UserDtoDetailed} from "../../../api/models/user-dto-detailed";
 import {ProductDto} from "../../../api/models/product-dto";
 import {ProductControllerService} from "../../../api/services/product-controller.service";
 import {environment} from "../../../../environment";
+import {savedProducts, selectUser} from "../../../store/app.selectors";
 
 @Component({
   selector: 'app-product-detail',
@@ -25,10 +23,11 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   protected image: string = "";
   protected query: string = '';
   protected user?: UserDtoDetailed;
-  protected _user = this.store.select(selectUser);
-  protected _saved = this.store.select(savedProductsIDs);
+  private $user = this.store.select(selectUser);
+  private $saved = this.store.select(savedProducts);
   protected savedSubscription?: Subscription;
   protected userSubscription?: Subscription;
+  protected readonly environment = environment;
 
   constructor(private store: Store, private productService: ProductControllerService, private activatedRoute: ActivatedRoute, private snackService: MatSnackBar) {
   }
@@ -41,30 +40,23 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
           this.savedSubscription?.unsubscribe();
           this.product = value;
           this.image = value.images?.[0] || '';
-          this.savedSubscription = this._saved.subscribe(savedProducts => {
-            this.isSaved = savedProducts.some(productId => productId === this.product?.id)
+          this.savedSubscription = this.$saved.subscribe(savedProducts => {
+            this.isSaved = savedProducts.some(savedProduct => savedProduct.id === this.product?.id)
           })
-
         })
       }
     })
-    this.userSubscription = this._user.subscribe(user => {
+    this.userSubscription = this.$user.subscribe(user => {
       this.user = user
     })
   }
 
   addToSaved() {
-    if (this.user) {
+    if (this.product) {
       if (this.isSaved) {
         this.store.dispatch(SavedActions.removeProduct({productId: this.product?.id!}))
       } else {
-        this.store.dispatch(SavedActions.addProduct({productId: this.product?.id!}))
-      }
-    } else {
-      if (this.isSaved) {
-        this.store.dispatch(SavedActions.removeProduct({productId: this.product?.id!}))
-      } else {
-        this.store.dispatch(SavedActions.addProduct({productId: this.product?.id!}))
+        this.store.dispatch(SavedActions.saveProduct({product: this.product}))
       }
     }
   }
@@ -75,10 +67,12 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         duration: 3000,
       });
     } else {
-      this.store.dispatch(CartActions.addProduct({product: this.product!}))
-      this.snackService.open("Sikeresen hozzáadtad a kosárhoz.",undefined, {
-        duration: 3000,
-      })
+      if (this.product) {
+        this.store.dispatch(CartActions.saveCartElement({product: this.product}))
+        this.snackService.open("Sikeresen hozzáadtad a kosárhoz.", undefined, {
+          duration: 3000,
+        })
+      }
     }
   }
 
@@ -90,6 +84,4 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     this.savedSubscription?.unsubscribe();
     this.userSubscription?.unsubscribe()
   }
-
-    protected readonly environment = environment;
 }

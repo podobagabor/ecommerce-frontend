@@ -42,8 +42,6 @@ export const CategoryStore = signalStore(
           }
         })
       })
-      console.log("categoryIds", categoryIds);
-      console.log("availableCategoriesIdList", availableCategoriesIdList());
       if (!categoryIds.length) {
         return availableCategoriesIdList();
       } else {

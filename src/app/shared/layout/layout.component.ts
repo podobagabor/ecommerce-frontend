@@ -46,7 +46,6 @@ export class LayoutComponent implements OnInit, OnDestroy {
         })
       }
     })
-    this.currentUser$.subscribe( user => {})
     this.categoryService.getMainCategories().pipe(take(1)).subscribe(categories => {
       this.categories = categories;
     })

@@ -6,6 +6,7 @@ export const UserActions = createActionGroup({
   events: {
     'Init': emptyProps(),
     'Login': props<{ user: UserDtoDetailed }>(),
+    'SetSavedAndCartFromUser': emptyProps(),
     'Logout': emptyProps(),
     'Modified': props<{ user: UserDtoDetailed }>(),
   }

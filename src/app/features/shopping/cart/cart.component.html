@@ -2,30 +2,35 @@
   <h1>Kosár</h1>
   <section class="cart-items">
     <h2>Kiválasztott termékek</h2>
-    <mat-card class="cart-element" *ngFor="let item of cartItems">
-      <p class="product-name">
-        {{ item.productDto?.brand?.name }} {{ item.productDto?.name }}
-      </p>
-      <div class="qounatity-container">
-        <button mat-icon-button (click)="reduce(item)">
-          <mat-icon>
-            remove
-          </mat-icon>
-        </button>
-        <p class="product-price">{{ item.quantity }} db</p>
-        <button mat-icon-button (click)="grow(item)">
-          <mat-icon>
-            add
-          </mat-icon>
-        </button>
-      </div>
-      <p class="product-price">{{ item.productDto?.price! * item.quantity! | number }}Ft</p>
-      <div class="product-image">
-        <img
-          [src]="environment.backendUrl + item.productDto?.images?.[0]">
-      </div>
-    </mat-card>
-    <h1 *ngIf="!cartItems.length" class="text-centered">Üres a kosarad</h1>
+    @if (($cartItems | async)?.length) {
+      @for (cartElement of $cartItems | async; track cartElement.id) {
+        <mat-card class="cart-element">
+          <p class="product-name">
+            {{ cartElement.productDto.brand?.name }} {{ cartElement.productDto.name }}
+          </p>
+          <div class="qounatity-container">
+            <button mat-icon-button (click)="reduce(cartElement)">
+              <mat-icon>
+                remove
+              </mat-icon>
+            </button>
+            <p class="product-price">{{ cartElement.quantity }} db</p>
+            <button mat-icon-button (click)="grow(cartElement)">
+              <mat-icon>
+                add
+              </mat-icon>
+            </button>
+          </div>
+          <p class="product-price">{{ cartElement.productDto.price! * cartElement.quantity! | number }}Ft</p>
+          <div class="product-image">
+            <img
+              [src]="environment.backendUrl + cartElement.productDto.images?.[0]">
+          </div>
+        </mat-card>
+      }
+    } @else {
+      <h1  class="text-centered">Üres a kosarad</h1>
+    }
     <mat-card class="total-amount-container">
       <p class="total-amount">Fizetendő</p>
       <p class="total-amount-sum">{{ getSum() | number }} Ft</p>
@@ -106,7 +111,7 @@
     </form>
   </section>
   <div class="buton-container">
-    <button (click)="order()" [disabled]="!cartItems.length || userShippingAddressForm.invalid || (!billingAddressIsTheSame && userBillingAddressForm.invalid)"  class="my-button-form full-size-button">Tovább a
+    <button (click)="order()" [disabled]="!($cartItems | async)?.length || userShippingAddressForm.invalid || (!billingAddressIsTheSame && userBillingAddressForm.invalid)" class="my-button-form full-size-button">Tovább a
       megrendeléshez
     </button>
   </div>

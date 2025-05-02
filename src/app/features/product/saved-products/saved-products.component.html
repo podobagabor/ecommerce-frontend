@@ -1,5 +1,8 @@
-<main class="saved-container" *ngIf="savedItems.length">
-  <app-product-card [hasUser]="hasUser" (removeSaved)="removeFromSaved($event)" [savedMode]="true" [product]="product"
-                    *ngFor="let product of savedItems"></app-product-card>
+<main class="saved-container">
+  @if (($savedItems | async)?.length) {
+    <app-product-card [savedMode]="true" [product]="product"
+                      *ngFor="let product of $savedItems | async"></app-product-card>
+  } @else {
+    <h1 class="text-centered">Eddig üres a listád. :(</h1>
+  }
 </main>
-<h1 *ngIf="!savedItems.length" class="text-centered">Eddig üres a listád. :(</h1>

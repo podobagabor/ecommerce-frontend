@@ -5,9 +5,11 @@ import {ProductDto} from "../../api/models/product-dto";
 export const CartActions = createActionGroup({
   source: "Cart",
   events: {
-    'Add Product': props<{ product: ProductDto }>(),
-    'Remove Product': props<{ productId: number }>(),
-    'Init': props<{ cartElements: CartElementDto[] }>(),
-    'Updated': emptyProps,
+    'Init': emptyProps(),
+    'Save Cart Element': props<{ product: ProductDto }>(),
+    'Add Cart Element': props<{ cartElement: CartElementDto }>(),
+    'Delete Cart ElementFromUser': props<{ cartElement: CartElementDto }>(),
+    'Remove Cart Element': props<{ cartElementId: number }>(),
+    'SetValue': props<{ cartElements: CartElementDto[] }>(),
   }
 })

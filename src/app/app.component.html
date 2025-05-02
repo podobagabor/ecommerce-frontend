@@ -1,1 +1,8 @@
+@if (productStore.isLoading() !== true) {
+  <div class="progress-indicator-container">
+    <mat-icon color="primary" class="progress-indicator">
+      refresh
+    </mat-icon>
+  </div>
+}
 <router-outlet></router-outlet>

@@ -8,12 +8,13 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { ProductDto } from '../../models/product-dto';
 
 export interface AddProductToSaved$Params {
   id: number;
 }
 
-export function addProductToSaved(http: HttpClient, rootUrl: string, params: AddProductToSaved$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+export function addProductToSaved(http: HttpClient, rootUrl: string, params: AddProductToSaved$Params, context?: HttpContext): Observable<StrictHttpResponse<ProductDto>> {
   const rb = new RequestBuilder(rootUrl, addProductToSaved.PATH, 'put');
   if (params) {
     rb.path('id', params.id, {});
@@ -24,7 +25,7 @@ export function addProductToSaved(http: HttpClient, rootUrl: string, params: Add
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: parseFloat(String((r as HttpResponse<any>).body)) }) as StrictHttpResponse<number>;
+      return r as StrictHttpResponse<ProductDto>;
     })
   );
 }

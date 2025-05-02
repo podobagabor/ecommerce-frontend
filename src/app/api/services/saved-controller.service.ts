@@ -34,7 +34,7 @@ export class SavedControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  addProductToSaved$Response(params: AddProductToSaved$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+  addProductToSaved$Response(params: AddProductToSaved$Params, context?: HttpContext): Observable<StrictHttpResponse<ProductDto>> {
     return addProductToSaved(this.http, this.rootUrl, params, context);
   }
 
@@ -44,9 +44,9 @@ export class SavedControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  addProductToSaved(params: AddProductToSaved$Params, context?: HttpContext): Observable<number> {
+  addProductToSaved(params: AddProductToSaved$Params, context?: HttpContext): Observable<ProductDto> {
     return this.addProductToSaved$Response(params, context).pipe(
-      map((r: StrictHttpResponse<number>): number => r.body)
+      map((r: StrictHttpResponse<ProductDto>): ProductDto => r.body)
     );
   }
 

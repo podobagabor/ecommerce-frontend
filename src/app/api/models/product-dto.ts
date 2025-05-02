@@ -10,7 +10,7 @@ export interface ProductDto {
   count?: number;
   description?: string;
   discountPercentage?: number;
-  id?: number;
+  id: number;
   images?: Array<string>;
   name?: string;
   price?: number;
