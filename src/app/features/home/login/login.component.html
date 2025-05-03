@@ -21,7 +21,10 @@
     <div fxLayout="row" fxLayoutAlign="end">
       <button class="forgot-password" [matDialogClose]="'forgot_password'">Elfelejtetted a jelszavad?</button>
     </div>
-    <p *ngIf="errorMessage" class="login-error">{{errorMessage}}</p>
+    @if (errorMessage) {
+      <p class="login-error">{{errorMessage}}</p>
+
+    }
     <button class="my-button" (click)="login()" [disabled]="loginForm.invalid">
       Bejelentkezés
     </button>
