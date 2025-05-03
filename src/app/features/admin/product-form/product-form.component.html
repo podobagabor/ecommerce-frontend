@@ -12,8 +12,10 @@
       <mat-form-field class="two-form__form">
         <mat-label>Kategória</mat-label>
         <mat-autocomplete #auto1="matAutocomplete" [displayWith]="displayObjectWithName">
-          <mat-option *ngFor="let category of filteredCategories"
-                      [value]="category">{{category.name}}</mat-option>
+          @for (category of filteredCategories; track category.id) {
+            <mat-option
+                        [value]="category">{{category.name}}</mat-option>
+          }
         </mat-autocomplete>
         <input matInput type="text" [matAutocomplete]="auto1" formControlName="category">
       </mat-form-field>

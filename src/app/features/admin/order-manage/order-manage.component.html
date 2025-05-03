@@ -1,5 +1,5 @@
 <main class="my-main">
-  <div  class="header-with-searchbar">
+  <div class="header-with-searchbar">
     <h1>Rendelések</h1>
     <div [formGroup]="orderSearchForm" class="searchbar">
       <mat-form-field>
@@ -29,7 +29,7 @@
             <p class="order-panel-text">Összeg: {{ getTotalPrice(order) |number }} Ft</p>
             <div class="order-panel-actions">
               <button (click)="showDeliveryInfo(order,$event)" class="shipping-icon" mat-icon-button color="accent">
-                <mat-icon >
+                <mat-icon>
                   local_shipping
                 </mat-icon>
               </button>
@@ -43,17 +43,19 @@
           </div>
         </mat-expansion-panel-header>
         <section class="product-list">
-          <mat-card class="product-element" *ngFor="let item of order.items">
-            <p class="product-name">
-              {{ item.product?.brand?.name }} {{ item.product?.name }}
-            </p>
-            <p class="product-price">{{ item.quantity }} db</p>
-            <p class="product-price">{{ item.product?.price! * item.quantity! | number }}Ft</p>
-            <div class="product-image">
-              <img
-                [src]="environment.backendUrl + item.product?.images?.[0]">
-            </div>
-          </mat-card>
+          @for (item of order.items; track item.id) {
+            <mat-card class="product-element">
+              <p class="product-name">
+                {{ item.product?.brand?.name }} {{ item.product?.name }}
+              </p>
+              <p class="product-price">{{ item.quantity }} db</p>
+              <p class="product-price">{{ item.product?.price! * item.quantity! | number }}Ft</p>
+              <div class="product-image">
+                <img
+                  [src]="environment.backendUrl + item.product?.images?.[0]">
+              </div>
+            </mat-card>
+          }
         </section>
       </mat-expansion-panel>
     </mat-accordion>

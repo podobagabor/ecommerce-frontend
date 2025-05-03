@@ -1,8 +1,14 @@
 <div class="main-container">
-  <div class="category-column" *ngFor="let category of categories">
-    <a routerLink="/product/list" (click)="categoryStore.updateAllCategory(category.id)"><strong>{{category.name}}</strong></a>
-    <a *ngFor="let subCategory of category.subCategories" (click)="categoryStore.updateAllCategory(subCategory.id)" routerLink="/product/list">{{subCategory.name}}</a>
-  </div>
+  @for (category of categories; track category.id) {
+    <div class="category-column">
+      <a routerLink="/product/list"
+         (click)="categoryStore.updateAllCategory(category.id)"><strong>{{ category.name }}</strong></a>
+      @for (subCategory of category.subCategories; track subCategory.id) {
+        <a (click)="categoryStore.updateAllCategory(subCategory.id)"
+           routerLink="/product/list">{{ subCategory.name }}</a>
+      }
+    </div>
+  }
   <div class="placeholder">
   </div>
 </div>

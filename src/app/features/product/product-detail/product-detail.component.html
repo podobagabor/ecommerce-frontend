@@ -10,8 +10,10 @@
       <img [src]="environment.backendUrl + image">
     </div>
     <div class="image-container">
-      <img (mouseenter)="showImage(image)" class="image" *ngFor="let image of product?.images"
-           [src]="environment.backendUrl + image">
+      @for (image of product?.images; track image) {
+        <img (mouseenter)="showImage(image)" class="image"
+             [src]="environment.backendUrl + image">
+      }
     </div>
   </section>
   <section class="information-container">
