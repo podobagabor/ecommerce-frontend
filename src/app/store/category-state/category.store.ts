@@ -31,6 +31,7 @@ export const CategoryStore = signalStore(
   withState(initialCategoryState),
   withComputed(({categories, availableCategoriesIdList}) => ({
     categoryFilters: computed(() => {
+      console.log("categoryFilters");
       let categoryIds: number[] = [];
       categories().forEach(category => {
         if (category.selected) {
@@ -57,6 +58,8 @@ export const CategoryStore = signalStore(
           return categoryService.getCategoryDetailedById({id: categoryId}).pipe(
             tapResponse({
                 next: (response) => {
+                  console.log("updateAllCategory");
+
                   const categories = response.subCategories?.map((subCat: CategoryDetailedDto) => {
                     return {
                       category: subCat,
@@ -82,6 +85,8 @@ export const CategoryStore = signalStore(
         })
       )),
     updateSelectedCategory(categoryId: number, selected: boolean) {
+      console.log("updateSelectedCategory");
+
       const currentState = getState(store);
       currentState.categories.forEach((subCategory) => {
         if (subCategory.category.id === categoryId) {
@@ -110,6 +115,7 @@ export const CategoryStore = signalStore(
       }
 
       effect(() => {
+        console.log("categoryEffect")
         const state = getState(store);
         localStorage.setItem("categories", JSON.stringify(state));
       });

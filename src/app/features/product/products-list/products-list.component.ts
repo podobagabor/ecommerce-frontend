@@ -1,4 +1,4 @@
-import {Component, effect, inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, effect, inject, OnDestroy, OnInit, untracked} from '@angular/core';
 import {PageEvent} from "@angular/material/paginator";
 import {Store} from "@ngrx/store";
 import {savedProducts} from "../../../store/app.selectors";
@@ -32,15 +32,10 @@ export class ProductsListComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store) {
     effect(() => {
-      this.productStore.loadProducts({
-        brandId: this.brandStore.brands().filter(value => value.selected).map(brand => brand.brand.id),
-        maxPrice: this.price.max,
-        minPrice: this.price.min,
-        discount: this.discount ? true : undefined,
-        page: this.productStore.products().number,
-        size: this.products.size,
-        categoryId: this.categoryStore.categoryFilters(),
-      })
+      console.log("effect", this.categoryStore.mainCategory());
+      untracked(() => {
+        this.getProducts();
+      });
     });
   }
 
@@ -56,7 +51,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
 
   getProducts() {
     this.productStore.loadProducts({
-      brandId: this.brandStore.brands().filter(value => value.selected).map(brand => brand.brand.id),
+     brandId: this.brandStore.brands().filter(value => value.selected).map(brand => brand.brand.id),
       maxPrice: this.price.max,
       minPrice: this.price.min,
       discount: this.discount ? true : undefined,
