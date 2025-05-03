@@ -5,13 +5,13 @@
 import { BrandDto } from '../models/brand-dto';
 import { CategoryDto } from '../models/category-dto';
 export interface ProductDto {
-  brand?: BrandDto;
-  category?: CategoryDto;
-  count?: number;
-  description?: string;
+  brand: BrandDto;
+  category: CategoryDto;
+  count: number;
+  description: string;
   discountPercentage?: number;
   id: number;
-  images?: Array<string>;
-  name?: string;
-  price?: number;
+  images: Array<string>;
+  name: string;
+  price: number;
 }

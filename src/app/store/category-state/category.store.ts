@@ -21,7 +21,11 @@ type CategoryState = {
 
 const initialCategoryState: CategoryState = {
   categories: [],
-  mainCategory: {id: 0},
+  mainCategory: {
+    id: -1,
+    subCategories: [],
+    name: "",
+  },
   availableCategoriesIdList: [],
   isLoading: false,
 }

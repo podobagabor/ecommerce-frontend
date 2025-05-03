@@ -121,14 +121,15 @@ export class BrandFormComponent implements OnInit {
   }
 
   protected updateBrand() {
-    if (this.brandForm.valid && this.storedImages.length > 0 && this.editedBrandId) {
+    if (this.brandForm.valid && this.storedImages.length > 0 && this.editedBrandId && this.storedImages[0].url
+    && this.brandForm.value.brandName && this.brandForm.value.brandDescription) {
       this.brandService.modifyBrand({
         body: {
           brand: {
             imageUrl: this.storedImages[0].url,
-            name: this.brandForm.value.brandName || "",
+            name: this.brandForm.value.brandName,
             id: this.editedBrandId,
-            description: this.brandForm.value.brandDescription || "",
+            description: this.brandForm.value.brandDescription,
           },
           newImage: this.storedImages[0].url!! ? undefined : this.storedImages[0].file,
         }

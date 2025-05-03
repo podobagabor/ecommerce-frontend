@@ -5,9 +5,9 @@
 import { Address } from '../models/address';
 export interface UserModifyDto {
   address?: Address;
-  email?: string;
-  firstName?: string;
-  gender?: 'MALE' | 'FEMALE';
-  lastName?: string;
+  email: string;
+  firstName: string;
+  gender: 'MALE' | 'FEMALE';
+  lastName: string;
   phone?: string;
 }

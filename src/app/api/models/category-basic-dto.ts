@@ -4,5 +4,5 @@
 
 export interface CategoryBasicDto {
   id: number;
-  name?: string;
+  name: string;
 }

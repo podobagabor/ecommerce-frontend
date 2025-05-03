@@ -4,7 +4,7 @@
 
 import { ProductDto } from '../models/product-dto';
 export interface OrderItemDto {
-  id?: number;
-  product?: ProductDto;
-  quantity?: number;
+  id: number;
+  product: ProductDto;
+  quantity: number;
 }

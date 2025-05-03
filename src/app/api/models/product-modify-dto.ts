@@ -4,13 +4,13 @@
 
 import { ImageModifyDto } from '../models/image-modify-dto';
 export interface ProductModifyDto {
-  brandId?: number;
-  categoryId?: number;
-  count?: number;
-  description?: string;
+  brandId: number;
+  categoryId: number;
+  count: number;
+  description: string;
   discountPercentage?: number;
-  id?: number;
-  images?: Array<ImageModifyDto>;
-  name?: string;
-  price?: number;
+  id: number;
+  images: Array<ImageModifyDto>;
+  name: string;
+  price: number;
 }

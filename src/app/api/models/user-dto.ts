@@ -5,13 +5,13 @@
 import { Address } from '../models/address';
 export interface UserDto {
   address?: Address;
-  cartNumber?: number;
-  email?: string;
-  firsName?: string;
-  gender?: 'MALE' | 'FEMALE';
-  id?: string;
-  lastName?: string;
+  cartNumber: number;
+  email: string;
+  firsName: string;
+  gender: 'MALE' | 'FEMALE';
+  id: string;
+  lastName: string;
   phone?: string;
-  role?: 'ADMIN' | 'USER' | 'SUPER_ADMIN';
-  savedNumber?: number;
+  role: 'ADMIN' | 'USER' | 'SUPER_ADMIN';
+  savedNumber: number;
 }

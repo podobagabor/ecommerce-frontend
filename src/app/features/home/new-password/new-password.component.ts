@@ -4,22 +4,22 @@ import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
 import {UserControllerService} from "../../../api/services/user-controller.service";
 
 @Component({
-    selector: 'app-new-password',
-    templateUrl: './new-password.component.html',
-    styleUrls: ['./new-password.component.scss'],
-    standalone: false
+  selector: 'app-new-password',
+  templateUrl: './new-password.component.html',
+  styleUrls: ['./new-password.component.scss'],
+  standalone: false
 })
 export class NewPasswordComponent implements OnInit {
   protected passwordsNotCorrect: boolean = false;
   protected userToken?: string;
-  protected passwordChanged :  boolean = false;
+  protected passwordChanged: boolean = false;
   protected newPasswordForm = new FormGroup({
     password1: new FormControl<string>('', Validators.required),
     password2: new FormControl<string>('', Validators.required),
   })
 
   constructor(private userService: UserControllerService, private dialog: MatDialog, @Inject(MAT_DIALOG_DATA) private data: any) {
-    if(data) {
+    if (data) {
       this.userToken = data['userToken'];
     }
   }
@@ -32,13 +32,15 @@ export class NewPasswordComponent implements OnInit {
 
 
   newPassword() {
-    this.userService.setNewPassword({
-      body: {
-        token: this.userToken,
-        newPassword: this.newPasswordForm.value.password2!
-      }
-    }).subscribe(_ => {
-      this.dialog.closeAll();
-    })
+    if (this.userToken) {
+      this.userService.setNewPassword({
+        body: {
+          token: this.userToken,
+          newPassword: this.newPasswordForm.value.password2!
+        }
+      }).subscribe(_ => {
+        this.dialog.closeAll();
+      })
+    }
   }
 }

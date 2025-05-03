@@ -4,6 +4,6 @@
 
 import { Address } from '../models/address';
 export interface OrderCreateDto {
-  billingAddress?: Address;
-  shippingAddress?: Address;
+  billingAddress: Address;
+  shippingAddress: Address;
 }

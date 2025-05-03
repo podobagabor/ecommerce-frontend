@@ -37,7 +37,6 @@ export class RegistrationComponent implements OnInit {
   registration() {
     this.userService.createUser({
       body: {
-        id: undefined,
         gender: this.registrationForm.value.gender!,
         email: this.registrationForm.value.email!,
         password: this.registrationForm.value.passwordFirst!,

@@ -4,5 +4,5 @@
 
 export interface BrandSimpleDto {
   id: number;
-  name?: string;
+  name: string;
 }

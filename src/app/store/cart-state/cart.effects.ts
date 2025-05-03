@@ -114,7 +114,7 @@ export class CartEffects {
   constructor(private store: Store, private actions$: Actions, private cartService: CartControllerService) {
   }
 
-  save(newSavedList: ProductDto[]) {
+  save(newSavedList: CartElementDto[]) {
     localStorage.setItem("cart", JSON.stringify(newSavedList));
   }
 

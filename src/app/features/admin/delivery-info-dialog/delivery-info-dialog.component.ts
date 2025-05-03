@@ -9,7 +9,7 @@ import {MAT_DIALOG_DATA} from "@angular/material/dialog";
   styleUrl: './delivery-info-dialog.component.scss'
 })
 export class DeliveryInfoDialogComponent {
-  protected order: OrderDto = {};
+  protected order?: OrderDto = undefined;
 
   constructor(@Inject(MAT_DIALOG_DATA) private data: {order: OrderDto}) {
     if(data && data.order) {

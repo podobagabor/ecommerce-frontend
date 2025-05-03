@@ -7,13 +7,13 @@ import { CartElementDto } from '../models/cart-element-dto';
 import { ProductDto } from '../models/product-dto';
 export interface UserDtoDetailed {
   address?: Address;
-  cartItems?: Array<CartElementDto>;
-  email?: string;
-  firsName?: string;
-  gender?: 'MALE' | 'FEMALE';
-  id?: string;
-  lastName?: string;
+  cartItems: Array<CartElementDto>;
+  email: string;
+  firsName: string;
+  gender: 'MALE' | 'FEMALE';
+  id: string;
+  lastName: string;
   phone?: string;
-  role?: 'ADMIN' | 'USER' | 'SUPER_ADMIN';
-  savedItems?: Array<ProductDto>;
+  role: 'ADMIN' | 'USER' | 'SUPER_ADMIN';
+  savedItems: Array<ProductDto>;
 }

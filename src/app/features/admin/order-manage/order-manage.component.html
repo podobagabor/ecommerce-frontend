@@ -46,13 +46,13 @@
           @for (item of order.items; track item.id) {
             <mat-card class="product-element">
               <p class="product-name">
-                {{ item.product?.brand?.name }} {{ item.product?.name }}
+                {{ item.product.brand.name }} {{ item.product.name }}
               </p>
               <p class="product-price">{{ item.quantity }} db</p>
-              <p class="product-price">{{ item.product?.price! * item.quantity! | number }}Ft</p>
+              <p class="product-price">{{ item.product.price! * item.quantity | number }}Ft</p>
               <div class="product-image">
                 <img
-                  [src]="environment.backendUrl + item.product?.images?.[0]">
+                  [src]="environment.backendUrl + item.product.images[0]">
               </div>
             </mat-card>
           }

@@ -6,7 +6,7 @@
       @for (cartElement of $cartItems | async; track cartElement.id) {
         <mat-card class="cart-element">
           <p class="product-name">
-            {{ cartElement.productDto.brand?.name }} {{ cartElement.productDto.name }}
+            {{ cartElement.productDto.brand.name }} {{ cartElement.productDto.name }}
           </p>
           <div class="qounatity-container">
             <button mat-icon-button (click)="reduce(cartElement)">
@@ -24,7 +24,7 @@
           <p class="product-price">{{ cartElement.productDto.price! * cartElement.quantity! | number }}Ft</p>
           <div class="product-image">
             <img
-              [src]="environment.backendUrl + cartElement.productDto.images?.[0]">
+              [src]="environment.backendUrl + cartElement.productDto.images[0]">
           </div>
         </mat-card>
       }

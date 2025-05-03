@@ -4,5 +4,5 @@
 
 export interface ActionResponseDto {
   message?: string;
-  success?: boolean;
+  success: boolean;
 }

@@ -5,12 +5,12 @@
 import { Address } from '../models/address';
 export interface UserCreateDto {
   address?: Address;
-  email?: string;
-  firstName?: string;
-  gender?: 'MALE' | 'FEMALE';
+  email: string;
+  firstName: string;
+  gender: 'MALE' | 'FEMALE';
   id?: string;
-  lastName?: string;
-  password?: string;
+  lastName: string;
+  password: string;
   phone?: string;
   role?: 'ADMIN' | 'USER' | 'SUPER_ADMIN';
 }

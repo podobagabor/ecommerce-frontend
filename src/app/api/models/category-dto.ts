@@ -4,7 +4,7 @@
 
 export interface CategoryDto {
   id: number;
-  name?: string;
+  name: string;
   parentCategoryId?: number;
   subCategoryIds?: Array<number>;
 }

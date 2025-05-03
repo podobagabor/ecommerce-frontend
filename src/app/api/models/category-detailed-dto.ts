@@ -5,6 +5,6 @@
 import { CategoryBasicDto } from '../models/category-basic-dto';
 export interface CategoryDetailedDto {
   id: number;
-  name?: string;
+  name: string;
   subCategories?: Array<CategoryBasicDto>;
 }

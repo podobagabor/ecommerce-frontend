@@ -9,12 +9,13 @@
       <p>Számlázási cím:</p>
     </div>
     <div class="delivery-info-container__column">
-      <p>{{order.user?.firsName}} {{order.user?.lastName}}</p>
-      <p>{{order.user?.phone}}</p>
-      <p>{{order.user?.email}}</p>
-      <p>{{order.billingAddress?.country}} {{order.billingAddress?.postalCode}} {{order.billingAddress?.city}} {{order.billingAddress?.street}} {{order.billingAddress?.number}}</p>
-      <p>{{order.user?.address?.country}} {{order.user?.address?.postalCode}} {{order.user?.address?.city}} {{order.user?.address?.street}} {{order.user?.address?.number}}</p>
-
+      @if (order) {
+        <p>{{order.user.firsName}} {{order.user.lastName}}</p>
+        <p>{{order.user.phone}}</p>
+        <p>{{order.user.email}}</p>
+        <p>{{order.billingAddress.country}} {{order.billingAddress.postalCode}} {{order.billingAddress.city}} {{order.billingAddress.street}} {{order.billingAddress.number}}</p>
+        <p>{{order.user.address?.country}} {{order.user.address?.postalCode}} {{order.user.address?.city}} {{order.user.address?.street}} {{order.user.address?.number}}</p>
+      }
     </div>
   </div>
 
