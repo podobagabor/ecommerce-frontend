@@ -14,7 +14,7 @@ import { ProductDto } from '../../models/product-dto';
 export interface CreateProduct$Params {
       body?: {
 'product': ProductCreateDto;
-'images'?: Array<Blob>;
+'images': Array<Blob>;
 }
 }
 

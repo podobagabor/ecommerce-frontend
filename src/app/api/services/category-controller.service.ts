@@ -11,7 +11,6 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { ActionResponseDto } from '../models/action-response-dto';
 import { CategoryCreateDataDto } from '../models/category-create-data-dto';
 import { CategoryDetailedDto } from '../models/category-detailed-dto';
 import { CategoryDto } from '../models/category-dto';
@@ -222,7 +221,7 @@ export class CategoryControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  deleteCategory$Response(params: DeleteCategory$Params, context?: HttpContext): Observable<StrictHttpResponse<ActionResponseDto>> {
+  deleteCategory$Response(params: DeleteCategory$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
     return deleteCategory(this.http, this.rootUrl, params, context);
   }
 
@@ -232,9 +231,9 @@ export class CategoryControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  deleteCategory(params: DeleteCategory$Params, context?: HttpContext): Observable<ActionResponseDto> {
+  deleteCategory(params: DeleteCategory$Params, context?: HttpContext): Observable<void> {
     return this.deleteCategory$Response(params, context).pipe(
-      map((r: StrictHttpResponse<ActionResponseDto>): ActionResponseDto => r.body)
+      map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
 

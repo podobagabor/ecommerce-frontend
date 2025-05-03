@@ -3,7 +3,7 @@ import {BrandDto} from "../../../api/models/brand-dto";
 import {PageBrandDto} from "../../../api/models/page-brand-dto";
 import {PageEvent} from "@angular/material/paginator";
 import {BrandControllerService} from "../../../api/services/brand-controller.service";
-import {take} from "rxjs";
+import {take, tap} from "rxjs";
 import {FormControl, FormGroup} from "@angular/forms";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
@@ -39,20 +39,12 @@ export class BrandListComponent implements OnInit {
   }
 
   deleteBrand(element: BrandDto) {
-    this.brandService.deleteBrand({id: element.id}).pipe(take(1)).subscribe(response => {
-        if (response.success) {
-          this.snackService.open("Sikeres törlés.", undefined, {
-            duration: 3000
-          });
-          this.loadBrandList();
-        } else {
-          this.snackService.open("Hiba a törlés során, frissítsd az oldalt.", undefined, {
-            duration: 3000
-          });
-          console.error(response.message);
-        }
-      }
-    )
+    this.brandService.deleteBrand({id: element.id}).pipe(take(1),
+      tap(() => {
+        this.loadBrandList();
+        this.snackService.open("Sikeres törlés.", undefined, {duration: 2000,});
+      })
+    ).subscribe()
   }
 
   page($event: PageEvent) {

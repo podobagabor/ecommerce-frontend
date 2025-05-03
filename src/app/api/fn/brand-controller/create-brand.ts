@@ -14,7 +14,7 @@ import { BrandDto } from '../../models/brand-dto';
 export interface CreateBrand$Params {
       body?: {
 'brand': BrandCreateDto;
-'image'?: Blob;
+'image': Blob;
 }
 }
 

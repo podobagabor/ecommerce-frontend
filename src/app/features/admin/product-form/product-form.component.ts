@@ -7,18 +7,14 @@ import {ProductControllerService} from "../../../api/services/product-controller
 import {CategoryControllerService} from "../../../api/services/category-controller.service";
 import {BrandDto} from "../../../api/models/brand-dto";
 import {ProductCreateDto} from "../../../api/models/product-create-dto";
-import {catchError, of, take} from "rxjs";
+import {take, tap} from "rxjs";
 import {BrandControllerService} from "../../../api/services/brand-controller.service";
 import {environment} from "../../../../environment";
 import {ProductModifyDto} from "../../../api/models/product-modify-dto";
 import {ImageModifyDto} from "../../../api/models/image-modify-dto";
 import {BrandSimpleDto} from "../../../api/models/brand-simple-dto";
+import {StoredFile} from "../../../shared/interfaces";
 
-export interface StoredFile {
-  file: File;
-  url?: string;
-  deleted: boolean;
-}
 
 @Component({
   selector: 'app-product-form',
@@ -184,16 +180,14 @@ export class ProductFormComponent implements OnInit {
         images: this.illustrationImages
       }
     }).pipe(
-      catchError(err => {
-        //TODO: státuszkód
-        return of("Váratlan hiba történt: " + err.message);
+      take(1),
+      tap(() => {
+        this.snackService.open("Sikeres termék létrehozás", undefined, {
+          duration: 3000,
+        });
+        this.router.navigateByUrl("/admin/productList");
       })
-    ).subscribe(_ => {
-      this.snackService.open("Sikeres termék létrehozás", undefined, {
-        duration: 3000,
-      });
-      this.router.navigateByUrl("/admin/productList");
-    })
+    ).subscribe()
   }
 
   deleteImage(element: File) {

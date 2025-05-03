@@ -5,9 +5,9 @@ import {CartActions} from "./cart.actions";
 import {Store} from "@ngrx/store";
 import {cartProducts} from "../app.selectors";
 import {CartControllerService} from "../../api/services/cart-controller.service";
-import {ProductDto} from "../../api/models/product-dto";
 import {CartElementDto} from "../../api/models/cart-element-dto";
 import {tapResponse} from "@ngrx/operators";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Injectable()
 export class CartEffects {
@@ -33,8 +33,17 @@ export class CartEffects {
               next: (response) => {
                 this.store.dispatch(CartActions.addCartElement({cartElement: response}));
               },
-              error: error => {
-                console.error(error)
+              error: (error: any) => {
+                console.error(error);
+                if (error.status === 405 || error.statis === 403) {
+                  this.snackService.open(error.error, undefined, {
+                    duration: 3000,
+                  });
+                } else {
+                  this.snackService.open("Hiba történt, töltsd újra az oldalt.", undefined, {
+                    duration: 3000,
+                  });
+                }
               }
             })
           );
@@ -91,8 +100,13 @@ export class CartEffects {
                 next: (response) => {
                   this.store.dispatch(CartActions.removeCartElement({cartElementId: action.cartElement.id}))
                 },
-                error: error => {
+                error: (error: any) => {
                   console.error(error)
+                  if (error.status === 500) {
+                    this.snackService.open("Hiba történt, töltsd újra az oldalt.", undefined, {
+                      duration: 3000,
+                    });
+                  }
                 }
               })
             )
@@ -111,7 +125,7 @@ export class CartEffects {
     ),
     {dispatch: false});
 
-  constructor(private store: Store, private actions$: Actions, private cartService: CartControllerService) {
+  constructor(private snackService: MatSnackBar, private store: Store, private actions$: Actions, private cartService: CartControllerService) {
   }
 
   save(newSavedList: CartElementDto[]) {

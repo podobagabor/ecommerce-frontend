@@ -4,7 +4,8 @@ import {UserDtoDetailed} from "../../../api/models/user-dto-detailed";
 import {UserControllerService} from "../../../api/services/user-controller.service";
 import {Store} from "@ngrx/store";
 import {selectUser} from "../../../store/app.selectors";
-import {take} from "rxjs";
+import {take, tap} from "rxjs";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-change-password',
@@ -20,7 +21,7 @@ export class ChangePasswordComponent implements OnInit {
   protected isEmailSent: boolean = false;
 
 
-  constructor(private store: Store, private userService: UserControllerService) {
+  constructor(private store: Store, private userService: UserControllerService, private snackService: MatSnackBar) {
   }
 
   ngOnInit(): void {
@@ -32,10 +33,7 @@ export class ChangePasswordComponent implements OnInit {
   }
 
   sendEmail() {
-    this.userService.requestPasswordChange({body: this.currentUser?.email!}).pipe(take(1)).subscribe(response => {
-      if (response.success) {
-        this.isEmailSent = true;
-      }
-    })
+    this.userService.requestPasswordChange({body: this.currentUser?.email!}).pipe(take(1),
+      tap(() => this.isEmailSent = true)).subscribe()
   }
 }

@@ -9,6 +9,8 @@ import {UserControllerService} from "../../api/services/user-controller.service"
 import {SavedActions} from "../saved-state/saved.actions";
 import {CartActions} from "../cart-state/cart.actions";
 import {selectUser} from "../app.selectors";
+import {AuthenticationService} from "../../services/authentication.service";
+import {Router} from "@angular/router";
 
 @Injectable()
 export class UserEffects {
@@ -28,6 +30,7 @@ export class UserEffects {
             })
           )
         }
+        this.authenticationService.logout();
         this.store.dispatch(SavedActions.init());
         this.store.dispatch(CartActions.init());
         return EMPTY;
@@ -50,6 +53,6 @@ export class UserEffects {
     ),
     {dispatch: false});
 
-  constructor(private store: Store, private actions$: Actions, private cookieService: CookieService, private userService: UserControllerService) {
+  constructor(private store: Store, private actions$: Actions, private cookieService: CookieService, private userService: UserControllerService, private authenticationService: AuthenticationService) {
   }
 }

@@ -11,7 +11,6 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { ActionResponseDto } from '../models/action-response-dto';
 import { BrandDto } from '../models/brand-dto';
 import { BrandSimpleDto } from '../models/brand-simple-dto';
 import { createBrand } from '../fn/brand-controller/create-brand';
@@ -168,7 +167,7 @@ export class BrandControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  deleteBrand$Response(params: DeleteBrand$Params, context?: HttpContext): Observable<StrictHttpResponse<ActionResponseDto>> {
+  deleteBrand$Response(params: DeleteBrand$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
     return deleteBrand(this.http, this.rootUrl, params, context);
   }
 
@@ -178,9 +177,9 @@ export class BrandControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  deleteBrand(params: DeleteBrand$Params, context?: HttpContext): Observable<ActionResponseDto> {
+  deleteBrand(params: DeleteBrand$Params, context?: HttpContext): Observable<void> {
     return this.deleteBrand$Response(params, context).pipe(
-      map((r: StrictHttpResponse<ActionResponseDto>): ActionResponseDto => r.body)
+      map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
 

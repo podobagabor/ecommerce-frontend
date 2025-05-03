@@ -9,6 +9,7 @@ import {UserControllerService} from "../api/services/user-controller.service";
 import {KeycloakLoginResponse} from "./KeycloakLoginResponse";
 import {UserDtoDetailed} from "../api/models/user-dto-detailed";
 import {environment} from "../../environment";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class AuthenticationService {
 
   constructor(private userService: UserControllerService,
               private store: Store, private cookieService: CookieService,
-              private http: HttpClient) {
+              private http: HttpClient, private router: Router) {
   }
 
   login(email: string, password: string): Promise<any> {
@@ -55,6 +56,7 @@ export class AuthenticationService {
   logout() {
     this.logoutWithoutDispatchingAction()
     this.store.dispatch(UserActions.logout());
+    this.router.navigate(["/home"]);
   }
 
   logoutWithoutDispatchingAction() {

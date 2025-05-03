@@ -39,35 +39,6 @@ export class CategoryListComponent implements OnInit {
     })
   }
 
-  deleteCategory(category: CategoryDto) {
-    const ref = this.dialogService.open(TorlesDialogComponent);
-    ref.afterClosed().subscribe(value => {
-      if (value) {
-        this.categoryService.deleteCategory({id: category.id!}).pipe(take(1)).subscribe(_ => {
-          this.snackService.open("Sikeres törlés.", undefined, {
-            duration: 2000,
-          });
-          this.updateCategories();
-        })
-      }
-    })
-  }
-
-  alma(category: CategoryDto, $event: any) {
-    $event.stopPropagation();
-    const ref = this.dialogService.open(CategoryEditDialogComponent, {
-      data: {
-        category: category,
-        addSubCategory: false,
-      }
-    });
-    ref.afterClosed().subscribe(value => {
-      if (value) {
-        this.updateCategories();
-      }
-    })
-  }
-
   editCategory(category: CategoryDto, $event: any) {
     if (!this.allCategory.length) {
       this.loadAllCategory().then(_ => {

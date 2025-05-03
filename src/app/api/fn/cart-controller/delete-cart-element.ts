@@ -8,24 +8,23 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { ActionResponseDto } from '../../models/action-response-dto';
 
 export interface DeleteCartElement$Params {
   id: number;
 }
 
-export function deleteCartElement(http: HttpClient, rootUrl: string, params: DeleteCartElement$Params, context?: HttpContext): Observable<StrictHttpResponse<ActionResponseDto>> {
+export function deleteCartElement(http: HttpClient, rootUrl: string, params: DeleteCartElement$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
   const rb = new RequestBuilder(rootUrl, deleteCartElement.PATH, 'delete');
   if (params) {
     rb.path('id', params.id, {});
   }
 
   return http.request(
-    rb.build({ responseType: 'json', accept: 'application/json', context })
+    rb.build({ responseType: 'text', accept: '*/*', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<ActionResponseDto>;
+      return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
     })
   );
 }

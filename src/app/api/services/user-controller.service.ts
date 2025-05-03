@@ -11,7 +11,6 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { ActionResponseDto } from '../models/action-response-dto';
 import { createUser } from '../fn/user-controller/create-user';
 import { CreateUser$Params } from '../fn/user-controller/create-user';
 import { getAllUser } from '../fn/user-controller/get-all-user';
@@ -69,7 +68,7 @@ export class UserControllerService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  setNewPassword$Response(params: SetNewPassword$Params, context?: HttpContext): Observable<StrictHttpResponse<ActionResponseDto>> {
+  setNewPassword$Response(params: SetNewPassword$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
     return setNewPassword(this.http, this.rootUrl, params, context);
   }
 
@@ -79,9 +78,9 @@ export class UserControllerService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  setNewPassword(params: SetNewPassword$Params, context?: HttpContext): Observable<ActionResponseDto> {
+  setNewPassword(params: SetNewPassword$Params, context?: HttpContext): Observable<void> {
     return this.setNewPassword$Response(params, context).pipe(
-      map((r: StrictHttpResponse<ActionResponseDto>): ActionResponseDto => r.body)
+      map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
 
@@ -94,7 +93,7 @@ export class UserControllerService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  requestPasswordChange$Response(params: RequestPasswordChange$Params, context?: HttpContext): Observable<StrictHttpResponse<ActionResponseDto>> {
+  requestPasswordChange$Response(params: RequestPasswordChange$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
     return requestPasswordChange(this.http, this.rootUrl, params, context);
   }
 
@@ -104,9 +103,9 @@ export class UserControllerService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  requestPasswordChange(params: RequestPasswordChange$Params, context?: HttpContext): Observable<ActionResponseDto> {
+  requestPasswordChange(params: RequestPasswordChange$Params, context?: HttpContext): Observable<void> {
     return this.requestPasswordChange$Response(params, context).pipe(
-      map((r: StrictHttpResponse<ActionResponseDto>): ActionResponseDto => r.body)
+      map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
 

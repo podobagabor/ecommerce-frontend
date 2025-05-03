@@ -5,7 +5,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {CategoryControllerService} from "../../../api/services/category-controller.service";
 import {CategoryDetailedDto} from "../../../api/models/category-detailed-dto";
 import {CategoryDto} from "../../../api/models/category-dto";
-import {catchError, take, throwError} from "rxjs";
+import {catchError, EMPTY, take, tap} from "rxjs";
 
 @Component({
   selector: 'app-category-edit-dialog',
@@ -46,16 +46,13 @@ export class CategoryEditDialogComponent {
           id: this.category?.id,
           parentCategoryId: (this.categoryForm.value.parent as CategoryDto).id || undefined,
         }
-      }).pipe(catchError(err => {
-        this.snackService.open("Sikertelen módosítás", undefined, {
-          duration: 2000,
-        });
-        return throwError(err);
-      })).subscribe(_ => {
-        this.snackService.open("Sikeres kategória módosítás", undefined, {
-          duration: 2000,
-        });
-      })
+      }).pipe(
+        take(1),
+        tap(() => {
+          this.snackService.open("Sikeres kategória módosítás", undefined, {
+            duration: 2000,
+          });
+        })).subscribe()
     }
   }
 
@@ -65,9 +62,14 @@ export class CategoryEditDialogComponent {
 
   deleteCategory() {
     if (this.category) {
-      this.categoryService.deleteCategory({id: this.category.id}).pipe(take(1)).subscribe(response => {
-        this.snackService.open(response.success ? "Sikeres törlés." : (response.message || "Hiba történt."), undefined, {duration: 2000,});
-      })
+      this.categoryService.deleteCategory({id: this.category.id}).pipe(take(1),
+        tap(() => {
+          this.snackService.open("Sikeres törlés.", undefined, {duration: 2000,});
+        }),
+        catchError((err) => {
+          return EMPTY;
+        })
+      ).subscribe()
     }
   }
 }

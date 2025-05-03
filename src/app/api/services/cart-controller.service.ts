@@ -11,7 +11,6 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { ActionResponseDto } from '../models/action-response-dto';
 import { CartElementDto } from '../models/cart-element-dto';
 import { changeQuantity } from '../fn/cart-controller/change-quantity';
 import { ChangeQuantity$Params } from '../fn/cart-controller/change-quantity';
@@ -112,7 +111,7 @@ export class CartControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  deleteCartElement$Response(params: DeleteCartElement$Params, context?: HttpContext): Observable<StrictHttpResponse<ActionResponseDto>> {
+  deleteCartElement$Response(params: DeleteCartElement$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
     return deleteCartElement(this.http, this.rootUrl, params, context);
   }
 
@@ -122,9 +121,9 @@ export class CartControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  deleteCartElement(params: DeleteCartElement$Params, context?: HttpContext): Observable<ActionResponseDto> {
+  deleteCartElement(params: DeleteCartElement$Params, context?: HttpContext): Observable<void> {
     return this.deleteCartElement$Response(params, context).pipe(
-      map((r: StrictHttpResponse<ActionResponseDto>): ActionResponseDto => r.body)
+      map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
 

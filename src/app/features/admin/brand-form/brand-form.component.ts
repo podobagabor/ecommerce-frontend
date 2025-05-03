@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {BrandControllerService} from "../../../api/services/brand-controller.service";
-import {catchError, of, take} from "rxjs";
+import {take} from "rxjs";
 import {BrandCreateDto} from "../../../api/models/brand-create-dto";
 import {ActivatedRoute, Router} from "@angular/router";
-import {StoredFile} from "../product-form/product-form.component";
 import {environment} from "../../../../environment";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {StoredFile} from "../../../shared/interfaces";
 
 @Component({
   selector: 'app-brand-form',
@@ -101,28 +101,18 @@ export class BrandFormComponent implements OnInit {
           brand: newBrand,
           image: this.uploadedFile[0]
         }
-      }).pipe(take(1),
-        catchError((err) => {
-          this.snackService.open("Hiba történt", undefined, {
-            duration: 3000,
-          })
-          return of(err.message as string);
-        })).subscribe(value => {
-        if (typeof value !== "string") {
-          this.snackService.open("Sikeres létrehozás.", undefined, {
-            duration: 3000,
-          });
-          this.router.navigateByUrl("admin/brandList");
-        } else {
-          console.error(value.toString());
-        }
+      }).pipe(take(1)).subscribe(value => {
+        this.snackService.open("Sikeres létrehozás.", undefined, {
+          duration: 3000,
+        });
+        this.router.navigateByUrl("admin/brandList");
       })
     }
   }
 
   protected updateBrand() {
     if (this.brandForm.valid && this.storedImages.length > 0 && this.editedBrandId && this.storedImages[0].url
-    && this.brandForm.value.brandName && this.brandForm.value.brandDescription) {
+      && this.brandForm.value.brandName && this.brandForm.value.brandDescription) {
       this.brandService.modifyBrand({
         body: {
           brand: {
@@ -133,22 +123,12 @@ export class BrandFormComponent implements OnInit {
           },
           newImage: this.storedImages[0].url!! ? undefined : this.storedImages[0].file,
         }
-      }).pipe(take(1),
-        catchError((err) => {
-          this.snackService.open("Hiba történt", undefined, {
-            duration: 3000,
-          })
-          return of(err.message as string);
-        })
+      }).pipe(take(1)
       ).subscribe(value => {
-        if (typeof value !== "string") {
-          this.snackService.open("Sikeres módosítás", undefined, {
-            duration: 3000,
-          });
-          this.router.navigateByUrl("admin/brandList");
-        } else {
-          console.error(value.toString());
-        }
+        this.snackService.open("Sikeres módosítás", undefined, {
+          duration: 3000,
+        });
+        this.router.navigateByUrl("admin/brandList");
       })
     }
   }

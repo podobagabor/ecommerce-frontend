@@ -26,6 +26,7 @@ import {EffectsModule} from '@ngrx/effects';
 import {CartEffects} from "./store/cart-state/cart.effects";
 import {SavedEffects} from "./store/saved-state/saved.effects";
 import {UserEffects} from "./store/user-state/user.effects";
+import {HttpErrorInterceptor} from "./core/http-error.interceptor";
 
 
 @NgModule({
@@ -61,6 +62,11 @@ import {UserEffects} from "./store/user-state/user.effects";
     useClass: AuthHeaderInterceptor,
     multi: true,
   },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
+      multi: true,
+    },
     CookieService, provideHttpClient(withInterceptorsFromDi()),]
 })
 export class AppModule {

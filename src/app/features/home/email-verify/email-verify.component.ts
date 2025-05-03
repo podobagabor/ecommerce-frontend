@@ -2,7 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {MAT_DIALOG_DATA} from "@angular/material/dialog";
 import {UserControllerService} from "../../../api/services/user-controller.service";
-import {catchError, of} from "rxjs";
+import {take, tap} from "rxjs";
 
 @Component({
   selector: 'app-email-verify',
@@ -23,12 +23,9 @@ export class EmailVerifyComponent implements OnInit {
   ngOnInit(): void {
     if (this.userToken) {
       this.userService.validateUserEmail({token: this.userToken}).pipe(
-        catchError(err => {
-          return of("Hiba")
-        })
-      ).subscribe(_ => {
-        this.loading = false;
-      })
+        take(1),
+        tap(() => this.loading = false)
+      ).subscribe()
     }
   }
 
