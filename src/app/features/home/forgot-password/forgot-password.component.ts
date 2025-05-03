@@ -22,23 +22,25 @@ export class ForgotPasswordComponent {
   }
 
   forgotPassword() {
-    this.isEmailUnknown = false;
-    this.userService.requestPasswordChange({body: this.forgotPasswordForm.value.email!!}).pipe(take(1),
-      tap(() =>this.emailSent = true),
-      catchError ((err) => {
-        console.error(err);
-        if(err.status === 404) {
-          this.isEmailUnknown = true;
-          this.snackService.open("Ismeretlen e-mail cím",undefined,{
-            duration: 3000,
-          });
-        } else {
-          this.snackService.open("Hiba történt, töltsd újra az oldalt.",undefined,{
-            duration: 3000,
-          });
-        }
-        return EMPTY;
-      })
+    if (this.forgotPasswordForm.value.email) {
+      this.isEmailUnknown = false;
+      this.userService.requestPasswordChange({body: this.forgotPasswordForm.value.email}).pipe(take(1),
+        tap(() => this.emailSent = true),
+        catchError((err) => {
+          console.error(err);
+          if (err.status === 404) {
+            this.isEmailUnknown = true;
+            this.snackService.open("Ismeretlen e-mail cím", undefined, {
+              duration: 3000,
+            });
+          } else {
+            this.snackService.open("Hiba történt, töltsd újra az oldalt.", undefined, {
+              duration: 3000,
+            });
+          }
+          return EMPTY;
+        })
       ).subscribe()
+    }
   }
 }

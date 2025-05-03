@@ -81,7 +81,7 @@ export class CartEffects {
       ofType(CartActions.deleteCartElementFromUser),
       exhaustMap((action) => {
           if (action.cartElement.quantity === 1) {
-            return this.cartService.deleteCartElement({id: action.cartElement.id!}).pipe(
+            return this.cartService.deleteCartElement({id: action.cartElement.id}).pipe(
               tapResponse({
                 next: (response) => {
                   this.store.dispatch(CartActions.removeCartElement({cartElementId: action.cartElement.id}))

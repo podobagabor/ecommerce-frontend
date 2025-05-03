@@ -131,7 +131,7 @@ export class ProductFormComponent implements OnInit {
     if (typeof object === 'string') {
       return object;
     } else {
-      return object.name!;
+      return object.name;
     }
   }
 
@@ -139,15 +139,15 @@ export class ProductFormComponent implements OnInit {
   updateProduct() {
     const images = this.processImages();
     console.log(images);
-    if (this.productId) {
+    if (this.productId && this.isProductFormValid()) {
       const product: ProductModifyDto = {
         brandId: (this.productForm.value.brand as BrandDto).id,
         count: this.productForm.value.quantity || 0,
         name: this.productForm.value.productName || "",
         discountPercentage: this.productForm.value.discount || undefined,
-        description: this.productForm.value.description!,
-        price: this.productForm.value.price!,
-        id: this.productId || 0,
+        description: this.productForm.value.description || "",
+        price: this.productForm.value.price || 0,
+        id: this.productId,
         images: images.storedImages,
         categoryId: (this.productForm.value.category as CategoryDto).id,
       };
@@ -165,29 +165,31 @@ export class ProductFormComponent implements OnInit {
   }
 
   createProduct() {
-    const product: ProductCreateDto = {
-      brandId: (this.productForm.value.brand as BrandDto).id,
-      count: this.productForm.value.quantity || 0,
-      name: this.productForm.value.productName || "",
-      discountPercentage: this.productForm.value.discount || undefined,
-      description: this.productForm.value.description!,
-      price: this.productForm.value.price!,
-      categoryId: (this.productForm.value.category as CategoryDto).id
-    };
-    this.productService.createProduct({
-      body: {
-        product: product,
-        images: this.illustrationImages
-      }
-    }).pipe(
-      take(1),
-      tap(() => {
-        this.snackService.open("Sikeres termék létrehozás", undefined, {
-          duration: 3000,
-        });
-        this.router.navigateByUrl("/admin/productList");
-      })
-    ).subscribe()
+    if (this.isProductFormValid()) {
+      const product: ProductCreateDto = {
+        brandId: (this.productForm.value.brand as BrandDto).id,
+        count: this.productForm.value.quantity || 0,
+        name: this.productForm.value.productName || "",
+        discountPercentage: this.productForm.value.discount || undefined,
+        description: this.productForm.value.description || "",
+        price: this.productForm.value.price || 0,
+        categoryId: (this.productForm.value.category as CategoryDto).id
+      };
+      this.productService.createProduct({
+        body: {
+          product: product,
+          images: this.illustrationImages
+        }
+      }).pipe(
+        take(1),
+        tap(() => {
+          this.snackService.open("Sikeres termék létrehozás", undefined, {
+            duration: 3000,
+          });
+          this.router.navigateByUrl("/admin/productList");
+        })
+      ).subscribe()
+    }
   }
 
   deleteImage(element: File) {
@@ -224,5 +226,11 @@ export class ProductFormComponent implements OnInit {
     anchor.download = fileName;
     anchor.click();
     URL.revokeObjectURL(anchor.href);
+  }
+
+  isProductFormValid(): boolean {
+    return !!(this.productForm.valid && this.productForm.value.brand
+      && this.productForm.value.productName && this.productForm.value.quantity
+      && this.productForm.value.description && this.productForm.value.price);
   }
 }

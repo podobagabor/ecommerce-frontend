@@ -20,16 +20,14 @@ export interface ProductFilter {
 type ProductState = {
   products: PageProductDto,
   isLoading: boolean,
-  filter: { query: ProductFilter, page: number, size: number },
+  filter: ProductFilter ,
 }
 
 const initialProductState: ProductState = {
   isLoading: false,
   products: {},
   filter: {
-    query: {},
-    page: 0,
-    size: 1,
+    size: 5
   }
 }
 
@@ -41,8 +39,8 @@ export const ProductStore = signalStore(
       pipe(
         tap(() => patchState(store, {isLoading: true})),
         switchMap((value) => {
-          const state = getState(store);
-          return productService.getProductsByParams({...value, page: state.products.number}).pipe(
+          console.log(value);
+          return productService.getProductsByParams({...value}).pipe(
             tapResponse({
               next: (products) => {
                 console.log("loadProducts");
@@ -58,10 +56,18 @@ export const ProductStore = signalStore(
         tap(() => patchState(store, {isLoading: false}))
       )
     ),
-    updateQuery(query: ProductFilter) {
+    updateFilters(query: ProductFilter) {
       console.log("updateQuery");
 
       patchState(store, (state) => ({...state, filter: {...state.filter, query}}));
+    },
+    updatePageValues(values: {
+      page: number,
+      size: number,
+    }) {
+      console.log("updatePageValues",values);
+
+      patchState(store, (state) => ({filter: {...state.filter, page: values.page, size: values.size}}));
     },
     updateProducts(products: PageProductDto) {
       console.log("updateProducts");

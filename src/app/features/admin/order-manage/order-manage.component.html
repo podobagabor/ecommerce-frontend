@@ -49,7 +49,7 @@
                 {{ item.product.brand.name }} {{ item.product.name }}
               </p>
               <p class="product-price">{{ item.quantity }} db</p>
-              <p class="product-price">{{ item.product.price! * item.quantity | number }}Ft</p>
+              <p class="product-price">{{ item.product.price * item.quantity | number }}Ft</p>
               <div class="product-image">
                 <img
                   [src]="environment.backendUrl + item.product.images[0]">
@@ -61,8 +61,8 @@
     </mat-accordion>
   }
 
-  <mat-paginator [pageSizeOptions]="[5, 10, 20]" [length]="orders.totalElements!" [pageIndex]="orders.number!"
-                 [pageSize]="orders.size!" (page)="page($event)" showFirstLastButtons
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]" [length]="orders.totalElements" [pageIndex]="orders.number"
+                 [pageSize]="orders.size" (page)="page($event)" showFirstLastButtons
                  aria-label="Select page of periodic elements">
   </mat-paginator>
 </main>

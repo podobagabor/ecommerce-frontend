@@ -21,7 +21,7 @@ export class ProductListComponent implements OnInit{
     this.updateList();
   }
   deleteProduct(element: ProductDto) {
-    this.productService.deleteProduct({id: element.id!}).subscribe( value => {
+    this.productService.deleteProduct({id: element.id}).subscribe( value => {
       this.snackService.open("Sikeres törlés.",undefined,{
         duration: 3000
       });

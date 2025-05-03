@@ -33,7 +33,7 @@ export class CategoryFormComponent implements OnInit {
 
     this.categoryForm.controls.parentCategory.valueChanges.subscribe(value => {
       if (value && typeof value === 'string') {
-        this.filteredParentCategories = [...this.availableParentCategories.filter(c => c.name!!.toLowerCase().includes(value.toLowerCase()))];
+        this.filteredParentCategories = [...this.availableParentCategories.filter(c => c.name.toLowerCase().includes(value.toLowerCase()))];
       } else {
         this.filteredParentCategories = [...this.availableParentCategories];
       }
@@ -41,17 +41,19 @@ export class CategoryFormComponent implements OnInit {
   }
 
   createCategory() {
-    this.categoryService.createCategory({
-      body: {
-        name: this.categoryForm.value.name!,
-        parentCategoryId: (this.categoryForm.value.parentCategory) ? (this.categoryForm.value.parentCategory as CategoryDto).id : undefined,
-      }
-    }).subscribe(_ => {
-      this.snackService.open("Sikeres kategória létrehozás", undefined, {
-        duration: 3000,
+    if(this.categoryForm.valid && this.categoryForm.value.name) {
+      this.categoryService.createCategory({
+        body: {
+          name: this.categoryForm.value.name,
+          parentCategoryId: (this.categoryForm.value.parentCategory) ? (this.categoryForm.value.parentCategory as CategoryDto).id : undefined,
+        }
+      }).subscribe(_ => {
+        this.snackService.open("Sikeres kategória létrehozás", undefined, {
+          duration: 3000,
+        })
+        this.router.navigateByUrl('/admin/categoryList');
       })
-      this.router.navigateByUrl('/admin/categoryList');
-    })
+    }
   }
 
   displayCategory(category: CategoryDto): string {

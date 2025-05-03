@@ -45,8 +45,8 @@ export class OrderManageComponent implements OnInit {
   statusChanged($event: Event, order: OrderDto) {
     $event.stopPropagation();
     this.orderService.changeOrderStatus({
-      id: order.id!,
-      status: order.status!
+      id: order.id,
+      status: order.status
     }).subscribe(value => {
       this.snackService.open('Sikeres sátusz módosítás', undefined, {
         duration: 2000,

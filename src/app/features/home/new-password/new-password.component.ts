@@ -32,11 +32,11 @@ export class NewPasswordComponent implements OnInit {
 
 
   newPassword() {
-    if (this.userToken) {
+    if (this.userToken && this.newPasswordForm.valid && this.newPasswordForm.value.password2) {
       this.userService.setNewPassword({
         body: {
           token: this.userToken,
-          newPassword: this.newPasswordForm.value.password2!
+          newPassword: this.newPasswordForm.value.password2
         }
       }).subscribe(_ => {
         this.dialog.closeAll();

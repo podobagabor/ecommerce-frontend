@@ -33,7 +33,10 @@ export class ChangePasswordComponent implements OnInit {
   }
 
   sendEmail() {
-    this.userService.requestPasswordChange({body: this.currentUser?.email!}).pipe(take(1),
-      tap(() => this.isEmailSent = true)).subscribe()
+    if (this.currentUser?.email) {
+      this.userService.requestPasswordChange({body: this.currentUser?.email}).pipe(take(1),
+        tap(() => this.isEmailSent = true)).subscribe();
+    }
+
   }
 }

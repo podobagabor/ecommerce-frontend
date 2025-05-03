@@ -3,8 +3,6 @@ import {PageEvent} from "@angular/material/paginator";
 import {Store} from "@ngrx/store";
 import {savedProducts} from "../../../store/app.selectors";
 import {Subscription} from "rxjs";
-import {PageProductDto} from "../../../api/models/page-product-dto";
-import {CategoryDetailedDto} from "../../../api/models/category-detailed-dto";
 import {ProductStore} from "../../../store/products-signal-state/products.store";
 import {BrandStore} from "../../../store/brand-signal-state/brand.store";
 import {CategoryStore} from "../../../store/category-state/category.store";
@@ -21,12 +19,10 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   readonly brandStore = inject(BrandStore);
   readonly categoryStore = inject(CategoryStore);
 
-  protected products: PageProductDto = {};
   protected _savedProducts = this.store.select(savedProducts)
   protected savedProducts: ProductDto[] = []
-  protected price: { min: number, max: number } = {min: 0, max: 120000};
-  protected discount: boolean = false;
-  protected category?: CategoryDetailedDto;
+  protected price: { min: number, max: number } = {min: 0, max: 88888}
+  protected discount: boolean = this.productStore.filter().discount || false;
   protected subscription?: Subscription;
   protected emptyCategory: boolean = false;
 
@@ -40,23 +36,31 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    let savedSubscription = this._savedProducts.subscribe(saved => {
+    this.price = {
+      min: this.productStore.filter().minPrice || 0,
+      max: this.productStore.filter().maxPrice || 100000,
+    }
+    this.subscription?.add(this._savedProducts.subscribe(saved => {
       this.savedProducts = [...saved];
-    })
+    }));
     if (!this.brandStore.brands().length) {
       this.brandStore.loadBrands("");
     }
-    this.getProducts();
   }
 
   getProducts() {
+    this.productStore.updateFilters({
+      maxPrice: this.price.max,
+      minPrice: this.price.min,
+      discount: this.discount,
+    });
     this.productStore.loadProducts({
-     brandId: this.brandStore.brands().filter(value => value.selected).map(brand => brand.brand.id),
+      brandId: this.brandStore.brands().filter(value => value.selected).map(brand => brand.brand.id),
       maxPrice: this.price.max,
       minPrice: this.price.min,
       discount: this.discount ? true : undefined,
-      page: this.productStore.products().number,
-      size: this.products.size,
+      page: this.productStore.filter().page,
+      size: this.productStore.filter().size,
       categoryId: this.categoryStore.categoryFilters(),
     })
   }
@@ -66,8 +70,11 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   }
 
   page($event: PageEvent) {
-    this.products.pageable!.pageNumber = $event.pageIndex;
-    this.products.pageable!.pageSize = $event.pageSize;
+
+    this.productStore.updatePageValues({
+      page: $event.pageIndex,
+      size: $event.pageSize,
+    })
     this.getProducts();
   }
 

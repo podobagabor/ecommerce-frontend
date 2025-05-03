@@ -35,16 +35,19 @@ export class RegistrationComponent implements OnInit {
   }
 
   registration() {
+    if(this.registrationForm.value.gender && this.registrationForm.value.email
+    && this.registrationForm.value.passwordFirst && this.registrationForm.value.firstName
+    && this.registrationForm.value.familyName && this.registrationForm.value.phoneNumber)
     this.userService.createUser({
       body: {
-        gender: this.registrationForm.value.gender!,
-        email: this.registrationForm.value.email!,
-        password: this.registrationForm.value.passwordFirst!,
+        gender: this.registrationForm.value.gender,
+        email: this.registrationForm.value.email,
+        password: this.registrationForm.value.passwordFirst,
         address: undefined,
-        firstName: this.registrationForm.value.firstName!,
-        lastName: this.registrationForm.value.familyName!,
+        firstName: this.registrationForm.value.firstName,
+        lastName: this.registrationForm.value.familyName,
         role: "USER",
-        phone: this.registrationForm.value.phoneNumber!,
+        phone: this.registrationForm.value.phoneNumber,
       }
     }).subscribe(_ => this.registrated = true)
   }
