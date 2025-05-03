@@ -2,7 +2,7 @@
   <h1>Termékek</h1>
   @if (products.content?.length) {
     <div class="bordered-container-fill">
-      <table mat-table [dataSource]="products.content" class="table">
+      <table mat-table [dataSource]="products.content || []" class="table">
         <ng-container matColumnDef="category">
           <th mat-header-cell *matHeaderCellDef> Kategória</th>
           <td mat-cell *matCellDef="let element"> {{element.category.name}} </td>
