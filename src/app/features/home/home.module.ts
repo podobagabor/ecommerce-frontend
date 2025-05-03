@@ -4,7 +4,6 @@ import {HomeRoutingModule} from "./home-routing.module";
 import {SharedModule} from "../../shared/shared.module";
 import {HomeComponent} from './home/home.component';
 import {UserSettingsComponent} from "../user/user-settings/user-settings.component";
-import {ArticleComponent} from './article/article.component';
 import {OrdersComponent} from "../user/orders/orders.component";
 
 
@@ -12,7 +11,6 @@ import {OrdersComponent} from "../user/orders/orders.component";
   declarations: [
     HomeComponent,
     UserSettingsComponent,
-    ArticleComponent,
     OrdersComponent
   ],
   imports: [

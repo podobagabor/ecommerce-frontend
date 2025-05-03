@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import {SharedModule} from "../../shared/shared.module";
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { ProductFormComponent } from './product-form/product-form.component';
-import { ArticleFormComponent } from './article-form/article-form.component';
 import { ProductListComponent } from './product-list/product-list.component';
 import {AdminRoutingModule} from "./admin-routing.module";
 import { CategoryListComponent } from './category-list/category-list.component';
@@ -22,7 +21,6 @@ import { DeliveryInfoDialogComponent } from './delivery-info-dialog/delivery-inf
   declarations: [
     AdminDashboardComponent,
     ProductFormComponent,
-    ArticleFormComponent,
     ProductListComponent,
     CategoryListComponent,
     CategoryFormComponent,
