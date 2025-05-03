@@ -10,26 +10,28 @@
       <img [src]="environment.backendUrl + image">
     </div>
     <div class="image-container">
-      <img (mouseenter)="showImage(image)" class="image" *ngFor="let image of product?.images" [src]="environment.backendUrl + image">
+      <img (mouseenter)="showImage(image)" class="image" *ngFor="let image of product?.images"
+           [src]="environment.backendUrl + image">
     </div>
   </section>
   <section class="information-container">
     <header>
       <div class="product-title">
-        <h2 class="product-brand">{{product?.brand?.name}}</h2>
-        <h1 class="product-name">{{product?.name}}</h1>
+        <h2 class="product-brand">{{ product?.brand?.name }}</h2>
+        <h1 class="product-name">{{ product?.name }}</h1>
       </div>
       <button mat-icon-button (click)="addToSaved()">
-      <span *ngIf="!isSaved" class="material-symbols-outlined">
-        favorite
-      </span>
-        <mat-icon *ngIf="isSaved">
-          favorite
-        </mat-icon>
+        @if (!isSaved) {
+          <span class="material-symbols-outlined">favorite</span>
+        } @else {
+          <mat-icon>
+            favorite
+          </mat-icon>
+        }
       </button>
     </header>
-    <p class="product-price">{{product?.price | number}}Ft</p>
+    <p class="product-price">{{ product?.price | number }}Ft</p>
     <button (click)="addToCart()" class="my-button-form">Kosárba</button>
-    <p class="product-description">{{product?.description}}</p>
+    <p class="product-description">{{ product?.description }}</p>
   </section>
 </main>

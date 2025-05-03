@@ -5,7 +5,6 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {RegistrationComponent} from "../../features/home/registration/registration.component";
 import {ForgotPasswordComponent} from "../../features/home/forgot-password/forgot-password.component";
 import {Subscription, take} from "rxjs";
-import {CookieService} from "ngx-cookie-service";
 import {EmailVerifyComponent} from "../../features/home/email-verify/email-verify.component";
 import {NewPasswordComponent} from "../../features/home/new-password/new-password.component";
 import {AuthenticationService} from "../../services/authentication.service";

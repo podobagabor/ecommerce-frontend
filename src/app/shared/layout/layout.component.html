@@ -2,81 +2,119 @@
   <a routerLink="/home" class="logo-name">N I L E</a>
 </div>
 <div fxLayout="column" fxLayoutAlign="center" class="profile-icon">
-  <button mat-fab (click)="login()" *ngIf="!(currentUser$ | async)">
-    <mat-icon>
-      account_circle
-    </mat-icon>
-  </button>
-  <p *ngIf="currentUser$ | async as user" class="user-name">Szia <a
-    routerLink="/home/userSettings">{{user?.lastName}}</a> !</p>
+  @if (!(currentUser$ | async)) {
+    <button mat-fab (click)="login()">
+      <mat-icon>
+        account_circle
+      </mat-icon>
+    </button>
+  }
+  @if (currentUser$ | async) {
+    <p class="user-name">Szia <a
+      routerLink="/home/userSettings">{{ (currentUser$ | async)?.lastName }}</a> !</p>
+  }
 </div>
 <div class="action-menu" fxLayoutAlign="space-between">
   <div fxLayout="row" fxLayoutGap="8rem">
-    <ng-container *ngIf="!(currentUser$ | async)">
-      <button (click)="categoryMenu()" class="action-menu-label"><strong>Termék kategóriák</strong></button>
-    </ng-container>
-    <ng-container *ngIf="currentUser$ | async as user">
-      <button *ngIf="user.role !== 'ADMIN'" (click)="categoryMenu()" class="action-menu-label"><strong>Termék
-        kategóriák</strong></button>
-      <a *ngIf="user.role === 'ADMIN'" routerLink="/admin/productCreate" class="action-menu-label-link"><strong>Termék
-        felvétele</strong></a>
-      <a *ngIf="user.role === 'ADMIN'" routerLink="/admin/productList" class="action-menu-label-link"><strong>Termék
-        lista</strong></a>
-      <a *ngIf="user.role === 'ADMIN'" routerLink="/admin/brandCreate" class="action-menu-label-link"><strong>Brand
-        létrehozása</strong></a>
-      <a *ngIf="user.role === 'ADMIN'" routerLink="/admin/brandList" class="action-menu-label-link"><strong>Brand
-        lista</strong></a>
-      <a *ngIf="user.role === 'ADMIN'" routerLink="/admin/articleCreate" class="action-menu-label-link"><strong>Blog
-        felvétele</strong></a>
-      <a *ngIf="user.role === 'ADMIN'" routerLink="/admin/categoryCreate" class="action-menu-label-link"><strong>Kategória
-        létrehozása</strong></a>
-      <a *ngIf="user.role === 'ADMIN'" routerLink="/admin/categoryList" class="action-menu-label-link"><strong>Kategória
-        lista</strong></a>
-      <a *ngIf="user.role === 'ADMIN'" routerLink="/admin/orders"
-         class="action-menu-label-link"><strong>Rendelések</strong></a>
-      <div fxLayout="row" *ngIf="!(user.role === 'ADMIN')">
-        <div fxLayout="column" fxLayoutAlign="center">
-          <input type="text" class="search-bar">
-        </div>
-        <button mat-icon-button class="action-menu-icon">
-          <mat-icon>
-            search
-          </mat-icon>
-        </button>
-      </div>
-    </ng-container>
+    @if (!(currentUser$ | async)) {
+      <ng-container>
+        <button (click)="categoryMenu()" class="action-menu-label"><strong>Termék kategóriák</strong></button>
+      </ng-container>
+    }
+    @if (currentUser$ | async) {
+      <ng-container>
+        @if ((currentUser$ | async)?.role !== 'ADMIN') {
+          <button (click)="categoryMenu()" class="action-menu-label"><strong>Termék
+            kategóriák</strong></button>
+        }
+        @if ((currentUser$ | async)?.role === 'ADMIN') {
+          <a routerLink="/admin/productCreate" class="action-menu-label-link"><strong>Termék
+            felvétele</strong></a>
+        }
+        @if ((currentUser$ | async)?.role === 'ADMIN') {
+          <a routerLink="/admin/productList" class="action-menu-label-link"><strong>Termék
+            lista</strong></a>
+        }
+        @if ((currentUser$ | async)?.role === 'ADMIN') {
+          <a routerLink="/admin/brandCreate" class="action-menu-label-link"><strong>Brand
+            létrehozása</strong></a>
+        }
+        @if ((currentUser$ | async)?.role === 'ADMIN') {
+          <a routerLink="/admin/brandList" class="action-menu-label-link"><strong>Brand
+            lista</strong></a>
+        }
+        @if ((currentUser$ | async)?.role === 'ADMIN') {
+          <a routerLink="/admin/articleCreate" class="action-menu-label-link"><strong>Blog
+            felvétele</strong></a>
+        }
+        @if ((currentUser$ | async)?.role === 'ADMIN') {
+          <a routerLink="/admin/categoryCreate" class="action-menu-label-link"><strong>Kategória
+            létrehozása</strong></a>
+        }
+        @if ((currentUser$ | async)?.role === 'ADMIN') {
+          <a routerLink="/admin/categoryList" class="action-menu-label-link"><strong>Kategória
+            lista</strong></a>
+        }
+        @if ((currentUser$ | async)?.role === 'ADMIN') {
+          <a routerLink="/admin/orders"
+             class="action-menu-label-link"><strong>Rendelések</strong></a>
+        }
+        @if (!((currentUser$ | async)?.role === 'ADMIN')) {
+          <div fxLayout="row">
+            <div fxLayout="column" fxLayoutAlign="center">
+              <input type="text" class="search-bar">
+            </div>
+            <button mat-icon-button class="action-menu-icon">
+              <mat-icon>
+                search
+              </mat-icon>
+            </button>
+          </div>
+        }
+      </ng-container>
+    }
   </div>
   <div fxLayout="row">
-    <ng-container *ngIf="currentUser$ | async as user">
-      <a mat-icon-button class="action-menu-icon" routerLink="/shopping/cart"
-         *ngIf="user && user.role !== 'ADMIN'">
+    @if(currentUser$ | async){
+      <ng-container>
+        @if((currentUser$ | async) && (currentUser$ | async)?.role !== 'ADMIN') {
+          <a mat-icon-button class="action-menu-icon" routerLink="/shopping/cart">
+            <mat-icon>
+              shopping_bag
+            </mat-icon>
+          </a>
+        }
+      </ng-container>
+    } @else {
+      <ng-container>
+        <a mat-icon-button class="action-menu-icon" routerLink="/product/saved">
+          <mat-icon>
+            favorite
+          </mat-icon>
+        </a>
+      </ng-container>
+    }
+    @if (currentUser$ | async) {
+      <ng-container>
+        @if((currentUser$ | async)?.role !== 'ADMIN') {
+          <a mat-icon-button class="action-menu-icon" routerLink="/product/saved">
+            <mat-icon>
+              favorite
+            </mat-icon>
+          </a>
+        }
+      </ng-container>
+      <a mat-icon-button class="action-menu-icon" (click)="logout()">
         <mat-icon>
-          shopping_bag
+          logout
         </mat-icon>
       </a>
-    </ng-container>
-    <ng-container *ngIf="!(currentUser$ | async)">
-      <a mat-icon-button class="action-menu-icon" routerLink="/product/saved">
-        <mat-icon>
-          favorite
-        </mat-icon>
-      </a>
-    </ng-container>
-    <ng-container *ngIf="currentUser$ | async as user">
-      <a mat-icon-button class="action-menu-icon" routerLink="/product/saved" *ngIf="user.role !== 'ADMIN'">
-        <mat-icon>
-          favorite
-        </mat-icon>
-      </a>
-    </ng-container>
-    <a *ngIf="currentUser$ | async" mat-icon-button class="action-menu-icon" (click)="logout()">
-      <mat-icon>
-        logout
-      </mat-icon>
-    </a>
+    }
   </div>
 </div>
-<app-category-menu [categories]="categories" class="category-menu" (mouseleave)="menuClosed()" *ngIf="categoryMenuOpen"></app-category-menu>
+@if (categoryMenuOpen) {
+  <app-category-menu [categories]="categories" class="category-menu" (mouseleave)="menuClosed()"></app-category-menu>
+}
 <router-outlet></router-outlet>
 
 

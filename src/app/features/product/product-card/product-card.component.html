@@ -2,20 +2,26 @@
   <header class="product-header">
     <p class="product-name">{{ product?.name }}</p>
     <button mat-icon-button (click)="save($event)">
-      <span *ngIf="!isSaved && !savedMode" class="material-symbols-outlined">
+      @if (!isSaved && !savedMode) {
+        <span class="material-symbols-outlined">
         favorite
       </span>
-      <mat-icon *ngIf="isSaved || savedMode">
-        favorite
-      </mat-icon>
+      } @else {
+        <mat-icon>
+          favorite
+        </mat-icon>
+      }
     </button>
   </header>
   <p class="product-brand">{{ product?.brand?.name }}</p>
   <div class="product-image" [style.background-image]="'url(' + environment.backendUrl + product?.images![0]!+ ')'">
   </div>
-  <div *ngIf="product?.discountPercentage" class="price-container">
-    <p><strong>{{ product?.price | number }} Ft</strong></p>
-    <p class="discount"> - {{ product?.discountPercentage }} %</p>
-  </div>
-  <p *ngIf="!product?.discountPercentage"><strong>{{ product?.price }} Ft</strong></p>
+  @if (product?.discountPercentage) {
+    <div class="price-container">
+      <p><strong>{{ product?.price | number }} Ft</strong></p>
+      <p class="discount"> - {{ product?.discountPercentage }} %</p>
+    </div>
+  } @else {
+    <p><strong>{{ product?.price }} Ft</strong></p>
+  }
 </div>
