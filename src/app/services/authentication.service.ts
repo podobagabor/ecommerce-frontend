@@ -15,8 +15,6 @@ import {Router} from "@angular/router";
   providedIn: 'root'
 })
 export class AuthenticationService {
-  protected currentUser = new BehaviorSubject<UserDtoDetailed | undefined>(undefined);
-
 
   constructor(private userService: UserControllerService,
               private store: Store, private cookieService: CookieService,
@@ -54,15 +52,8 @@ export class AuthenticationService {
   }
 
   logout() {
-    this.logoutWithoutDispatchingAction()
     this.store.dispatch(UserActions.logout());
     this.router.navigate(["/home"]);
-  }
-
-  logoutWithoutDispatchingAction() {
     this.cookieService.deleteAll();
-    localStorage.removeItem("saved");
-    localStorage.removeItem("cart");
-    this.currentUser?.next(undefined);
   }
 }

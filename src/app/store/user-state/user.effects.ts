@@ -29,8 +29,10 @@ export class UserEffects {
               this.store.dispatch(UserActions.setSavedAndCartFromUser());
             })
           )
+        } else {
+          this.store.dispatch(UserActions.logout());
+          this.cookieService.deleteAll();
         }
-        this.authenticationService.logout();
         this.store.dispatch(SavedActions.init());
         this.store.dispatch(CartActions.init());
         return EMPTY;
@@ -53,6 +55,6 @@ export class UserEffects {
     ),
     {dispatch: false});
 
-  constructor(private store: Store, private actions$: Actions, private cookieService: CookieService, private userService: UserControllerService, private authenticationService: AuthenticationService) {
+  constructor(private store: Store, private router: Router, private actions$: Actions, private cookieService: CookieService, private userService: UserControllerService, private authenticationService: AuthenticationService) {
   }
 }

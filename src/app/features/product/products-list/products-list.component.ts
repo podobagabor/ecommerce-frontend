@@ -23,7 +23,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   protected savedProducts: ProductDto[] = []
   protected price: { min: number, max: number } = {min: 0, max: 88888}
   protected discount: boolean = this.productStore.filter().discount || false;
-  protected subscription?: Subscription;
+  protected subscription: Subscription = new Subscription();
   protected emptyCategory: boolean = false;
 
   constructor(private store: Store) {
@@ -40,7 +40,8 @@ export class ProductsListComponent implements OnInit, OnDestroy {
       min: this.productStore.filter().minPrice || 0,
       max: this.productStore.filter().maxPrice || 100000,
     }
-    this.subscription?.add(this._savedProducts.subscribe(saved => {
+    this.subscription.add(this._savedProducts.subscribe(saved => {
+      console.log("saved",saved);
       this.savedProducts = [...saved];
     }));
     if (!this.brandStore.brands().length) {
