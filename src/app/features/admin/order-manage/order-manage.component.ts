@@ -6,7 +6,6 @@ import {PageOrderDto} from "../../../api/models/page-order-dto";
 import {FormControl, FormGroup} from "@angular/forms";
 import {PageEvent} from "@angular/material/paginator";
 import {MatDialog} from "@angular/material/dialog";
-import {CategoryEditDialogComponent} from "../category-edit-dialog/category-edit-dialog.component";
 import {DeliveryInfoDialogComponent} from "../delivery-info-dialog/delivery-info-dialog.component";
 import {environment} from "../../../../environment";
 
@@ -21,7 +20,9 @@ export class OrderManageComponent implements OnInit {
   protected orders: PageOrderDto = {};
   protected orderSearchForm = new FormGroup({
     id: new FormControl<number | undefined>(undefined),
-    status: new FormControl<"CREATED" | "IN_PROGRESS" | "UNDER_DELIVERY" | "COMPLETED" | undefined>(undefined)
+    status: new FormControl<"CREATED" | "IN_PROGRESS" | "UNDER_DELIVERY" | "COMPLETED" | undefined>(undefined),
+    dateStart: new FormControl<Date | undefined>(undefined),
+    dateEnd: new FormControl<Date | undefined>(undefined),
   })
 
   constructor(private orderService: OrderControllerService, private snackService: MatSnackBar, private dialogService: MatDialog) {
@@ -37,6 +38,8 @@ export class OrderManageComponent implements OnInit {
       size: this.orders.pageable?.pageSize,
       status: this.orderSearchForm.value.status || undefined,
       id: this.orderSearchForm.value.id || undefined,
+      after: this.orderSearchForm.value.dateStart?.toISOString().split('.')[0] || undefined,
+      before: this.orderSearchForm.value.dateEnd?.toISOString().split('.')[0] || undefined,
     }).subscribe(value => {
       this.orders = value;
     })

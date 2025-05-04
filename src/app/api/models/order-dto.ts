@@ -7,6 +7,7 @@ import { OrderItemDto } from '../models/order-item-dto';
 import { UserDto } from '../models/user-dto';
 export interface OrderDto {
   billingAddress: Address;
+  date: string;
   id: number;
   items: Array<OrderItemDto>;
   shippingAddress: Address;

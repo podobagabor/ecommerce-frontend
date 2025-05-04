@@ -15,6 +15,22 @@
         <mat-label>Keresés</mat-label>
         <input matInput formControlName="id">
       </mat-form-field>
+      <mat-form-field>
+        <mat-label>Létrehozás dátuma</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+          <input matStartDate formControlName="dateStart" placeholder="Tól">
+          <input matEndDate formControlName="dateEnd" placeholder="Ig">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+
+        @if (orderSearchForm.controls.dateStart.hasError('matStartDateInvalid')) {
+          <mat-error>Nem megfelelő kezdeti dátum</mat-error>
+        }
+        @if (orderSearchForm.controls.dateEnd.hasError('matEndDateInvalid')) {
+          <mat-error>Nem megfelelő záró dátum</mat-error>
+        }
+      </mat-form-field>
       <button (click)="loadOrders()" class="my-button-form">Keresés</button>
     </div>
   </div>
@@ -24,8 +40,8 @@
       <mat-expansion-panel hideToggle>
         <mat-expansion-panel-header class="panel-header">
           <div class="orders-panel-container">
-            <!-- <p class="order-panel-text">{{order.orderDate | date}}</p>e -->
             <p class="order-panel-text">{{ order.id }} </p>
+            <p class="order-panel-text">{{ order.date | date }} </p>
             <p class="order-panel-text">Összeg: {{ getTotalPrice(order) |number }} Ft</p>
             <div class="order-panel-actions">
               <button (click)="showDeliveryInfo(order,$event)" class="shipping-icon" mat-icon-button color="accent">
