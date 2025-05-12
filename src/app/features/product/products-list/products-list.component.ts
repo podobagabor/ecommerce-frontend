@@ -76,7 +76,6 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   }
 
   getProducts() {
-    //TODO EZ ITT NEM OKÉS
     this.productStore.loadProducts({
       brandId: this.brandStore.brands().filter(value => value.selected).map(brand => brand.brand.id),
       maxPrice: this.price.max,
