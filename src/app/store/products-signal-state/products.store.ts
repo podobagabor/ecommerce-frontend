@@ -20,14 +20,15 @@ export interface ProductFilter {
 type ProductState = {
   products: PageProductDto,
   isLoading: boolean,
-  filter: ProductFilter ,
+  filter: ProductFilter,
 }
 
 const initialProductState: ProductState = {
   isLoading: false,
   products: {},
   filter: {
-    size: 5
+    size: 5,
+    discount: false
   }
 }
 
@@ -40,7 +41,11 @@ export const ProductStore = signalStore(
         tap(() => patchState(store, {isLoading: true})),
         switchMap((value) => {
           console.log(value);
-          return productService.getProductsByParams({...value}).pipe(
+          const state = getState(store)
+          return productService.getProductsByParams({
+            ...value, page: state.filter.page, size: state.filter.size,
+            maxPrice: state.filter.maxPrice, minPrice: state.filter.minPrice, discount: state.filter.discount
+          }).pipe(
             tapResponse({
               next: (products) => {
                 console.log("loadProducts");
@@ -56,16 +61,23 @@ export const ProductStore = signalStore(
         tap(() => patchState(store, {isLoading: false}))
       )
     ),
-    updateFilters(query: ProductFilter) {
+    updateFilters(value: ProductFilter) {
       console.log("updateQuery");
 
-      patchState(store, (state) => ({...state, filter: {...state.filter, query}}));
+      patchState(store, (state) => ({
+        ...state, filter: {
+          ...state.filter,
+          discount: (value.discount !== undefined ) ? value.discount :  state.filter.discount,
+          minPrice: value.minPrice || state.filter.minPrice,
+          maxPrice: value.maxPrice || state.filter.maxPrice
+        }
+      }));
     },
     updatePageValues(values: {
       page: number,
       size: number,
     }) {
-      console.log("updatePageValues",values);
+      console.log("updatePageValues", values);
 
       patchState(store, (state) => ({filter: {...state.filter, page: values.page, size: values.size}}));
     },

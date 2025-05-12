@@ -32,4 +32,4 @@ export function changeQuantity(http: HttpClient, rootUrl: string, params: Change
   );
 }
 
-changeQuantity.PATH = '/api/cart/{id}/increase/{quantity}';
+changeQuantity.PATH = '/api/cart/{id}/modify/{quantity}';

@@ -13,8 +13,8 @@ import { PageOrderDto } from '../../models/page-order-dto';
 export interface GetOrderListPage$Params {
   status?: 'CANCELLED' | 'CREATED' | 'IN_PROGRESS' | 'UNDER_DELIVERY' | 'COMPLETED';
   id?: number;
-  before?: string;
   after?: string;
+  before?: string;
   page?: number;
   size?: number;
   sortId?: string;
@@ -26,8 +26,8 @@ export function getOrderListPage(http: HttpClient, rootUrl: string, params?: Get
   if (params) {
     rb.query('status', params.status, {});
     rb.query('id', params.id, {});
-    rb.query('before', params.before, {});
     rb.query('after', params.after, {});
+    rb.query('before', params.before, {});
     rb.query('page', params.page, {});
     rb.query('size', params.size, {});
     rb.query('sortId', params.sortId, {});

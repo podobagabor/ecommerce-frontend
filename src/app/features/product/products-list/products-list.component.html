@@ -29,11 +29,13 @@
       }
     </section>
     <h3>Ár</h3>
-    <mat-slider discrete min=0 max="120000" step="100" class="slider">
-      <input [(ngModel)]="price.min" matSliderStartThumb>
-      <input [(ngModel)]="price.max" matSliderEndThumb>
+    <mat-slider discrete min=0 max="120000" step="100" class="slider" [formGroup]="basicFilterForm">
+      <input formControlName="minPrice" matSliderStartThumb>
+      <input formControlName="maxPrice" matSliderEndThumb>
     </mat-slider>
-    <mat-checkbox [(ngModel)]="discount"><h3>Kedvezmény</h3></mat-checkbox>
+    <form [formGroup]="basicFilterForm">
+      <mat-checkbox formControlName="discount"><h3>Kedvezmény</h3></mat-checkbox>
+    </form>
     <div class="button-container">
       <button class="my-button-form" (click)="getProducts()">Szűrés</button>
     </div>
@@ -45,7 +47,8 @@
           filter_alt
         </mat-icon>
       </button>
-      <mat-paginator [pageSizeOptions]="[5, 10, 20]" [length]="productStore.products().totalElements" [pageIndex]="productStore.products().number"
+      <mat-paginator [pageSizeOptions]="[1, 2, 20]" [length]="productStore.products().totalElements"
+                     [pageIndex]="productStore.products().number"
                      [pageSize]="productStore.products().size" (page)="page($event)" showFirstLastButtons
                      aria-label="Select page of periodic elements">
       </mat-paginator>
@@ -59,7 +62,7 @@
       }
       @for (product of productStore.products().content; track product.id) {
         <app-product-card [product]="product"
-                           [isSaved]="isSaved(product)"></app-product-card>
+                          [isSaved]="isSaved(product)"></app-product-card>
       }
     </section>
   </mat-sidenav-content>

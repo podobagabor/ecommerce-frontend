@@ -28,7 +28,7 @@ export class CartControllerService extends BaseService {
   }
 
   /** Path part for operation `changeQuantity()` */
-  static readonly ChangeQuantityPath = '/api/cart/{id}/increase/{quantity}';
+  static readonly ChangeQuantityPath = '/api/cart/{id}/modify/{quantity}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.

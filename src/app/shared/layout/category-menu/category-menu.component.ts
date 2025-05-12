@@ -1,6 +1,6 @@
 import {Component, inject, Input} from '@angular/core';
 import {CategoryDetailedDto} from "../../../api/models/category-detailed-dto";
-import {CategoryStore} from "../../../store/category-state/category.store";
+import {CategoryStore} from "../../../store/category-signal-state/category.store";
 
 @Component({
   selector: 'app-category-menu',

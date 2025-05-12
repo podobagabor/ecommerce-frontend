@@ -5,8 +5,9 @@ import {savedProducts} from "../../../store/app.selectors";
 import {Subscription} from "rxjs";
 import {ProductStore} from "../../../store/products-signal-state/products.store";
 import {BrandStore} from "../../../store/brand-signal-state/brand.store";
-import {CategoryStore} from "../../../store/category-state/category.store";
+import {CategoryStore} from "../../../store/category-signal-state/category.store";
 import {ProductDto} from "../../../api/models/product-dto";
+import {FormControl, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-products-list',
@@ -25,6 +26,11 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   protected discount: boolean = this.productStore.filter().discount || false;
   protected subscription: Subscription = new Subscription();
   protected emptyCategory: boolean = false;
+  protected basicFilterForm = new FormGroup({
+    minPrice: new FormControl<number>(0),
+    maxPrice: new FormControl<number>(0),
+    discount: new FormControl<boolean>(false),
+  })
 
   constructor(private store: Store) {
     effect(() => {
@@ -33,15 +39,35 @@ export class ProductsListComponent implements OnInit, OnDestroy {
         this.getProducts();
       });
     });
+    effect(() => {
+      if (this.productStore.filter.discount !== undefined)
+        this.basicFilterForm.controls.discount.patchValue(this.productStore.filter.discount() || false)
+    });
   }
 
   ngOnInit(): void {
-    this.price = {
-      min: this.productStore.filter().minPrice || 0,
-      max: this.productStore.filter().maxPrice || 100000,
-    }
+    this.basicFilterForm.patchValue({
+      maxPrice: this.productStore.filter().maxPrice || 100000,
+      minPrice: this.productStore.filter().minPrice || 0,
+      discount: this.productStore.filter().discount || false
+    });
+    this.basicFilterForm.controls.minPrice.valueChanges.subscribe((value) => {
+      if (value !== null) {
+        this.productStore.updateFilters({minPrice: value});
+      }
+    });
+    this.basicFilterForm.controls.maxPrice.valueChanges.subscribe((value) => {
+      if (value !== null) {
+        this.productStore.updateFilters({maxPrice: value});
+      }
+    });
+    this.basicFilterForm.controls.discount.valueChanges.subscribe((value) => {
+      if (value !== null) {
+        this.productStore.updateFilters({discount: value});
+      }
+    });
     this.subscription.add(this._savedProducts.subscribe(saved => {
-      console.log("saved",saved);
+      console.log("saved", saved);
       this.savedProducts = [...saved];
     }));
     if (!this.brandStore.brands().length) {
@@ -50,18 +76,11 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   }
 
   getProducts() {
-    this.productStore.updateFilters({
-      maxPrice: this.price.max,
-      minPrice: this.price.min,
-      discount: this.discount,
-    });
+    //TODO EZ ITT NEM OKÉS
     this.productStore.loadProducts({
       brandId: this.brandStore.brands().filter(value => value.selected).map(brand => brand.brand.id),
       maxPrice: this.price.max,
       minPrice: this.price.min,
-      discount: this.discount ? true : undefined,
-      page: this.productStore.filter().page,
-      size: this.productStore.filter().size,
       categoryId: this.categoryStore.categoryFilters(),
     })
   }
