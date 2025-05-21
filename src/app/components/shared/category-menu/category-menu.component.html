@@ -1,0 +1,14 @@
+<div class="main-container">
+  @for (category of categories; track category.id) {
+    <div class="category-column">
+      <a routerLink="/product/list"
+         (click)="categoryStore.updateAllCategory(category.id)"><strong>{{ category.name }}</strong></a>
+      @for (subCategory of category.subCategories; track subCategory.id) {
+        <a (click)="categoryStore.updateAllCategory(subCategory.id)"
+           routerLink="/product/list">{{ subCategory.name }}</a>
+      }
+    </div>
+  }
+  <div class="placeholder">
+  </div>
+</div>

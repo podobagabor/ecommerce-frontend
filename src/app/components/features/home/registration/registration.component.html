@@ -1,0 +1,76 @@
+<mat-card class="main-card">
+  <div class="close" fxLayout="row" fxLayoutAlign="space-between center">
+    <div fxLayout="row" fxLayoutGap="1rem">
+      <mat-icon>
+        arrow_back
+      </mat-icon>
+      <a class="back-link" [matDialogClose]="'login'" fxLayout="row" fxLayoutAlign="center center">Bejelentkezés</a>
+    </div>
+    <button mat-icon-button [matDialogClose]="false">
+      <mat-icon>
+        cancel
+      </mat-icon>
+    </button>
+  </div>
+  <p class="title">Regisztráció</p>
+  @if (!registrated) {
+    <mat-card-content fxLayout="row" fxLayoutGap="3rem" [formGroup]="registrationForm">
+      <div fxLayout="column" fxFlex="48%">
+        <mat-form-field>
+          <mat-label>Vezetéknév</mat-label>
+          <input matInput type="text" formControlName="familyName">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Keresztnév</mat-label>
+          <input matInput type="text" formControlName="firstName">
+        </mat-form-field>
+        <div fxLayout="row" fxLayoutGap="1rem">
+          <p>Nem: </p>
+          <mat-radio-group fxLayout="row" fxLayoutGap="1rem" fxLayoutAlign="center center" formControlName="gender">
+            <mat-radio-button [value]="'MALE'">Férfi</mat-radio-button>
+            <mat-radio-button [value]="'FEMALE'">Nő</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+      <div fxLayout="column" fxFlex="48%">
+        <mat-form-field>
+          <mat-label>E-mail cím</mat-label>
+          <input matInput type="text" formControlName="email">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Telefonszám</mat-label>
+          <input matInput type="text" formControlName="phoneNumber">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Jelszó</mat-label>
+          <input matInput type="password" formControlName="passwordFirst">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Jelszó mégegyszer</mat-label>
+          <input matInput type="password" formControlName="passwordSecond">
+        </mat-form-field>
+      </div>
+      @if (passwordsNotCorrect) {
+        <p class="password-error">Nem egyezmek a megadott jelszavak.</p>
+      }
+    </mat-card-content>
+  } @else {
+    <mat-card-content fxLayout="column" fxLayoutGap="1rem">
+      <div fxLayout="row" fxLayoutAlign="center">
+        <mat-icon color="primary">
+          task_alt
+        </mat-icon>
+      </div>
+      <p class="text">Sikeresen regisztáltál. Most küldünk neked egy e-mail, amivel hitelesítheted a profilodat.</p>
+    </mat-card-content>
+  }
+  <mat-card-actions fxLayout="row" fxLayoutAlign="center">
+    @if (!registrated) {
+      <button fxFlex="60%" class="my-button" (click)="registration()"
+              [disabled]="registrationForm.invalid || passwordsNotCorrect">
+        Regisztráció
+      </button>
+    }
+  </mat-card-actions>
+</mat-card>
+

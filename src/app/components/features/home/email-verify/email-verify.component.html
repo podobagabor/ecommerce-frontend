@@ -1,0 +1,26 @@
+<mat-card class="main-card">
+  @if (loading) {
+    <div fxLayout="column" fxLayoutAlign="center center">
+      <mat-icon color="primary" class="progress-indicator">
+        refresh
+      </mat-icon>
+      <p>Kis türelmet, hitelesítünk...</p>
+    </div>
+  } @else {
+    <div fxLayout="column" fxLayoutAlign="center">
+      <div fxLayoutAlign="center center">
+        <mat-icon color="primary">
+          task_alt
+        </mat-icon>
+      </div>
+      <p class="title">Gratulálunk!</p>
+      <mat-card-content fxLayout="column" fxLayoutGap="1rem">
+        <p class="text">Sikeresen hitelesítetted az e-mail címedet.</p>
+        <button class="my-button" (click)="startShopping()" [matDialogClose]="true">
+          Kezdjük a vásárlást!
+        </button>
+      </mat-card-content>
+    </div>
+  }
+</mat-card>
+

@@ -4,22 +4,27 @@ import {RouterModule, Routes} from '@angular/router';
 const routes: Routes = [
   {
     path: 'product',
-    loadChildren: () => import('./features/product/product.module').then(m => m.ProductModule),
+    loadChildren: () => import('./components/features/product/product.module').then(m => m.ProductModule),
     canActivate: []
   },
   {
     path: 'shopping',
-    loadChildren: () => import('./features/shopping/shopping.module').then(m => m.ShoppingModule),
+    loadChildren: () => import('./components/features/shopping/shopping.module').then(m => m.ShoppingModule),
     canActivate: []
   },
   {
     path: 'home',
-    loadChildren: () => import('./features/home/home.module').then(m => m.HomeModule),
+    loadChildren: () => import('./components/features/home/home.module').then(m => m.HomeModule),
+    canActivate: []
+  },
+  {
+    path: 'user',
+    loadChildren: () => import('./components/features/user/user.module').then(m => m.UserModule),
     canActivate: []
   },
   {
     path: 'admin',
-    loadChildren: () => import('./features/admin/admin.module').then(m => m.AdminModule),
+    loadChildren: () => import('./components/features/admin/admin.module').then(m => m.AdminModule),
     canActivate: []
   },
   {

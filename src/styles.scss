@@ -6,7 +6,8 @@
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
-@include mat.core();
+@include mat.elevation-classes();
+@include mat.app-background();
 
 
 $dark-primary-text: #213555;
@@ -16,6 +17,7 @@ $light-primary-text: white;
   --light-primary: #bfcbdc;
   --my-font-family: 'Raleway', sans-serif;
   --primary: #4f709c;
+  --primary-transparent: #4f709c80;
   --accent: #e5d183;
   --accent-dark: #d29c00;
   --warn:#f44336;
@@ -73,15 +75,15 @@ $mat-accent: (
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$Nile-primary: mat.define-palette($mat-primary, 400);
-$Nile-accent: mat.define-palette($mat-accent, 200);
+$Nile-primary: mat.m2-define-palette($mat-primary, 400);
+$Nile-accent: mat.m2-define-palette($mat-accent, 200);
 
 // The warn palette is optional (defaults to red).
-$Nile-warn: mat.define-palette(mat.$red-palette);
+$Nile-warn: mat.m2-define-palette(mat.$m2-red-palette);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
-$Nile-theme: mat.define-light-theme((
+$Nile-theme: mat.m2-define-light-theme((
   color: (
     primary: $Nile-primary,
     accent: $Nile-accent,
@@ -98,6 +100,55 @@ html, body {
   height: 100%;
   margin: 0;
   font-family: 'Raleway', sans-serif !important;
+}
+
+.my-table {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  .table {
+    width: 100%;
+    background-color: white;
+    border: 0.15em solid var(--light-primary);
+    border-radius: 0.5rem;
+    padding: 2px;
+    table {
+      background-color: white;
+      font-size: large;
+      font-weight: bolder;
+    }
+  }
+}
+.image-uploader {
+  padding: 1rem;
+  background-color: whitesmoke;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  font-size: large;
+  font-weight: bolder;
+  margin-bottom: 2rem;
+  .file-uploader-input {
+    display: none;
+  }
+}
+
+.main-container {
+  max-width: 1000px;
+  width: 100%;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  .form {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    border: 0.15em solid var(--light-primary);
+    border-radius: 0.5rem;
+    box-shadow: rgba(0, 0, 0, 0.09) 0 0 10px;
+  }
 }
 
 .my-button {
@@ -291,4 +342,16 @@ mat-expansion-panel-header:focus {
   background-color: var(--light-primary) !important;
 }
 
+.password-error {
+  color: var(--warn);
+}
 
+.dialog-actions {
+  padding: 0 2rem 2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  button {
+    width: 100%;
+  }
+}

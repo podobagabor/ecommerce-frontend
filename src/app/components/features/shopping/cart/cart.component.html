@@ -1,0 +1,118 @@
+<main>
+  <h1>Kosár</h1>
+  <section class="cart-items">
+    <h2>Kiválasztott termékek</h2>
+    @if (($cartItems | async)?.length) {
+      @for (cartElement of $cartItems | async; track cartElement.id) {
+        <mat-card class="cart-element">
+          <p class="product-name">
+            {{ cartElement.productDto.brand.name }} {{ cartElement.productDto.name }}
+          </p>
+          <div class="qounatity-container">
+            <button mat-icon-button (click)="reduce(cartElement)">
+              <mat-icon>
+                remove
+              </mat-icon>
+            </button>
+            <p class="product-price">{{ cartElement.quantity }} db</p>
+            <button mat-icon-button (click)="grow(cartElement)">
+              <mat-icon>
+                add
+              </mat-icon>
+            </button>
+          </div>
+          <p class="product-price">{{ cartElement.productDto.price! * cartElement.quantity! | number }}Ft</p>
+          <div class="product-image">
+            <img
+              [src]="environment.backendUrl + cartElement.productDto.images[0]">
+          </div>
+        </mat-card>
+      }
+    } @else {
+      <h1  class="text-centered">Üres a kosarad</h1>
+    }
+    <mat-card class="total-amount-container">
+      <p class="total-amount">Fizetendő</p>
+      <p class="total-amount-sum">{{ getSum() | number }} Ft</p>
+    </mat-card>
+  </section>
+  <section class="user-adatok-container">
+    <h2>Szükséges adatok</h2>
+    <form fxLayout="column" class="address-section" [formGroup]="userShippingAddressForm">
+      <h2>Szállítási cím</h2>
+      <div fxLayout="row" fxLayoutAlign="space-between">
+        <mat-form-field fxFlex="45%">
+          <mat-label>Ország</mat-label>
+          <input matInput type="text" formControlName="country">
+        </mat-form-field>
+        <mat-form-field fxFlex="45%">
+          <mat-label>Irányítószám</mat-label>
+          <input matInput type="text" formControlName="zipCode">
+        </mat-form-field>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="space-between">
+        <mat-form-field fxFlex="45%">
+          <mat-label>Város</mat-label>
+          <input matInput type="text" formControlName="city">
+        </mat-form-field>
+        <mat-form-field fxFlex="45%">
+          <mat-label>Út / Utca</mat-label>
+          <input matInput type="text" formControlName="street">
+        </mat-form-field>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="space-between">
+        <mat-form-field fxFlex="45%">
+          <mat-label>Házszám</mat-label>
+          <input matInput type="text" formControlName="streetNumber">
+        </mat-form-field>
+        <mat-form-field fxFlex="45%">
+          <mat-label>Emelet/Ajtó</mat-label>
+          <input matInput type="text" formControlName="floor">
+        </mat-form-field>
+      </div>
+    </form>
+  </section>
+  <section class="user-adatok-container">
+      <h2>Számlázási adatok</h2>
+      <mat-checkbox [(ngModel)]="billingAddressIsTheSame">Megegyezik a szállítási címmel.</mat-checkbox>
+    <form fxLayout="column" class="address-section" [formGroup]="userBillingAddressForm">
+      @if(!billingAddressIsTheSame) {
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <mat-form-field fxFlex="45%">
+            <mat-label>Ország</mat-label>
+            <input matInput type="text" formControlName="country">
+          </mat-form-field>
+          <mat-form-field fxFlex="45%">
+            <mat-label>Irányítószám</mat-label>
+            <input matInput type="text" formControlName="zipCode">
+          </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <mat-form-field fxFlex="45%">
+            <mat-label>Város</mat-label>
+            <input matInput type="text" formControlName="city">
+          </mat-form-field>
+          <mat-form-field fxFlex="45%">
+            <mat-label>Út / Utca</mat-label>
+            <input matInput type="text" formControlName="street">
+          </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <mat-form-field fxFlex="45%">
+            <mat-label>Házszám</mat-label>
+            <input matInput type="text" formControlName="streetNumber">
+          </mat-form-field>
+          <mat-form-field fxFlex="45%">
+            <mat-label>Emelet/Ajtó</mat-label>
+            <input matInput type="text" formControlName="floor">
+          </mat-form-field>
+        </div>
+      }
+    </form>
+  </section>
+  <div class="buton-container">
+    <button (click)="order()" [disabled]="!($cartItems | async)?.length || userShippingAddressForm.invalid || (!billingAddressIsTheSame && userBillingAddressForm.invalid)" class="my-button-form full-size-button">Tovább a
+      megrendeléshez
+    </button>
+  </div>
+</main>

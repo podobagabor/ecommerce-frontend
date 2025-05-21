@@ -1,0 +1,84 @@
+<main class="my-main">
+  <div class="header">
+    <h1>Rendelések</h1>
+  </div>
+  <div [formGroup]="orderSearchForm" class="searchbar">
+    <mat-form-field>
+      <mat-select formControlName="status">
+        <mat-option [value]="undefined">Nincs szűrő</mat-option>
+        <mat-option [value]="'CANCELLED'">Lemondva</mat-option>
+        <mat-option [value]="'CREATED'">Létrehozva</mat-option>
+        <mat-option [value]="'IN_PROGRESS'">Folyamatban</mat-option>
+        <mat-option [value]="'UNDER_DELIVERY'">Szállítás alatt</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Keresés</mat-label>
+      <input matInput formControlName="id">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Létrehozás dátuma</mat-label>
+      <mat-date-range-input [rangePicker]="picker">
+        <input matStartDate formControlName="dateStart" placeholder="Tól">
+        <input matEndDate formControlName="dateEnd" placeholder="Ig">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+
+      @if (orderSearchForm.controls.dateStart.hasError('matStartDateInvalid')) {
+        <mat-error>Nem megfelelő kezdeti dátum</mat-error>
+      }
+      @if (orderSearchForm.controls.dateEnd.hasError('matEndDateInvalid')) {
+        <mat-error>Nem megfelelő záró dátum</mat-error>
+      }
+    </mat-form-field>
+    <button (click)="loadOrders()" class="my-button-form">Keresés</button>
+  </div>
+  @for (order of orders.content; track order.id) {
+    <mat-accordion>
+      <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header class="panel-header">
+          <div class="orders-panel-container">
+            <p class="order-panel-text">{{ order.id }} </p>
+            <p class="order-panel-text">{{ order.date | date }} </p>
+            <p class="order-panel-text">Összeg: {{ getTotalPrice(order) |number }} Ft</p>
+            <div class="order-panel-actions">
+              <button (click)="showDeliveryInfo(order,$event)" class="shipping-icon" mat-icon-button color="accent">
+                <mat-icon>
+                  local_shipping
+                </mat-icon>
+              </button>
+              <select [(ngModel)]="order.status" (change)="statusChanged($event,order)">
+                <option [value]="'CANCELLED'">Lemondva</option>
+                <option [value]="'CREATED'">Létrehozva</option>
+                <option [value]="'IN_PROGRESS'">Folyamatban</option>
+                <option [value]="'UNDER_DELIVERY'">Szállítás alatt</option>
+              </select>
+            </div>
+          </div>
+        </mat-expansion-panel-header>
+        <section class="product-list">
+          @for (item of order.items; track item.id) {
+            <mat-card class="product-element">
+              <p class="product-name">
+                {{ item.product.brand.name }} {{ item.product.name }}
+              </p>
+              <p class="product-price">{{ item.quantity }} db</p>
+              <p class="product-price">{{ item.product.price * item.quantity | number }}Ft</p>
+              <div class="product-image">
+                <img
+                  [src]="environment.backendUrl + item.product.images[0]">
+              </div>
+            </mat-card>
+          }
+        </section>
+      </mat-expansion-panel>
+    </mat-accordion>
+  }
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]" [length]="orders.totalElements" [pageIndex]="orders.number"
+                 [pageSize]="orders.size" (page)="page($event)" showFirstLastButtons
+                 aria-label="Select page of periodic elements">
+  </mat-paginator>
+</main>
+

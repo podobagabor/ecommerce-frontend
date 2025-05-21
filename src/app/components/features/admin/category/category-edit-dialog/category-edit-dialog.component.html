@@ -1,0 +1,25 @@
+<mat-dialog-content [formGroup]="categoryForm">
+  <h1>{{addingSubCategoryMode ? 'Alkategória hozzáadása' : 'Kategória szerkesztése'}}</h1>
+  <mat-form-field class="dialog-form">
+    <mat-label>Név</mat-label>
+    <input matInput formControlName="name">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Szülő kategória</mat-label>
+    <input
+      matInput
+      formControlName="parent"
+      name="parent"
+      [matAutocomplete]="parentCategoriesAutocomplete"
+    />
+    <mat-autocomplete #parentCategoriesAutocomplete="matAutocomplete" [displayWith]="displayCategory">
+      @for (category of filteredCategories; track category.id) {
+        <mat-option [value]="category">{{ category.name }}</mat-option>
+      }
+    </mat-autocomplete>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions class="dialog-actions">
+  <button class="my-button" [matDialogClose]="true" [disabled]="categoryForm.invalid" (click)="saveCategory()" >Mentés</button>
+  <button class="my-button-accent" [matDialogClose]="true"  (click)="deleteCategory()" >Törlés</button>
+</mat-dialog-actions>

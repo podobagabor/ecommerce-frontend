@@ -1,8 +1,0 @@
-<div class="main-container">
-  <div class="category-column" *ngFor="let category of categories">
-    <a routerLink="/product/list" [queryParams]="{'category': category.name}"><strong>{{category.name}}</strong></a>
-    <a *ngFor="let subCategory of category.subCategories" routerLink="/product/list" [queryParams]="{category: category.name, subCategory:subCategory.name}">{{subCategory.name}}</a>
-  </div>
-  <div class="placeholder">
-  </div>
-</div>

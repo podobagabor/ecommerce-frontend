@@ -1,0 +1,31 @@
+<main class="my-main">
+  <h1>Termékek</h1>
+  <mat-accordion *ngFor="let order of orders">
+    <mat-expansion-panel hideToggle>
+      <mat-expansion-panel-header class="panel-header">
+        <div class="orders-panel-container">
+          <!-- <p class="order-panel-text">Összeg: {{order.totalPrice |number}} Ft</p>
+          <p class="order-panel-text">Státusz: {{order.status ? getStatus(order.status) : ''}}</p>
+          <div class="order-panel-actions">
+            <button (click)="cancel(order, $event)" *ngIf="order.status==='CREATED' || order.status==='PAYED' || order.status==='PACKAGED'" class="my-button-form-accent">Lemondás</button>
+          </div>-->
+
+
+        </div>
+      </mat-expansion-panel-header>
+      <!--  <mat-card class="product-element" *ngFor="let item of order.products">
+        <p class="product-name">
+          {{item.product?.brand?.name}} {{item.product?.name}}
+        </p>
+        <p class="product-price">{{item.count}} db</p>
+        <p class="product-price">{{item.product?.price! * item.count! | number}}Ft</p>
+        <div class="product-image">
+          <img
+            [src]="item.product?.imageUrls?.[0]">
+        </div>
+      </mat-card-->
+    >
+    </mat-expansion-panel>
+  </mat-accordion>
+</main>
+

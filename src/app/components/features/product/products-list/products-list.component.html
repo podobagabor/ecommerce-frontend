@@ -1,0 +1,72 @@
+<mat-sidenav-container class="side-nav-container" [autosize]="true">
+  <mat-sidenav #sideNav class="side_nav">
+    <h2>Szűrő</h2>
+    <h3>Márka</h3>
+    <section class="filter-list">
+      @for (brand of brandStore.brands(); track brand.brand.id) {
+        <mat-checkbox (change)="brandStore.selectBrand(brand.brand.id,$event.checked)"
+                      [checked]="brand.selected">{{ brand.brand.name }}
+        </mat-checkbox>
+      }
+    </section>
+    <h3>Kategória</h3>
+    <section class="filter-list">
+      @for (category of categoryStore.categories(); track category.category.id) {
+        <mat-checkbox [checked]="category.selected"
+                      (change)="categoryStore.updateSelectedCategory(category.category.id,$event.checked)">{{ category.category.name }}
+        </mat-checkbox>
+        @if (category.subCategories.length) {
+          <ul>
+            @for (subCategory of category.subCategories; track subCategory.category.id) {
+              <li>
+                <mat-checkbox [checked]="subCategory.selected"
+                              (change)="categoryStore.updateSelectedCategory(subCategory.category.id,$event.checked)">{{ subCategory.category.name }}
+                </mat-checkbox>
+              </li>
+            }
+          </ul>
+        }
+      }
+    </section>
+    <h3>Ár</h3>
+    <mat-slider discrete min=0 max="1000000" step="100" class="slider" [formGroup]="basicFilterForm">
+      <input formControlName="minPrice" matSliderStartThumb>
+      <input formControlName="maxPrice" matSliderEndThumb>
+    </mat-slider>
+    <form [formGroup]="basicFilterForm">
+      <mat-checkbox formControlName="discount"><h3>Kedvezmény</h3></mat-checkbox>
+    </form>
+    <div class="button-container">
+      <button class="my-button-form" (click)="getProducts()">Szűrés</button>
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-content class="side-nav-content">
+    <div class="list-header">
+      <button mat-fab (click)="sideNav.toggle()">
+        <mat-icon>
+          filter_alt
+        </mat-icon>
+      </button>
+      <mat-paginator [pageSizeOptions]="[1, 2, 20]" [length]="productStore.products().totalElements"
+                     [pageIndex]="productStore.products().number"
+                     [pageSize]="productStore.products().size" (page)="page($event)" showFirstLastButtons
+                     aria-label="Select page of periodic elements">
+      </mat-paginator>
+    </div>
+    <section class="card-container">
+      @if (emptyCategory) {
+        <p>Nincs az adott kategóriában termék. A többi közül viszont válogathatsz:</p>
+      }
+      @if (emptyCategory) {
+        <p>Nincs az adott kategóriában termék. A többi közül viszont válogathatsz:</p>
+      }
+      @for (product of productStore.products().content; track product.id) {
+        <app-product-card [product]="product"
+                          [isSaved]="isSaved(product)"></app-product-card>
+      }
+    </section>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+
+

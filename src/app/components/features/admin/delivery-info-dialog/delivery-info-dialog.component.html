@@ -1,0 +1,25 @@
+<mat-dialog-content>
+  <h1>Szállítási adatok</h1>
+  <div class="delivery-info-container">
+    <div class="delivery-info-container__column">
+      <p>Név:</p>
+      <p>Telefonszám:</p>
+      <p>E-mail:</p>
+      <p>Szállítási cím:</p>
+      <p>Számlázási cím:</p>
+    </div>
+    <div class="delivery-info-container__column">
+      @if (order) {
+        <p>{{order.user.firsName}} {{order.user.lastName}}</p>
+        <p>{{order.user.phone}}</p>
+        <p>{{order.user.email}}</p>
+        <p>{{order.billingAddress.country}} {{order.billingAddress.postalCode}} {{order.billingAddress.city}} {{order.billingAddress.street}} {{order.billingAddress.number}}</p>
+        <p>{{order.user.address?.country}} {{order.user.address?.postalCode}} {{order.user.address?.city}} {{order.user.address?.street}} {{order.user.address?.number}}</p>
+      }
+    </div>
+  </div>
+
+</mat-dialog-content>
+<mat-dialog-actions class="dialog-actions">
+  <button class="my-button" [matDialogClose]="true">Vissza</button>
+</mat-dialog-actions>

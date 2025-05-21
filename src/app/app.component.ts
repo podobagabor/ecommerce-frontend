@@ -1,25 +1,29 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AuthServiceService} from "./api/services/auth-service.service";
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {CookieService} from "ngx-cookie-service";
-import {UserServiceService} from "./api/services/user-service.service";
+import {Store} from "@ngrx/store";
+import {UserActions} from "./core/store/user-state/user.actions";
+import {ProductStore} from "./core/store/products-signal-state/products.store";
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss'],
-    standalone: false
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
+  standalone: false
 })
 export class AppComponent implements OnInit, OnDestroy {
+  readonly productStore = inject(ProductStore);
+
   protected name?: string;
   title = 'Nile';
 
-  constructor(private authService: AuthServiceService, private cookieService: CookieService, private userService: UserServiceService) {
+  constructor(private cookieService: CookieService, private store: Store) {
   }
 
   ngOnInit(): void {
+    this.store.dispatch(UserActions.init());
   }
 
   ngOnDestroy(): void {
-     // this.cookieService.deleteAll();
+    this.cookieService.deleteAll();
   }
 }
