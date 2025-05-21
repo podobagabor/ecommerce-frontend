@@ -22,6 +22,6 @@
       <p class="discount"> - {{ product().discountPercentage }} %</p>
     </div>
   } @else {
-    <p><strong>{{ product().price }} Ft</strong></p>
+    <p><strong>{{ product().price  | number}} Ft</strong></p>
   }
 </div>

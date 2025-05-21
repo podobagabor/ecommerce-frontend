@@ -8,7 +8,7 @@ const routes: Routes = [
     path: '',
     component: LayoutComponent,
     children: [
-      {path: 'settings', component: UserSettingsComponent}
+      {path: 'userSettings', component: UserSettingsComponent}
     ]
   },
 ];

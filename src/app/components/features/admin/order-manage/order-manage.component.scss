@@ -86,17 +86,18 @@
   }
 }
 
-.header-with-searchbar {
+.header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
 
-  .searchbar {
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-    mat-form-field {
-      min-width: 300px;
-    }
+.searchbar {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  mat-form-field {
+    min-width: 300px;
   }
 }
+

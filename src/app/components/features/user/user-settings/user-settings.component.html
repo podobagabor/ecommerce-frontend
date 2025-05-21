@@ -2,7 +2,10 @@
   <div fxLayout="row" fxLayoutAlign="space-between center">
     <h1>Profil</h1>
     <div class="button-container">
-      <a routerLink="/home/orders" class="my-button-form-link">Rendeléseim</a>
+      @if (false) {
+        <a routerLink="/home/orders" class="my-button-form-link">Rendeléseim</a>
+
+      }
       <button [disabled]="userSettingsForm.invalid && userShippingAddressForm.invalid"
               (click)="save()" class="my-button-form">Módosítások mentése
       </button>

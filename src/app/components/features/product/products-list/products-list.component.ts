@@ -47,7 +47,7 @@ export class ProductsListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.basicFilterForm.patchValue({
-      maxPrice: this.productStore.filter().maxPrice || 100000,
+      maxPrice: this.productStore.filter().maxPrice || 1000000,
       minPrice: this.productStore.filter().minPrice || 0,
       discount: this.productStore.filter().discount || false
     });

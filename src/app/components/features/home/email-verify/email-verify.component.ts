@@ -14,7 +14,7 @@ export class EmailVerifyComponent implements OnInit {
   protected loading: boolean = true;
   protected userToken?: string;
 
-  constructor(private activatedRoute: ActivatedRoute, private userService: UserControllerService, @Inject(MAT_DIALOG_DATA) private data: any, private router: Router) {
+  constructor(private userService: UserControllerService, @Inject(MAT_DIALOG_DATA) private data: any, private router: Router) {
     if (data) {
       this.userToken = data['userToken'];
     }

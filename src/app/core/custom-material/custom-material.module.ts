@@ -30,7 +30,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatMomentDateModule} from "@angular/material-moment-adapter";
-import {MatTree, MatTreeNode} from "@angular/material/tree";
+import {MatTree, MatTreeNode, MatTreeNodeDef, MatTreeNodePadding, MatTreeNodeToggle} from "@angular/material/tree";
 import {MatFormFieldModule} from "@angular/material/form-field";
 
 export const MY_FORMATS = {
@@ -53,8 +53,8 @@ export const MY_FORMATS = {
     MatSnackBarModule, MatProgressSpinnerModule, MatDatepickerModule,
     MatAutocompleteModule, MatTableModule, MatDialogModule, MatTabsModule,
     MatTooltipModule, MatSelectModule, MatPaginatorModule, MatChipsModule,
-    MatButtonToggleModule, MatSlideToggleModule, MatBadgeModule, MatCheckboxModule,
-    MatExpansionModule, DragDropModule, MatSortModule, MatRadioModule, MatTree, MatTreeNode, MatLabel, MatFormFieldModule
+    MatButtonToggleModule, MatSlideToggleModule, MatBadgeModule, MatCheckboxModule,MatTreeNodeToggle,
+    MatExpansionModule, DragDropModule, MatSortModule, MatRadioModule, MatTree, MatTreeNode, MatLabel, MatFormFieldModule, MatTreeNodeDef,MatTreeNodePadding
   ],
   exports: [
     CommonModule,
@@ -63,8 +63,8 @@ export const MY_FORMATS = {
     MatSnackBarModule, MatMenuModule, MatProgressSpinnerModule, MatDatepickerModule,
     MatAutocompleteModule, MatTableModule, MatDialogModule, MatTabsModule,
     MatTooltipModule, MatSelectModule, MatPaginatorModule, MatChipsModule,
-    MatButtonToggleModule, MatSlideToggleModule, MatBadgeModule, MatCheckboxModule,
-    MatExpansionModule, DragDropModule, MatSortModule, MatRadioModule, MatTree, MatTreeNode, MatLabel,MatFormFieldModule
+    MatButtonToggleModule, MatSlideToggleModule, MatBadgeModule, MatCheckboxModule,MatTreeNodeToggle,
+    MatExpansionModule, DragDropModule, MatSortModule, MatRadioModule, MatTree, MatTreeNode, MatLabel,MatFormFieldModule,MatTreeNodeDef,MatTreeNodePadding
   ],
   providers: [
     {

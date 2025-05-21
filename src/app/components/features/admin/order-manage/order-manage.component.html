@@ -1,40 +1,39 @@
 <main class="my-main">
-  <div class="header-with-searchbar">
+  <div class="header">
     <h1>Rendelések</h1>
-    <div [formGroup]="orderSearchForm" class="searchbar">
-      <mat-form-field>
-        <mat-select formControlName="status">
-          <mat-option [value]="undefined">Nincs szűrő</mat-option>
-          <mat-option [value]="'CANCELLED'">Lemondva</mat-option>
-          <mat-option [value]="'CREATED'">Létrehozva</mat-option>
-          <mat-option [value]="'IN_PROGRESS'">Folyamatban</mat-option>
-          <mat-option [value]="'UNDER_DELIVERY'">Szállítás alatt</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Keresés</mat-label>
-        <input matInput formControlName="id">
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Létrehozás dátuma</mat-label>
-        <mat-date-range-input [rangePicker]="picker">
-          <input matStartDate formControlName="dateStart" placeholder="Tól">
-          <input matEndDate formControlName="dateEnd" placeholder="Ig">
-        </mat-date-range-input>
-        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-date-range-picker #picker></mat-date-range-picker>
-
-        @if (orderSearchForm.controls.dateStart.hasError('matStartDateInvalid')) {
-          <mat-error>Nem megfelelő kezdeti dátum</mat-error>
-        }
-        @if (orderSearchForm.controls.dateEnd.hasError('matEndDateInvalid')) {
-          <mat-error>Nem megfelelő záró dátum</mat-error>
-        }
-      </mat-form-field>
-      <button (click)="loadOrders()" class="my-button-form">Keresés</button>
-    </div>
   </div>
+  <div [formGroup]="orderSearchForm" class="searchbar">
+    <mat-form-field>
+      <mat-select formControlName="status">
+        <mat-option [value]="undefined">Nincs szűrő</mat-option>
+        <mat-option [value]="'CANCELLED'">Lemondva</mat-option>
+        <mat-option [value]="'CREATED'">Létrehozva</mat-option>
+        <mat-option [value]="'IN_PROGRESS'">Folyamatban</mat-option>
+        <mat-option [value]="'UNDER_DELIVERY'">Szállítás alatt</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Keresés</mat-label>
+      <input matInput formControlName="id">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Létrehozás dátuma</mat-label>
+      <mat-date-range-input [rangePicker]="picker">
+        <input matStartDate formControlName="dateStart" placeholder="Tól">
+        <input matEndDate formControlName="dateEnd" placeholder="Ig">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
 
+      @if (orderSearchForm.controls.dateStart.hasError('matStartDateInvalid')) {
+        <mat-error>Nem megfelelő kezdeti dátum</mat-error>
+      }
+      @if (orderSearchForm.controls.dateEnd.hasError('matEndDateInvalid')) {
+        <mat-error>Nem megfelelő záró dátum</mat-error>
+      }
+    </mat-form-field>
+    <button (click)="loadOrders()" class="my-button-form">Keresés</button>
+  </div>
   @for (order of orders.content; track order.id) {
     <mat-accordion>
       <mat-expansion-panel hideToggle>

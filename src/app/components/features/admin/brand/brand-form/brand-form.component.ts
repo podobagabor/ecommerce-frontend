@@ -60,8 +60,8 @@ export class BrandFormComponent implements OnInit {
         this.storedImages.length = 0;
         this.storedImages.push({
           file: $event.target.files[0],
-          url: undefined,
-          deleted: true
+          url: "",
+          deleted: false
         });
         this.storedImages = [...this.storedImages];
       } else {
@@ -111,7 +111,7 @@ export class BrandFormComponent implements OnInit {
   }
 
   protected updateBrand() {
-    if (this.brandForm.valid && this.storedImages.length > 0 && this.editedBrandId && this.storedImages[0].url
+    if (this.brandForm.valid && this.storedImages.length > 0 && this.editedBrandId && this.storedImages[0].url !== undefined
       && this.brandForm.value.brandName && this.brandForm.value.brandDescription) {
       this.brandService.modifyBrand({
         body: {
@@ -121,7 +121,7 @@ export class BrandFormComponent implements OnInit {
             id: this.editedBrandId,
             description: this.brandForm.value.brandDescription,
           },
-          newImage: this.storedImages[0].url!! ? undefined : this.storedImages[0].file,
+          newImage: this.storedImages[0].url === "" ? this.storedImages[0].file : undefined,
         }
       }).pipe(take(1)
       ).subscribe(value => {

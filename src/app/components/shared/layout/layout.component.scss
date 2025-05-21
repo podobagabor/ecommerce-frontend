@@ -38,10 +38,29 @@
 
 .action-menu {
   width: 100%;
+  box-sizing: border-box;
   height: 3rem;
   background-color: var(--light-primary);
-  padding-left: 6rem;
-  padding-right: 6rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  &__section {
+    display: flex;
+    justify-content: space-around;
+  }
+
+}
+
+.action-menu-admin {
+  padding-left: 3rem;
+  padding-right: 3rem;
+  &__section {
+    flex: 1;
+    display: flex;
+    justify-content: space-around;
+  }
 }
 
 .action-menu-icon:hover {
@@ -57,7 +76,7 @@
 .action-menu-label {
   background-color: rgba(0, 0, 0, 0);
   border: rgba(0, 0, 0, 0);
-  font-family: var(--my-font-family);
+  font-family: var(--my-font-family), serif;
 }
 
 .action-menu-label:hover {
