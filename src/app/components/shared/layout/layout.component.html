@@ -40,12 +40,12 @@
             <button (click)="categoryMenu()" class="action-menu-label"><strong>Termék kategóriák</strong></button>
         </div>
         <div class="action-menu__section">
+            <a mat-icon-button class="action-menu-icon" routerLink="/product/saved">
+                <mat-icon>
+                    favorite
+                </mat-icon>
+            </a>
             @if ((currentUser$ | async)) {
-                <a mat-icon-button class="action-menu-icon" routerLink="/product/saved">
-                    <mat-icon>
-                        favorite
-                    </mat-icon>
-                </a>
                 <a mat-icon-button class="action-menu-icon" routerLink="/shopping/cart">
                     <mat-icon>
                         shopping_bag

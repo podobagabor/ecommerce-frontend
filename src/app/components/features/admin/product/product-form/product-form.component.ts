@@ -138,7 +138,6 @@ export class ProductFormComponent implements OnInit {
 
   updateProduct() {
     const images = this.processImages();
-    console.log(images);
     if (this.productId && this.isProductFormValid()) {
       const product: ProductModifyDto = {
         brandId: (this.productForm.value.brand as BrandDto).id,
@@ -151,8 +150,6 @@ export class ProductFormComponent implements OnInit {
         images: images.storedImages,
         categoryId: (this.productForm.value.category as CategoryDto).id,
       };
-      console.log(product);
-      console.log(images.newImages);
       this.productService.updateProduct({
         body: {
           newImages: images.newImages,

@@ -16,13 +16,11 @@ export class UserEffects {
       ofType(UserActions.init),
       exhaustMap(() => {
         if (localStorage.getItem("loggedInUser")) {
-          console.log("initAuthHasUserLocalStorage");
           const loggedInUser = JSON.parse(<string>localStorage.getItem("loggedInUser")) as UserDtoDetailed
           this.store.dispatch(UserActions.login({user: loggedInUser}));
         } else if (this.cookieService.get("accessToken") !== '') {
           return this.userService.getCurrentUser().pipe(
             tap(currentUser => {
-              console.log("initAuthHasUser");
               this.store.dispatch(UserActions.login({user: currentUser}));
               this.store.dispatch(UserActions.setSavedAndCartFromUser());
             })

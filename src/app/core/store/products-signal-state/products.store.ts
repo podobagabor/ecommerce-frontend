@@ -40,7 +40,6 @@ export const ProductStore = signalStore(
       pipe(
         tap(() => patchState(store, {isLoading: true})),
         switchMap((value) => {
-          console.log(value);
           const state = getState(store)
           return productService.getProductsByParams({
             ...value, page: state.filter.page, size: state.filter.size,
@@ -48,11 +47,14 @@ export const ProductStore = signalStore(
           }).pipe(
             tapResponse({
               next: (products) => {
-                console.log("loadProducts");
                 patchState(store, {products: products})
               },
               error: error => {
                 console.error(error)
+                patchState(store, {isLoading: false})
+              },
+              finalize: () => {
+                patchState(store, {isLoading: false})
               }
             }),
           )
@@ -62,8 +64,6 @@ export const ProductStore = signalStore(
       )
     ),
     updateFilters(value: ProductFilter) {
-      console.log("updateQuery");
-
       patchState(store, (state) => ({
         ...state, filter: {
           ...state.filter,
@@ -77,8 +77,6 @@ export const ProductStore = signalStore(
       page: number,
       size: number,
     }) {
-      console.log("updatePageValues", values);
-
       patchState(store, (state) => ({filter: {...state.filter, page: values.page, size: values.size}}));
     }
   })),
@@ -89,7 +87,6 @@ export const ProductStore = signalStore(
       }
 
       effect(() => {
-        console.log("productStoreEffect");
         const state = getState(store);
         localStorage.setItem("products", JSON.stringify(state));
       });

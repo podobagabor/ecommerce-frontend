@@ -29,29 +29,31 @@ export class SavedEffects {
           return this.savedService.addProductToSaved({id: action.product.id}).pipe(
             tapResponse({
               next: (response) => {
-                this.save(products);
+                this.store.dispatch(SavedActions.addProduct({product: response}));
               },
               error: (error) => console.error(error)
             })
           );
         } else {
-          this.save(products);
+          this.store.dispatch(SavedActions.addProduct({product: action.product}));
         }
         return of();
       })
     ),
     {dispatch: false});
 
-  removeFromSaved = createEffect(() => this.actions$.pipe(
-      ofType(SavedActions.removeProduct),
+  deleteFromSaved = createEffect(() => this.actions$.pipe(
+      ofType(SavedActions.deleteProduct),
       withLatestFrom(this.store.select(selectUser), this.store.select(savedProducts)),
       exhaustMap(([action, user, products]) => {
         if (user) {
           return this.savedService.removeProductFromSaved({id: action.productId}).pipe(
             tap(() => {
-              this.save(products);
+              this.store.dispatch(SavedActions.removeProduct({productId: action.productId}));
             })
           );
+        } else {
+          this.store.dispatch(SavedActions.removeProduct({productId: action.productId}));
         }
         return of();
       })
@@ -59,10 +61,6 @@ export class SavedEffects {
     {dispatch: false});
 
   constructor(private store: Store, private actions$: Actions, private savedService: SavedControllerService) {
-  }
-
-  save(newSavedList: ProductDto[]) {
-    localStorage.setItem("saved", JSON.stringify(newSavedList));
   }
 
   getSavedListFromLocalStorage(): ProductDto[] {

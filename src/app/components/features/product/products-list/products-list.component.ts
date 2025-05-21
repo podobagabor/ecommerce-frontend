@@ -67,7 +67,6 @@ export class ProductsListComponent implements OnInit, OnDestroy {
       }
     });
     this.subscription.add(this._savedProducts.subscribe(saved => {
-      console.log("saved", saved);
       this.savedProducts = [...saved];
     }));
     if (!this.brandStore.brands().length) {

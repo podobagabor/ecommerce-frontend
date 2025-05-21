@@ -102,6 +102,55 @@ html, body {
   font-family: 'Raleway', sans-serif !important;
 }
 
+.my-table {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  .table {
+    width: 100%;
+    background-color: white;
+    border: 0.15em solid var(--light-primary);
+    border-radius: 0.5rem;
+    padding: 2px;
+    table {
+      background-color: white;
+      font-size: large;
+      font-weight: bolder;
+    }
+  }
+}
+.image-uploader {
+  padding: 1rem;
+  background-color: whitesmoke;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  font-size: large;
+  font-weight: bolder;
+  margin-bottom: 2rem;
+  .file-uploader-input {
+    display: none;
+  }
+}
+
+.main-container {
+  max-width: 1000px;
+  width: 100%;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  .form {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    border: 0.15em solid var(--light-primary);
+    border-radius: 0.5rem;
+    box-shadow: rgba(0, 0, 0, 0.09) 0 0 10px;
+  }
+}
+
 .my-button {
   border: none;
   height: 3rem;

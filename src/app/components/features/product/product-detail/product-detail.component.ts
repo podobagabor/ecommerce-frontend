@@ -54,7 +54,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   addToSaved() {
     if (this.product) {
       if (this.isSaved) {
-        this.store.dispatch(SavedActions.removeProduct({productId: this.product?.id!}))
+        this.store.dispatch(SavedActions.deleteProduct({productId: this.product?.id!}))
       } else {
         this.store.dispatch(SavedActions.saveProduct({product: this.product}))
       }
