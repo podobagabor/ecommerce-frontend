@@ -37,3 +37,12 @@
     <p class="product-description">{{ product?.description }}</p>
   </section>
 </main>
+<aside>
+  <div class="photo">
+    <img [src]="environment.backendUrl + product?.brand?.imageUrl">
+  </div>
+  <div class="brand-container">
+    <h3>{{product?.brand?.name}}</h3>
+    <p>{{product?.brand?.description}}</p>
+  </div>
+</aside>
