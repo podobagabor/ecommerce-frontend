@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {CategoryEditDialogComponent} from "../category-edit-dialog/category-edit-dialog.component";
-import {TorlesDialogComponent} from "../../../../shared/torles-dialog/torles-dialog.component";
 import {CategoryDto} from "../../../../../api/models/category-dto";
 import {CategoryControllerService} from "../../../../../api/services/category-controller.service";
 import {catchError, of, take} from "rxjs";
@@ -56,7 +55,7 @@ export class CategoryListComponent implements OnInit {
       data: {
         category: category,
         categories: this.allCategory.filter(categoryElement => {
-          return (categoryElement.id !== category.id && categoryElement.parentCategoryId !== category.id && !this.isDescendant(categoryElement.id,category.id));
+          return (categoryElement.id !== category.id && categoryElement.parentCategoryId !== category.id && !this.isDescendant(categoryElement.id, category.id));
         }),
         parent: this.allCategory.find(categoryElement => categoryElement.subCategoryIds?.some(subCategoryId => subCategoryId === category.id)),
       }

@@ -28,7 +28,7 @@
 .order-panel-actions {
   display: flex;
   flex-direction: row;
-  gap:1rem;
+  gap: 1rem;
   align-items: center;
 }
 
@@ -44,6 +44,7 @@
   flex-direction: row;
   width: 100%;
   height: 100px;
+
   .product-name {
     width: 40%;
     margin-left: 1rem;
@@ -51,6 +52,7 @@
     flex-direction: column;
     justify-content: center;
   }
+
   .product-price {
     width: 30%;
     font-weight: bolder;
@@ -58,12 +60,14 @@
     flex-direction: column;
     justify-content: center;
   }
+
   .product-image {
     width: 30%;
     overflow: hidden;
     display: flex;
     flex-direction: row;
     justify-content: right;
+
     img {
       height: 100%;
       border-radius: 5px;

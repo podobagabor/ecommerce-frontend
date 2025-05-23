@@ -8,16 +8,16 @@ import {UserRoutingModule} from "./user-routing.module";
 
 
 @NgModule({
-    declarations: [
-        ChangePasswordComponent,
-        OrdersComponent,
-        UserSettingsComponent
-    ],
-    imports: [
-        CommonModule,
-        UserRoutingModule,
-        SharedModule
-    ]
+  declarations: [
+    ChangePasswordComponent,
+    OrdersComponent,
+    UserSettingsComponent
+  ],
+  imports: [
+    CommonModule,
+    UserRoutingModule,
+    SharedModule
+  ]
 })
 export class UserModule {
 }

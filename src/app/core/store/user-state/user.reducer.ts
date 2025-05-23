@@ -1,7 +1,6 @@
 import {createReducer, on} from "@ngrx/store";
 import {UserActions} from "./user.actions";
 import {UserState} from "../store.interfaces";
-import {UserDtoDetailed} from "../../../api/models/user-dto-detailed";
 
 export var initialState: UserState = {user: undefined}
 

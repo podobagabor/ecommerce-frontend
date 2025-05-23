@@ -6,40 +6,40 @@ import {ProductDto} from "../../../../api/models/product-dto";
 import {environment} from "../../../../../environment";
 
 @Component({
-  selector: 'app-product-card',
-  templateUrl: './product-card.component.html',
-  styleUrls: ['./product-card.component.scss'],
-  standalone: false
+    selector: 'app-product-card',
+    templateUrl: './product-card.component.html',
+    styleUrls: ['./product-card.component.scss'],
+    standalone: false
 })
 export class ProductCardComponent implements OnInit {
 
-  product = input.required<ProductDto>()
-  @Input() isSaved: boolean = false;
-  @Input() savedMode: boolean = false
+    product = input.required<ProductDto>()
+    @Input() isSaved: boolean = false;
+    @Input() savedMode: boolean = false
 
-  constructor(private router: Router, private store: Store) {
-  }
-
-  ngOnInit() {
-    if (this.savedMode) {
-      this.isSaved = true;
+    constructor(private router: Router, private store: Store) {
     }
-  }
 
-  save(event: any) {
-    event.stopPropagation();
-    if(this.product) {
-      if (this.isSaved) {
-        this.store.dispatch(SavedActions.deleteProduct({productId: this.product().id!}));
-      } else {
-        this.store.dispatch(SavedActions.saveProduct({product: this.product()}));
-      }
+    ngOnInit() {
+        if (this.savedMode) {
+            this.isSaved = true;
+        }
     }
-  }
 
-  goDetail() {
-    this.router.navigateByUrl('/product/' + this.product().id);
-  }
+    save(event: any) {
+        event.stopPropagation();
+        if (this.product) {
+            if (this.isSaved) {
+                this.store.dispatch(SavedActions.deleteProduct({productId: this.product().id!}));
+            } else {
+                this.store.dispatch(SavedActions.saveProduct({product: this.product()}));
+            }
+        }
+    }
 
-  protected readonly environment = environment;
+    goDetail() {
+        this.router.navigateByUrl('/product/' + this.product().id);
+    }
+
+    protected readonly environment = environment;
 }

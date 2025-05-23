@@ -35,4 +35,5 @@ import {CustomMaterialModule} from "../../../core/custom-material/custom-materia
     CustomMaterialModule
   ]
 })
-export class AdminModule { }
+export class AdminModule {
+}

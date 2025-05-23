@@ -26,6 +26,7 @@
 .text {
   text-align: center;
 }
+
 mat-card-content {
   mat-icon {
     font-size: 10rem;
@@ -33,6 +34,7 @@ mat-card-content {
     width: 10rem;
   }
 }
+
 .my-button:hover {
   background-color: var(--primary);
   cursor: pointer;

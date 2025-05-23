@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import {Router} from "@angular/router";
 import {MAT_DIALOG_DATA} from "@angular/material/dialog";
 import {UserControllerService} from "../../../../api/services/user-controller.service";
 import {take, tap} from "rxjs";

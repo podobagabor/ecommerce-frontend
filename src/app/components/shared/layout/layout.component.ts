@@ -14,10 +14,10 @@ import {CategoryControllerService} from "../../../api/services/category-controll
 import {CategoryDto} from "../../../api/models/category-dto";
 
 @Component({
-    selector: 'app-layout',
-    templateUrl: './layout.component.html',
-    styleUrls: ['./layout.component.scss'],
-    standalone: false
+  selector: 'app-layout',
+  templateUrl: './layout.component.html',
+  styleUrls: ['./layout.component.scss'],
+  standalone: false
 })
 export class LayoutComponent implements OnInit, OnDestroy {
   protected routeQueryParams$?: Subscription;
@@ -25,8 +25,9 @@ export class LayoutComponent implements OnInit, OnDestroy {
   protected categoryMenuOpen: boolean = false;
   protected subscription?: Subscription;
   protected categories: CategoryDto[] = [];
-  constructor(private store: Store, private dialog: MatDialog, private router: Router, private activatedRoute: ActivatedRoute,private authenticationService: AuthenticationService,
-            private categoryService: CategoryControllerService) {
+
+  constructor(private store: Store, private dialog: MatDialog, private router: Router, private activatedRoute: ActivatedRoute, private authenticationService: AuthenticationService,
+              private categoryService: CategoryControllerService) {
   }
 
   ngOnInit(): void {

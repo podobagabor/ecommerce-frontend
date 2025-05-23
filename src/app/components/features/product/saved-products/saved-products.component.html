@@ -1,6 +1,6 @@
 <main class="saved-container">
   @if (($savedItems | async)?.length) {
-    @for (product of  $savedItems | async; track product.id) {
+    @for (product of $savedItems | async; track product.id) {
       <app-product-card [savedMode]="true" [product]="product"></app-product-card>
     }
   } @else {
