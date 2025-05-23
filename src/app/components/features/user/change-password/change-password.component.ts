@@ -5,7 +5,6 @@ import {UserControllerService} from "../../../../api/services/user-controller.se
 import {Store} from "@ngrx/store";
 import {selectUser} from "../../../../core/store/app.selectors";
 import {take, tap} from "rxjs";
-import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-change-password',

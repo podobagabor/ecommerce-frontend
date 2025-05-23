@@ -53,8 +53,8 @@ export const MY_FORMATS = {
     MatSnackBarModule, MatProgressSpinnerModule, MatDatepickerModule,
     MatAutocompleteModule, MatTableModule, MatDialogModule, MatTabsModule,
     MatTooltipModule, MatSelectModule, MatPaginatorModule, MatChipsModule,
-    MatButtonToggleModule, MatSlideToggleModule, MatBadgeModule, MatCheckboxModule,MatTreeNodeToggle,
-    MatExpansionModule, DragDropModule, MatSortModule, MatRadioModule, MatTree, MatTreeNode, MatLabel, MatFormFieldModule, MatTreeNodeDef,MatTreeNodePadding
+    MatButtonToggleModule, MatSlideToggleModule, MatBadgeModule, MatCheckboxModule, MatTreeNodeToggle,
+    MatExpansionModule, DragDropModule, MatSortModule, MatRadioModule, MatTree, MatTreeNode, MatLabel, MatFormFieldModule, MatTreeNodeDef, MatTreeNodePadding
   ],
   exports: [
     CommonModule,
@@ -63,8 +63,8 @@ export const MY_FORMATS = {
     MatSnackBarModule, MatMenuModule, MatProgressSpinnerModule, MatDatepickerModule,
     MatAutocompleteModule, MatTableModule, MatDialogModule, MatTabsModule,
     MatTooltipModule, MatSelectModule, MatPaginatorModule, MatChipsModule,
-    MatButtonToggleModule, MatSlideToggleModule, MatBadgeModule, MatCheckboxModule,MatTreeNodeToggle,
-    MatExpansionModule, DragDropModule, MatSortModule, MatRadioModule, MatTree, MatTreeNode, MatLabel,MatFormFieldModule,MatTreeNodeDef,MatTreeNodePadding
+    MatButtonToggleModule, MatSlideToggleModule, MatBadgeModule, MatCheckboxModule, MatTreeNodeToggle,
+    MatExpansionModule, DragDropModule, MatSortModule, MatRadioModule, MatTree, MatTreeNode, MatLabel, MatFormFieldModule, MatTreeNodeDef, MatTreeNodePadding
   ],
   providers: [
     {

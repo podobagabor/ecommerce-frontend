@@ -4,18 +4,18 @@ import {LayoutComponent} from "../../shared/layout/layout.component";
 import {UserSettingsComponent} from "./user-settings/user-settings.component";
 
 const routes: Routes = [
-  {
-    path: '',
-    component: LayoutComponent,
-    children: [
-      {path: 'userSettings', component: UserSettingsComponent}
-    ]
-  },
+    {
+        path: '',
+        component: LayoutComponent,
+        children: [
+            {path: 'userSettings', component: UserSettingsComponent}
+        ]
+    },
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule]
 })
 export class UserRoutingModule {
 }

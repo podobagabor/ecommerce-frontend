@@ -67,7 +67,7 @@ export const ProductStore = signalStore(
       patchState(store, (state) => ({
         ...state, filter: {
           ...state.filter,
-          discount: (value.discount !== undefined ) ? value.discount :  state.filter.discount,
+          discount: (value.discount !== undefined) ? value.discount : state.filter.discount,
           minPrice: value.minPrice || state.filter.minPrice,
           maxPrice: value.maxPrice || state.filter.maxPrice
         }

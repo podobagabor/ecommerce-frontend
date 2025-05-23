@@ -28,12 +28,14 @@ main {
   flex-direction: row;
   width: 90%;
   height: 100px;
+
   .qounatity-container {
     display: flex;
     flex-direction: row;
     width: 30%;
     align-items: center;
   }
+
   .product-name {
     width: 30%;
     margin-left: 1rem;
@@ -41,6 +43,7 @@ main {
     flex-direction: column;
     justify-content: center;
   }
+
   .product-price {
     width: 20%;
     font-weight: bolder;
@@ -48,12 +51,14 @@ main {
     flex-direction: column;
     justify-content: center;
   }
+
   .product-image {
     width: 20%;
     overflow: hidden;
     display: flex;
     flex-direction: row;
     justify-content: right;
+
     img {
       height: 100%;
       border-radius: 5px;
@@ -74,6 +79,7 @@ main {
   flex-direction: row;
   width: 90%;
   background-color: var(--light-primary);
+
   .total-amount {
     font-weight: bolder;
     width: 30%;
@@ -95,6 +101,7 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
   a {
     width: 90%;
   }

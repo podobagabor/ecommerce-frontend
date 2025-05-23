@@ -1,5 +1,5 @@
 <mat-dialog-content [formGroup]="categoryForm">
-  <h1>{{addingSubCategoryMode ? 'Alkategória hozzáadása' : 'Kategória szerkesztése'}}</h1>
+  <h1>{{ addingSubCategoryMode ? 'Alkategória hozzáadása' : 'Kategória szerkesztése' }}</h1>
   <mat-form-field class="dialog-form">
     <mat-label>Név</mat-label>
     <input matInput formControlName="name">
@@ -20,6 +20,7 @@
   </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions class="dialog-actions">
-  <button class="my-button" [matDialogClose]="true" [disabled]="categoryForm.invalid" (click)="saveCategory()" >Mentés</button>
-  <button class="my-button-accent" [matDialogClose]="true"  (click)="deleteCategory()" >Törlés</button>
+  <button class="my-button" [matDialogClose]="true" [disabled]="categoryForm.invalid" (click)="saveCategory()">Mentés
+  </button>
+  <button class="my-button-accent" [matDialogClose]="true" (click)="deleteCategory()">Törlés</button>
 </mat-dialog-actions>

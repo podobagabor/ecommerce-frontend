@@ -6,38 +6,43 @@ import {ProductControllerService} from "../../../../../api/services/product-cont
 import {ProductDto} from "../../../../../api/models/product-dto";
 
 @Component({
-    selector: 'app-product-list',
-    templateUrl: './product-list.component.html',
-    styleUrls: ['./product-list.component.scss'],
-    standalone: false
+  selector: 'app-product-list',
+  templateUrl: './product-list.component.html',
+  styleUrls: ['./product-list.component.scss'],
+  standalone: false
 })
-export class ProductListComponent implements OnInit{
+export class ProductListComponent implements OnInit {
   protected products: PageProductDto = {};
-  protected displayedColumnsProduct = ["category","brand","name","quantity","price","discount","actions"];
+  protected displayedColumnsProduct = ["category", "brand", "name", "quantity", "price", "discount", "actions"];
+
   constructor(private productService: ProductControllerService, private snackService: MatSnackBar) {
   }
 
   ngOnInit(): void {
     this.updateList();
   }
+
   deleteProduct(element: ProductDto) {
-    this.productService.deleteProduct({id: element.id}).subscribe( value => {
-      this.snackService.open("Sikeres törlés.",undefined,{
+    this.productService.deleteProduct({id: element.id}).subscribe(value => {
+      this.snackService.open("Sikeres törlés.", undefined, {
         duration: 3000
       });
       this.updateList();
 
     })
   }
+
   updateList() {
-    this.productService.getProductsByParams({size: this.products.pageable?.pageSize,
-    page: this.products.pageable?.pageNumber}).subscribe(products => {
+    this.productService.getProductsByParams({
+      size: this.products.pageable?.pageSize,
+      page: this.products.pageable?.pageNumber
+    }).subscribe(products => {
       this.products = products;
     })
   }
 
   page($event: PageEvent) {
-    if(this.products.pageable) {
+    if (this.products.pageable) {
       this.products.pageable.pageNumber = $event.pageIndex;
       this.products.pageable.pageSize = $event.pageSize;
       this.updateList();

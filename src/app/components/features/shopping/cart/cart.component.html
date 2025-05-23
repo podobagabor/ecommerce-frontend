@@ -29,7 +29,7 @@
         </mat-card>
       }
     } @else {
-      <h1  class="text-centered">Üres a kosarad</h1>
+      <h1 class="text-centered">Üres a kosarad</h1>
     }
     <mat-card class="total-amount-container">
       <p class="total-amount">Fizetendő</p>
@@ -73,10 +73,10 @@
     </form>
   </section>
   <section class="user-adatok-container">
-      <h2>Számlázási adatok</h2>
-      <mat-checkbox [(ngModel)]="billingAddressIsTheSame">Megegyezik a szállítási címmel.</mat-checkbox>
+    <h2>Számlázási adatok</h2>
+    <mat-checkbox [(ngModel)]="billingAddressIsTheSame">Megegyezik a szállítási címmel.</mat-checkbox>
     <form fxLayout="column" class="address-section" [formGroup]="userBillingAddressForm">
-      @if(!billingAddressIsTheSame) {
+      @if (!billingAddressIsTheSame) {
         <div fxLayout="row" fxLayoutAlign="space-between">
           <mat-form-field fxFlex="45%">
             <mat-label>Ország</mat-label>
@@ -111,7 +111,9 @@
     </form>
   </section>
   <div class="buton-container">
-    <button (click)="order()" [disabled]="!($cartItems | async)?.length || userShippingAddressForm.invalid || (!billingAddressIsTheSame && userBillingAddressForm.invalid)" class="my-button-form full-size-button">Tovább a
+    <button (click)="order()"
+            [disabled]="!($cartItems | async)?.length || userShippingAddressForm.invalid || (!billingAddressIsTheSame && userBillingAddressForm.invalid)"
+            class="my-button-form full-size-button">Tovább a
       megrendeléshez
     </button>
   </div>

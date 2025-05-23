@@ -4,6 +4,7 @@
   flex-direction: row;
   justify-content: center;
 }
+
 .main-container {
   max-width: 1000px;
   width: 100%;
@@ -11,6 +12,7 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
+
   .form {
     padding: 2rem;
     border: 0.15em solid var(--light-primary);
@@ -29,5 +31,5 @@
 .button-container {
   display: flex;
   flex-direction: row;
-  gap:1rem;
+  gap: 1rem;
 }

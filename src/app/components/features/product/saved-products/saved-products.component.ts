@@ -1,12 +1,6 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {CookieService} from "ngx-cookie-service";
-import {AuthenticationService} from "../../../../core/services/authentication.service";
-import {SavedActions} from "../../../../core/store/saved-state/saved.actions";
+import {Component} from '@angular/core';
 import {Store} from "@ngrx/store";
 import {savedProducts} from "../../../../core/store/app.selectors";
-import {Subscription} from "rxjs";
-import {SavedControllerService} from "../../../../api/services/saved-controller.service";
-import {ProductDto} from "../../../../api/models/product-dto";
 
 @Component({
   selector: 'app-saved-products',
@@ -16,6 +10,7 @@ import {ProductDto} from "../../../../api/models/product-dto";
 })
 export class SavedProductsComponent {
   protected $savedItems = this.store.select(savedProducts)
+
   constructor(private store: Store,) {
   }
 }

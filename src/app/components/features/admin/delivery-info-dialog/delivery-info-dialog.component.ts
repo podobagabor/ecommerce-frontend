@@ -11,8 +11,8 @@ import {MAT_DIALOG_DATA} from "@angular/material/dialog";
 export class DeliveryInfoDialogComponent {
   protected order?: OrderDto = undefined;
 
-  constructor(@Inject(MAT_DIALOG_DATA) private data: {order: OrderDto}) {
-    if(data && data.order) {
+  constructor(@Inject(MAT_DIALOG_DATA) private data: { order: OrderDto }) {
+    if (data && data.order) {
       this.order = data.order;
     }
   }
