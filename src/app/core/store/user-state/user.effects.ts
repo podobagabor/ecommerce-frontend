@@ -15,8 +15,8 @@ export class UserEffects {
   initAuth = createEffect(() => this.actions$.pipe(
       ofType(UserActions.init),
       exhaustMap(() => {
-        if (localStorage.getItem("loggedInUser")) {
-          const loggedInUser = JSON.parse(<string>localStorage.getItem("loggedInUser")) as UserDtoDetailed
+        if (sessionStorage.getItem("loggedInUser")) {
+          const loggedInUser = JSON.parse(<string>sessionStorage.getItem("loggedInUser")) as UserDtoDetailed
           this.store.dispatch(UserActions.login({user: loggedInUser}));
         } else if (this.cookieService.get("accessToken") !== '') {
           return this.userService.getCurrentUser().pipe(

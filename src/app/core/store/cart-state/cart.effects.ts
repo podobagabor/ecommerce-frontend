@@ -129,11 +129,11 @@ export class CartEffects {
   }
 
   save(newSavedList: CartElementDto[]) {
-    localStorage.setItem("cart", JSON.stringify(newSavedList));
+    sessionStorage.setItem("cart", JSON.stringify(newSavedList));
   }
 
   getCartFromLocalStorage(): CartElementDto[] {
-    const temp = localStorage.getItem("cart");
+    const temp = sessionStorage.getItem("cart");
     let tempList: CartElementDto[] = [];
     if (temp) {
       tempList = JSON.parse(temp) as CartElementDto[];

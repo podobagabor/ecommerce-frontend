@@ -7,7 +7,7 @@ export const initialState: CartElementDto[] = []
 export const cartReducer = createReducer(
   initialState,
   on(CartActions.setValue, (_state, {cartElements}) => {
-    localStorage.setItem("cart", JSON.stringify(cartElements));
+    sessionStorage.setItem("cart", JSON.stringify(cartElements));
     return cartElements
   }),
 

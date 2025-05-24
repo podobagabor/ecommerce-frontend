@@ -109,13 +109,13 @@ export const CategoryStore = signalStore(
   })),
   withHooks({
     onInit(store) {
-      if (localStorage.getItem("categories")) {
-        patchState(store, {...(JSON.parse(<string>localStorage.getItem("categories")) as CategoryState)});
+      if (sessionStorage.getItem("categories")) {
+        patchState(store, {...(JSON.parse(<string>sessionStorage.getItem("categories")) as CategoryState)});
       }
 
       effect(() => {
         const state = getState(store);
-        localStorage.setItem("categories", JSON.stringify(state));
+        sessionStorage.setItem("categories", JSON.stringify(state));
       });
     }
   }),

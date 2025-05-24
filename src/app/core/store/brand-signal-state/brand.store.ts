@@ -61,13 +61,13 @@ export const BrandStore = signalStore(
   ),
   withHooks({
     onInit(store) {
-      if (localStorage.getItem("brands")) {
-        patchState(store, {...(JSON.parse(<string>localStorage.getItem("brands")) as BrandState)});
+      if (sessionStorage.getItem("brands")) {
+        patchState(store, {...(JSON.parse(<string>sessionStorage.getItem("brands")) as BrandState)});
       }
 
       effect(() => {
         const state = getState(store);
-        localStorage.setItem("brands", JSON.stringify(state));
+        sessionStorage.setItem("brands", JSON.stringify(state));
       });
     }
   }),

@@ -54,6 +54,6 @@ export class AuthenticationService {
     this.store.dispatch(UserActions.logout());
     this.router.navigate(["/home"]);
     this.cookieService.deleteAll();
-    localStorage.clear();
+    sessionStorage.clear();
   }
 }

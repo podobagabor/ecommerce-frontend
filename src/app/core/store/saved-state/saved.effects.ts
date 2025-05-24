@@ -64,7 +64,7 @@ export class SavedEffects {
     }
 
     getSavedListFromLocalStorage(): ProductDto[] {
-        const temp = localStorage.getItem("saved");
+        const temp = sessionStorage.getItem("saved");
         let tempList: ProductDto[] = [];
         if (temp) {
             tempList = JSON.parse(temp) as ProductDto[];
