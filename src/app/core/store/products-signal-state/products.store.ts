@@ -2,7 +2,7 @@ import {getState, patchState, signalStore, withHooks, withMethods, withState} fr
 import {effect, inject} from "@angular/core";
 import {ProductControllerService} from "../../../api/services/product-controller.service";
 import {rxMethod} from '@ngrx/signals/rxjs-interop';
-import {debounceTime, pipe, switchMap, tap} from "rxjs";
+import {catchError, debounceTime, EMPTY, pipe, switchMap, tap} from "rxjs";
 import {tapResponse} from "@ngrx/operators";
 import {PageProductDto} from "../../../api/models/page-product-dto";
 
@@ -59,6 +59,10 @@ export const ProductStore = signalStore(
             }),
           )
         }),
+        catchError((err, caught) => {
+          patchState(store, {isLoading: false});
+          return EMPTY;
+        }),
         debounceTime(1500),
         tap(() => patchState(store, {isLoading: false}))
       )
@@ -82,13 +86,13 @@ export const ProductStore = signalStore(
   })),
   withHooks({
     onInit(store) {
-      if (localStorage.getItem("products")) {
-        patchState(store, {...(JSON.parse(<string>localStorage.getItem("products")) as ProductState)});
+      if (sessionStorage.getItem("products")) {
+        patchState(store, {...(JSON.parse(<string>sessionStorage.getItem("products")) as ProductState)});
       }
 
       effect(() => {
         const state = getState(store);
-        localStorage.setItem("products", JSON.stringify(state));
+        sessionStorage.setItem("products", JSON.stringify(state));
       });
     }
   }),

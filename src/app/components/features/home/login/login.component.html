@@ -7,28 +7,30 @@
     </button>
   </div>
   <p class="title">Jelentkezz be!</p>
-  <mat-card-content fxLayout="column" fxLayoutGap="1rem" [formGroup]="loginForm">
-    <mat-form-field class="my-form">
-      <mat-label>E-mail</mat-label>
-      <input formControlName="email" matInput email>
-      <mat-error>Helytelen e-mail formátum.</mat-error>
-    </mat-form-field>
-    <mat-form-field class="my-form">
-      <mat-label>Jelszó megadása kötelező</mat-label>
-      <input formControlName="password" type="password" matInput>
-      <mat-error>Helytelen jelszó</mat-error>
-    </mat-form-field>
-    <div fxLayout="row" fxLayoutAlign="end">
-      <button class="forgot-password" [matDialogClose]="'forgot_password'">Elfelejtetted a jelszavad?</button>
-    </div>
-    @if (errorMessage) {
-      <p class="login-error">{{ errorMessage }}</p>
-    }
-    <button class="my-button" (click)="login()" [disabled]="loginForm.invalid">
-      Bejelentkezés
-    </button>
-    <a class="my-button-accent-link" [matDialogClose]="'register'">
-      Regisztráció
-    </a>
+  <mat-card-content>
+    <form  fxLayout="column" fxLayoutGap="1rem" [formGroup]="loginForm">
+      <mat-form-field class="my-form">
+        <mat-label>E-mail</mat-label>
+        <input formControlName="email" matInput email>
+        <mat-error>Helytelen e-mail formátum.</mat-error>
+      </mat-form-field>
+      <mat-form-field class="my-form">
+        <mat-label>Jelszó megadása kötelező</mat-label>
+        <input formControlName="password" type="password" matInput>
+        <mat-error>Helytelen jelszó</mat-error>
+      </mat-form-field>
+      <div fxLayout="row" fxLayoutAlign="end">
+        <button class="forgot-password" [matDialogClose]="'forgot_password'">Elfelejtetted a jelszavad?</button>
+      </div>
+      @if (errorMessage) {
+        <p class="login-error">{{ errorMessage }}</p>
+      }
+      <button class="my-button" (click)="login()" [disabled]="loginForm.invalid">
+        Bejelentkezés
+      </button>
+      <a class="my-button-accent-link" [matDialogClose]="'register'">
+        Regisztráció
+      </a>
+    </form>
   </mat-card-content>
 </mat-card>

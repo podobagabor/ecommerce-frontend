@@ -7,11 +7,11 @@ export var initialState: UserState = {user: undefined}
 export const userReducer = createReducer(
   initialState,
   on(UserActions.login, (state, {user}) => {
-    localStorage.setItem("loggedInUser", JSON.stringify(user));
+    sessionStorage.setItem("loggedInUser", JSON.stringify(user));
     return {user: user}
   }),
   on(UserActions.logout, (_state) => {
-    localStorage.removeItem("loggedInUser");
+    sessionStorage.removeItem("loggedInUser");
     return {user: undefined}
   })
 )
