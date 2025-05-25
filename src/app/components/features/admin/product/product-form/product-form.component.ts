@@ -129,7 +129,7 @@ export class ProductFormComponent implements OnInit, OnDestroy {
         this.illustrationImages.push(element);
       }
     });
-    if (this.editingMode) this._storedImages = [...this.storedImages];
+    if (this.editingMode) this._storedImages = [...this._storedImages];
     else this.illustrationImages = [...this.illustrationImages];
   }
 
@@ -197,7 +197,7 @@ export class ProductFormComponent implements OnInit, OnDestroy {
 
   deleteImage(element: File) {
     if (this.editingMode) {
-      const imageElement = this._storedImages.find(value => value.file == element);
+      const imageElement = this._storedImages.find(value => value.file === element);
       if (imageElement) {
         imageElement.deleted = true;
       }
