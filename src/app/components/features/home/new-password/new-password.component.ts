@@ -1,7 +1,8 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialog} from "@angular/material/dialog";
 import {UserControllerService} from "../../../../api/services/user-controller.service";
+import {Subject, takeUntil} from "rxjs";
 
 @Component({
   selector: 'app-new-password',
@@ -9,7 +10,9 @@ import {UserControllerService} from "../../../../api/services/user-controller.se
   styleUrls: ['./new-password.component.scss'],
   standalone: false
 })
-export class NewPasswordComponent implements OnInit {
+export class NewPasswordComponent implements OnInit, OnDestroy {
+
+  private unsubscribe$ = new Subject<void>();
   protected passwordsNotCorrect: boolean = false;
   protected userToken?: string;
   protected passwordChanged: boolean = false;
@@ -25,7 +28,9 @@ export class NewPasswordComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.newPasswordForm.valueChanges.subscribe(values => {
+    this.newPasswordForm.valueChanges.pipe(
+      takeUntil(this.unsubscribe$),
+    ).subscribe(values => {
       this.passwordsNotCorrect = !!(values.password1 && values.password2 && values.password1 !== values.password2);
     })
   }
@@ -42,5 +47,10 @@ export class NewPasswordComponent implements OnInit {
         this.dialog.closeAll();
       })
     }
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

@@ -36,3 +36,11 @@
   }
 }
 
+@media (max-width: 768px) {
+  .main-container {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+}
+

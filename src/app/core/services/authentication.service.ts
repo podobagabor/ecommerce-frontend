@@ -7,7 +7,6 @@ import {UserActions} from "../store/user-state/user.actions";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {UserControllerService} from "../../api/services/user-controller.service";
 import {environment} from "../../../environment";
-import {Router} from "@angular/router";
 import {KeycloakLoginResponse} from "../../components/shared/interfaces";
 
 @Injectable({
@@ -17,7 +16,7 @@ export class AuthenticationService {
 
   constructor(private userService: UserControllerService,
               private store: Store, private cookieService: CookieService,
-              private http: HttpClient, private router: Router) {
+              private http: HttpClient) {
   }
 
   login(email: string, password: string): Promise<any> {
@@ -28,13 +27,13 @@ export class AuthenticationService {
       .set("password", password);
     return new Promise<any>((resolve, reject) => {
       this.http.post<KeycloakLoginResponse>(environment.tokenEndpoint, loginRequest).pipe(
-        catchError((err) => {
+        catchError(() => {
           return of("Hiba a bejelentkezéskor");
         })
       ).subscribe(value => {
         if (typeof value !== "string") {
-          this.cookieService.set("accessToken", value.access_token);
-          this.cookieService.set("refreshToken", value.refresh_token);
+          this.cookieService.set("accessToken", value.access_token, undefined, "/");
+          this.cookieService.set("refreshToken", value.refresh_token, undefined, "/");
           this.userService.getCurrentUser().subscribe(user => {
             this.store.dispatch(UserActions.login({
                 user: user
@@ -44,16 +43,9 @@ export class AuthenticationService {
             resolve(true);
           })
         } else {
-          reject(value)
+          reject(value);
         }
       })
     })
-  }
-
-  logout() {
-    this.store.dispatch(UserActions.logout());
-    this.router.navigate(["/home"]);
-    this.cookieService.deleteAll();
-    sessionStorage.clear();
   }
 }

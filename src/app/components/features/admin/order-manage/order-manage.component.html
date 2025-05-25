@@ -4,6 +4,7 @@
   </div>
   <div [formGroup]="orderSearchForm" class="searchbar">
     <mat-form-field>
+      <mat-label>Státusz</mat-label>
       <mat-select formControlName="status">
         <mat-option [value]="undefined">Nincs szűrő</mat-option>
         <mat-option [value]="'CANCELLED'">Lemondva</mat-option>
@@ -66,7 +67,7 @@
               <p class="product-price">{{ item.quantity }} db</p>
               <p class="product-price">{{ item.product.price * item.quantity | number }}Ft</p>
               <div class="product-image">
-                <img
+                <img alt="image of product"
                   [src]="environment.backendUrl + item.product.images[0]">
               </div>
             </mat-card>

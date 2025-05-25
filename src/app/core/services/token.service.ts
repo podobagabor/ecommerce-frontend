@@ -4,13 +4,16 @@ import {catchError, Observable, of} from "rxjs";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {map} from "rxjs/operators";
 import {KeycloakLoginResponse} from "../../components/shared/interfaces";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {Store} from "@ngrx/store";
+import {UserActions} from "../store/user-state/user.actions";
 
 @Injectable({
   providedIn: 'root'
 })
 export class TokenService {
 
-  constructor(private cookieService: CookieService, private http: HttpClient) {
+  constructor(private store: Store,private cookieService: CookieService, private http: HttpClient, private snackBarService: MatSnackBar) {
   }
 
   getAccessToken(): string | null {
@@ -24,13 +27,19 @@ export class TokenService {
       .set("client_id", "ecommerce-rest-api")
       .set("refresh_token", refreshToken);
     return this.http.post<KeycloakLoginResponse>("/realms/ecommerce/protocol/openid-connect/token", refreshRequest).pipe(
-      catchError((err) => {
+      catchError((_) => {
+        this.snackBarService.open("Munkamenet lejárt, jelentkezz be!",undefined, {
+          duration: 3000,
+        });
+        this.store.dispatch(UserActions.logout());
         return of("Hiba a bejelentkezéskor");
       }),
       map(value => {
         if (typeof value !== "string") {
-          this.cookieService.set("accessToken", value.access_token);
-          this.cookieService.set("refreshToken", value.refresh_token);
+          this.cookieService.delete("accessToken");
+          this.cookieService.delete("refreshToken");
+          this.cookieService.set("accessToken", value.access_token,undefined,"/");
+          this.cookieService.set("refreshToken", value.refresh_token,undefined,"/");
         }
         return value
       }))

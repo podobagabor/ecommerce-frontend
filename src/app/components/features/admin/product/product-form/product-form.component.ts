@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -7,7 +7,7 @@ import {ProductControllerService} from "../../../../../api/services/product-cont
 import {CategoryControllerService} from "../../../../../api/services/category-controller.service";
 import {BrandDto} from "../../../../../api/models/brand-dto";
 import {ProductCreateDto} from "../../../../../api/models/product-create-dto";
-import {take, tap} from "rxjs";
+import {Subject, take, takeUntil, tap} from "rxjs";
 import {BrandControllerService} from "../../../../../api/services/brand-controller.service";
 import {environment} from "../../../../../../environment";
 import {ProductModifyDto} from "../../../../../api/models/product-modify-dto";
@@ -22,7 +22,9 @@ import {StoredFile} from "../../../../shared/interfaces";
   styleUrls: ['./product-form.component.scss'],
   standalone: false
 })
-export class ProductFormComponent implements OnInit {
+export class ProductFormComponent implements OnInit, OnDestroy {
+  private unsubscribe$ = new Subject<void>();
+
   protected editingMode: boolean = false;
   protected productId?: number = undefined;
   protected displayedColumnsIllustration = ["fileName", "actions"];
@@ -95,7 +97,9 @@ export class ProductFormComponent implements OnInit {
       this.filteredCategories = value;
     });
 
-    this.productForm.controls.category.valueChanges.subscribe(value => {
+    this.productForm.controls.category.valueChanges.pipe(
+      takeUntil(this.unsubscribe$),
+    ).subscribe(value => {
       if (typeof value === 'string') {
         this.filteredCategories = this.categories.filter(category => category.name?.toLowerCase().includes(value.toLowerCase()));
       } else {
@@ -103,7 +107,9 @@ export class ProductFormComponent implements OnInit {
       }
     });
 
-    this.productForm.controls.brand.valueChanges.subscribe(value => {
+    this.productForm.controls.brand.valueChanges.pipe(
+      takeUntil(this.unsubscribe$),
+    ).subscribe(value => {
       if (typeof value === 'string') {
         this.filteredBrands = this.brands.filter(brand => brand.name?.toLowerCase().includes(value.toLowerCase()));
       }
@@ -155,7 +161,7 @@ export class ProductFormComponent implements OnInit {
           newImages: images.newImages,
           productModifyDto: product
         }
-      }).subscribe(value => {
+      }).subscribe(_ => {
         this.router.navigateByUrl("/admin/productList");
       })
     }
@@ -229,5 +235,10 @@ export class ProductFormComponent implements OnInit {
     return !!(this.productForm.valid && this.productForm.value.brand
       && this.productForm.value.productName && this.productForm.value.quantity
       && this.productForm.value.description && this.productForm.value.price);
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

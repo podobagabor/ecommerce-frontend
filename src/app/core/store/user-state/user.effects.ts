@@ -9,10 +9,11 @@ import {UserControllerService} from "../../../api/services/user-controller.servi
 import {SavedActions} from "../saved-state/saved.actions";
 import {CartActions} from "../cart-state/cart.actions";
 import {selectUser} from "../app.selectors";
+import {Router} from "@angular/router";
 
 @Injectable()
 export class UserEffects {
-  initAuth = createEffect(() => this.actions$.pipe(
+  initAuthEffect$ = createEffect(() => this.actions$.pipe(
       ofType(UserActions.init),
       exhaustMap(() => {
         if (sessionStorage.getItem("loggedInUser")) {
@@ -25,9 +26,6 @@ export class UserEffects {
               this.store.dispatch(UserActions.setSavedAndCartFromUser());
             })
           )
-        } else {
-          this.store.dispatch(UserActions.logout());
-          this.cookieService.deleteAll();
         }
         this.store.dispatch(SavedActions.init());
         this.store.dispatch(CartActions.init());
@@ -35,7 +33,7 @@ export class UserEffects {
       })
     ),
     {dispatch: false});
-  getSavedAndCart = createEffect(() => this.actions$.pipe(
+  getSavedAndCartEffect$ = createEffect(() => this.actions$.pipe(
       ofType(UserActions.setSavedAndCartFromUser),
       withLatestFrom(this.store.select(selectUser)),
       tap(([_, user]) => {
@@ -50,7 +48,30 @@ export class UserEffects {
       })
     ),
     {dispatch: false});
+  logoutEffect$ = createEffect(() => this.actions$.pipe(
+      ofType(UserActions.logout),
+      tap(() => {
+        sessionStorage.removeItem("loggedInUser");
+        sessionStorage.removeItem("brands");
+        sessionStorage.removeItem("cart");
+        sessionStorage.removeItem("categories");
+        sessionStorage.removeItem("products");
+        sessionStorage.removeItem("saved");
+        this.cookieService.delete("accessToken", "/");
+        this.cookieService.delete("refreshToken", "/");
+        this.router.navigate(["/home"])
+      })
+    ),
+    {dispatch: false});
+  loginEffect$ = createEffect(() => this.actions$.pipe(
+      ofType(UserActions.login),
+      withLatestFrom(this.store.select(selectUser)),
+      tap(([_, user]) => {
+        sessionStorage.setItem("loggedInUser", JSON.stringify(user));
+      })
+    ),
+    {dispatch: false});
 
-  constructor(private store: Store, private actions$: Actions, private cookieService: CookieService, private userService: UserControllerService) {
+  constructor(private router: Router, private store: Store, private actions$: Actions, private cookieService: CookieService, private userService: UserControllerService) {
   }
 }

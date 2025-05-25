@@ -10,14 +10,14 @@
   width: 100%;
   padding: 3rem;
   display: flex;
+  box-sizing: border-box;
   flex-direction: column;
   gap: 2rem;
 
-  .form {
-    padding: 2rem;
-    border: 0.15em solid var(--light-primary);
-    border-radius: 0.5rem;
-    box-shadow: rgba(0, 0, 0, 0.09) 0 0 10px;
+  .header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
   }
 
   .address-section {
@@ -32,4 +32,15 @@
   display: flex;
   flex-direction: row;
   gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .main-container {
+    padding: 1rem;
+
+    .header {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
 }

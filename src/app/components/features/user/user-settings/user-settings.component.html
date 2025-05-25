@@ -1,5 +1,5 @@
 <div class="main-container">
-  <div fxLayout="row" fxLayoutAlign="space-between center">
+  <div class="header">
     <h1>Profil</h1>
     <div class="button-container">
       @if (false) {
@@ -11,24 +11,24 @@
       </button>
     </div>
   </div>
-  <form class="form" [formGroup]="userSettingsForm">
+  <form class="form-two-columns" [formGroup]="userSettingsForm">
     <h2>Személyes adatok</h2>
-    <div fxLayout="row" fxLayoutAlign="space-between">
-      <mat-form-field fxFlex="45%">
+    <div class="form-two-columns_section">
+      <mat-form-field>
         <mat-label>Vezetéknév</mat-label>
         <input matInput type="text" formControlName="familyName">
       </mat-form-field>
-      <mat-form-field fxFlex="45%">
+      <mat-form-field>
         <mat-label>Keresztnév</mat-label>
         <input matInput type="text" formControlName="firstName">
       </mat-form-field>
     </div>
-    <div fxLayout="row" fxLayoutAlign="space-between">
-      <mat-form-field fxFlex="45%">
+    <div class="form-two-columns_section">
+      <mat-form-field>
         <mat-label>E-mail cím</mat-label>
         <input matInput type="text" formControlName="email">
       </mat-form-field>
-      <mat-form-field fxFlex="45%">
+      <mat-form-field >
         <mat-label>Telefonszám</mat-label>
         <input matInput type="text" formControlName="phoneNumber">
       </mat-form-field>
@@ -42,34 +42,34 @@
     </div>
   </form>
   <button (click)="newPassword()" class="my-button-form">Új jelszó</button>
-  <form fxLayout="column" class="address-section" [formGroup]="userShippingAddressForm">
+  <form class="address-section form" [formGroup]="userShippingAddressForm">
     <h2>Szállítási cím</h2>
-    <div fxLayout="row" fxLayoutAlign="space-between">
-      <mat-form-field fxFlex="45%">
+    <div class="form-two-columns_section">
+      <mat-form-field>
         <mat-label>Ország</mat-label>
         <input matInput type="text" formControlName="country">
       </mat-form-field>
-      <mat-form-field fxFlex="45%">
+      <mat-form-field>
         <mat-label>Irányítószám</mat-label>
         <input matInput type="text" formControlName="zipCode">
       </mat-form-field>
     </div>
-    <div fxLayout="row" fxLayoutAlign="space-between">
-      <mat-form-field fxFlex="45%">
+    <div class="form-two-columns_section">
+      <mat-form-field>
         <mat-label>Város</mat-label>
         <input matInput type="text" formControlName="city">
       </mat-form-field>
-      <mat-form-field fxFlex="45%">
+      <mat-form-field>
         <mat-label>Út / Utca</mat-label>
         <input matInput type="text" formControlName="street">
       </mat-form-field>
     </div>
-    <div fxLayout="row" fxLayoutAlign="space-between">
-      <mat-form-field fxFlex="45%">
+    <div class="form-two-columns_section">
+      <mat-form-field>
         <mat-label>Házszám</mat-label>
         <input matInput type="text" formControlName="streetNumber">
       </mat-form-field>
-      <mat-form-field fxFlex="45%">
+      <mat-form-field>
         <mat-label>Emelet/Ajtó</mat-label>
         <input matInput type="text" formControlName="floor">
       </mat-form-field>

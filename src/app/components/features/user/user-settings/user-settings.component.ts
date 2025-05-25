@@ -3,9 +3,6 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatDialog} from "@angular/material/dialog";
 import {ChangePasswordComponent} from "../change-password/change-password.component";
-import {Router} from "@angular/router";
-import {CookieService} from "ngx-cookie-service";
-import {AuthenticationService} from "../../../../core/services/authentication.service";
 import {UserControllerService} from "../../../../api/services/user-controller.service";
 import {UserDtoDetailed} from "../../../../api/models/user-dto-detailed";
 import {Store} from "@ngrx/store";
@@ -40,7 +37,7 @@ export class UserSettingsComponent implements OnInit {
     gender: new FormControl<'MALE' | 'FEMALE'>('MALE'),
   })
 
-  constructor(private store: Store, private userService: UserControllerService, private snackService: MatSnackBar, private dialog: MatDialog, private router: Router, private cookieService: CookieService, private authenticationService: AuthenticationService) {
+  constructor(private store: Store, private userService: UserControllerService, private snackService: MatSnackBar, private dialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -51,7 +48,7 @@ export class UserSettingsComponent implements OnInit {
   }
 
   newPassword() {
-    const ref = this.dialog.open(ChangePasswordComponent);
+    this.dialog.open(ChangePasswordComponent);
   }
 
   setValues() {
@@ -100,7 +97,7 @@ export class UserSettingsComponent implements OnInit {
       }).subscribe(value => {
         if (value) {
           if (this.emailChanged) {
-            this.authenticationService.logout();
+            this.store.dispatch(UserActions.logout());
             this.snackService.open("Sikeres adatmódosítás. Az e-mail változás miatt jelentkezz be újra!", undefined, {
               duration: 3000
             })

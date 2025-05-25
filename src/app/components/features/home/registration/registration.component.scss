@@ -1,6 +1,14 @@
 .main-card {
-  width: 60rem;
+  max-height: 95vh;
   padding: 3rem;
+  width: 60vw;
+  overflow-y: auto;
+
+  .form-row {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+  }
 }
 
 .back-button {
@@ -42,4 +50,11 @@ mat-card-content {
 
 .password-error {
   color: var(--warn);
+}
+
+@media (max-width: 768px) {
+  .main-card {
+    width: 95vw;
+    padding: 1rem;
+  }
 }
