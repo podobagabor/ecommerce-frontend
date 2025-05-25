@@ -1,5 +1,6 @@
 <div class="home-header">
   <a routerLink="/home" class="logo-name">E - COMMERCE</a>
+
   <div fxLayout="column" fxLayoutAlign="center" class="profile-icon">
     @if (!(currentUser$ | async)) {
       <button mat-fab (click)="login()">
@@ -10,7 +11,7 @@
     }
     @if (currentUser$ | async) {
       <p class="user-name">Szia <a
-        routerLink="/user/userSettings">{{ (currentUser$ | async)?.lastName }}</a> !</p>
+        routerLink="/user/userSettings">{{ (currentUser$ | async)?.firsName }}</a> !</p>
     }
   </div>
 </div>
