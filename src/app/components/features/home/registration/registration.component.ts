@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {MatDialog} from "@angular/material/dialog";
 import {UserControllerService} from "../../../../api/services/user-controller.service";
+import {Subject, takeUntil} from "rxjs";
 
 @Component({
   selector: 'app-registration',
@@ -9,7 +9,9 @@ import {UserControllerService} from "../../../../api/services/user-controller.se
   styleUrls: ['./registration.component.scss'],
   standalone: false
 })
-export class RegistrationComponent implements OnInit {
+export class RegistrationComponent implements OnInit, OnDestroy {
+
+  private unsubscribe$ = new Subject<void>();
   protected registrated: boolean = false;
   protected passwordsNotCorrect: boolean = false;
   protected registrationForm = new FormGroup({
@@ -22,16 +24,20 @@ export class RegistrationComponent implements OnInit {
     gender: new FormControl<'MALE' | 'FEMALE'>('MALE'),
   })
 
-  constructor(private userService: UserControllerService, private dialog: MatDialog) {
+  constructor(private userService: UserControllerService) {
   }
 
   ngOnInit(): void {
-    this.registrationForm.controls.passwordFirst.valueChanges.subscribe(value => {
+    this.registrationForm.controls.passwordFirst.valueChanges.pipe(
+      takeUntil(this.unsubscribe$),
+    ).subscribe(value => {
       this.passwordsNotCorrect = !!(value && this.registrationForm.value.passwordSecond && value !== this.registrationForm.value.passwordSecond);
-    })
-    this.registrationForm.controls.passwordSecond.valueChanges.subscribe(value => {
+    });
+    this.registrationForm.controls.passwordSecond.valueChanges.pipe(
+      takeUntil(this.unsubscribe$),
+    ).subscribe(value => {
       this.passwordsNotCorrect = !!(value && this.registrationForm.value.passwordFirst && value !== this.registrationForm.value.passwordFirst);
-    })
+    });
   }
 
   registration() {
@@ -49,7 +55,11 @@ export class RegistrationComponent implements OnInit {
           role: "USER",
           phone: this.registrationForm.value.phoneNumber,
         }
-      }).subscribe(_ => this.registrated = true)
+      }).subscribe(_ => this.registrated = true);
   }
 
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
 }

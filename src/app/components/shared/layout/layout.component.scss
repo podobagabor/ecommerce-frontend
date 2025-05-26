@@ -3,21 +3,26 @@
   height: 5rem;
   background-color: var(--light-gray);
   position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
 }
 
 .logo-name {
+  text-align: center;
+  position: absolute;
   font-size: xxx-large;
   margin-top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
   text-decoration: none;
   color: black;
+  flex: 1;
 }
 
 .profile-icon {
-  position: absolute;
-  top: 0;
-  right: 6rem;
-  z-index: 10;
   height: 5rem;
+  padding-right: 3rem;
 
   button {
     height: 3rem;
@@ -91,17 +96,6 @@
   width: fit-content;
 }
 
-@media (max-width: 768px) {
-  .element {
-    width: 100%;
-    box-sizing: content-box;
-  }
-}
-
-.container {
-
-}
-
 .user-name {
   font-weight: bold;
   word-spacing: 0.4rem;
@@ -133,7 +127,7 @@
 .action-menu-label-link {
   background-color: rgba(0, 0, 0, 0);
   border: rgba(0, 0, 0, 0);
-  font-family: var(--my-font-family);
+  font-family: var(--my-font-family), serif;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -146,4 +140,27 @@
 
 .action-menu-label-link:hover {
   background-color: var(--accent);
+}
+
+@media (max-width: 850px) {
+  .element {
+    width: 100%;
+    box-sizing: content-box;
+  }
+  .home-header {
+    height: 8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .logo-name {
+      font-size: xx-large;
+      width: 100%;
+      top:10px;
+    }
+
+    .profile-icon {
+      padding: 0;
+    }
+  }
 }

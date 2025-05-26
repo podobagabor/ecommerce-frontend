@@ -20,6 +20,7 @@ import {SavedEffects} from "./core/store/saved-state/saved.effects";
 import {UserEffects} from "./core/store/user-state/user.effects";
 import {HttpErrorInterceptor} from "./core/interceptors/http-error.interceptor";
 import {AdminModule} from "./components/features/admin/admin.module";
+import {HomeModule} from "./components/features/home/home.module";
 
 
 @NgModule({
@@ -31,6 +32,7 @@ import {AdminModule} from "./components/features/admin/admin.module";
   imports: [BrowserModule,
     AppRoutingModule,
     AdminModule,
+    HomeModule,
     BrowserAnimationsModule,
     CustomMaterialModule.forRoot(),
     ApiModule.forRoot({rootUrl: 'http://localhost:4200'}),

@@ -11,18 +11,19 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Injectable()
 export class CartEffects {
-  onInit = createEffect(() => this.actions$.pipe(
+  onInitEffect$ = createEffect(() => this.actions$.pipe(
       ofType(CartActions.init),
       tap(() => {
         let cart = this.getCartFromLocalStorage();
         if (cart.length) {
           this.store.dispatch(CartActions.setValue({cartElements: cart}));
+          sessionStorage.setItem("cart", JSON.stringify(cart));
         }
       })
     ),
     {dispatch: false});
 
-  onSaveCartElement = createEffect(() => this.actions$.pipe(
+  onSaveCartElementEffect$ = createEffect(() => this.actions$.pipe(
       ofType(CartActions.saveCartElement),
       withLatestFrom(this.store.select(cartProducts)),
       exhaustMap(([action, items]) => {
@@ -68,7 +69,7 @@ export class CartEffects {
     ),
     {dispatch: false});
 
-  addToCart$ = createEffect(() => this.actions$.pipe(
+  addToCartEffect$ = createEffect(() => this.actions$.pipe(
       ofType(CartActions.addCartElement),
       withLatestFrom(this.store.select(cartProducts)),
       tap(([_, items]) => {
@@ -77,13 +78,13 @@ export class CartEffects {
     ),
     {dispatch: false});
 
-  deleteFromUser$ = createEffect(() => this.actions$.pipe(
+  deleteFromUserEffect$ = createEffect(() => this.actions$.pipe(
       ofType(CartActions.deleteCartElementFromUser),
       exhaustMap((action) => {
           if (action.cartElement.quantity === 1) {
             return this.cartService.deleteCartElement({id: action.cartElement.id}).pipe(
               tapResponse({
-                next: (response) => {
+                next: (_) => {
                   this.store.dispatch(CartActions.removeCartElement({cartElementId: action.cartElement.id}))
                 },
                 error: error => {
@@ -97,7 +98,7 @@ export class CartEffects {
               quantity: action.cartElement.quantity - 1
             }).pipe(
               tapResponse({
-                next: (response) => {
+                next: (_) => {
                   this.store.dispatch(CartActions.removeCartElement({cartElementId: action.cartElement.id}))
                 },
                 error: (error: any) => {
@@ -116,7 +117,7 @@ export class CartEffects {
     ),
     {dispatch: false});
 
-  removeFromCart$ = createEffect(() => this.actions$.pipe(
+  removeFromCartEffect$ = createEffect(() => this.actions$.pipe(
       ofType(CartActions.removeCartElement),
       withLatestFrom(this.store.select(cartProducts)),
       tap(([_, items]) => {
@@ -125,8 +126,15 @@ export class CartEffects {
     ),
     {dispatch: false});
 
-  constructor(private snackService: MatSnackBar, private store: Store, private actions$: Actions, private cartService: CartControllerService) {
-  }
+  setValueEffect$ = createEffect(() => this.actions$.pipe(
+      ofType(CartActions.setValue),
+      withLatestFrom(this.store.select(cartProducts)),
+      tap(([_, items]) => {
+        this.save(items);
+      })
+    ),
+    {dispatch: false});
+
 
   save(newSavedList: CartElementDto[]) {
     sessionStorage.setItem("cart", JSON.stringify(newSavedList));
@@ -139,5 +147,8 @@ export class CartEffects {
       tempList = JSON.parse(temp) as CartElementDto[];
     }
     return tempList;
+  }
+
+  constructor(private snackService: MatSnackBar, private store: Store, private actions$: Actions, private cartService: CartControllerService) {
   }
 }

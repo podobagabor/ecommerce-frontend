@@ -16,3 +16,12 @@
   height: 100%;
   box-sizing: border-box;
 }
+
+@media (max-width: 768px) {
+  :host {
+    padding: 2rem !important;
+  }
+  .saved-container {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}

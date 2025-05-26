@@ -13,7 +13,6 @@ export class HttpErrorInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
       catchError((err) => {
-        console.error(err);
         if (err.status === 405 || err.statis === 403) {
           this.snackService.open(err.error, undefined, {
             duration: 3000,

@@ -29,7 +29,7 @@ main {
   width: 90%;
   height: 100px;
 
-  .qounatity-container {
+  .quantity-container {
     display: flex;
     flex-direction: row;
     width: 30%;
@@ -121,4 +121,49 @@ main {
 
 .full-size-button {
   width: 100%;
+}
+
+
+@media (max-width: 768px) {
+  .cart-element {
+    flex-direction: column;
+    width: 100%;
+    height: fit-content;
+    align-items: center;
+    padding: 1rem;
+
+    .product-name {
+      flex-direction: column;
+      width: 100%;
+      gap: 1rem;
+      padding: 0;
+    }
+
+    .quantity-container {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+
+      .product-price {
+        text-align: center;
+      }
+    }
+
+    .product-price {
+      width: 100%;
+      text-align: center;
+    }
+
+    .product-image {
+      width: 80%;
+      height: auto;
+
+      img {
+        width: 100%;
+        border-radius: 5px;
+      }
+    }
+  }
 }

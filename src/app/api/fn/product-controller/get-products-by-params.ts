@@ -11,11 +11,14 @@ import { RequestBuilder } from '../../request-builder';
 import { PageProductDto } from '../../models/page-product-dto';
 
 export interface GetProductsByParams$Params {
+  id?: number;
   name?: string;
+  isActive?: boolean;
   categoryId?: Array<number>;
   discount?: boolean;
   minPrice?: number;
   maxPrice?: number;
+  maxQuantity?: number;
   brandId?: Array<number>;
   page?: number;
   size?: number;
@@ -26,11 +29,14 @@ export interface GetProductsByParams$Params {
 export function getProductsByParams(http: HttpClient, rootUrl: string, params?: GetProductsByParams$Params, context?: HttpContext): Observable<StrictHttpResponse<PageProductDto>> {
   const rb = new RequestBuilder(rootUrl, getProductsByParams.PATH, 'get');
   if (params) {
+    rb.query('id', params.id, {});
     rb.query('name', params.name, {});
+    rb.query('isActive', params.isActive, {});
     rb.query('categoryId', params.categoryId, {});
     rb.query('discount', params.discount, {});
     rb.query('minPrice', params.minPrice, {});
     rb.query('maxPrice', params.maxPrice, {});
+    rb.query('maxQuantity', params.maxQuantity, {});
     rb.query('brandId', params.brandId, {});
     rb.query('page', params.page, {});
     rb.query('size', params.size, {});

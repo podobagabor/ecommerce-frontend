@@ -13,7 +13,7 @@ export interface UserDtoDetailed {
   gender: 'MALE' | 'FEMALE';
   id: string;
   lastName: string;
-  phone?: string;
+  phone: string;
   role: 'ADMIN' | 'USER' | 'SUPER_ADMIN';
   savedItems: Array<ProductDto>;
 }

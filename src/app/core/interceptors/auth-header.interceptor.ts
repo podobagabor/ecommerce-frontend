@@ -1,12 +1,11 @@
 import {Injectable} from '@angular/core';
 import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
-import {BehaviorSubject, catchError, Observable, switchMap, take, throwError} from 'rxjs';
+import {BehaviorSubject, catchError, EMPTY, Observable, switchMap, take, throwError} from 'rxjs';
 import {filter} from "rxjs/operators";
 import {Store} from "@ngrx/store";
 import {UserActions} from "../store/user-state/user.actions";
 import {TokenService} from "../services/token.service";
 import {KeycloakLoginResponse} from "../../components/shared/interfaces";
-import {AuthenticationService} from "../services/authentication.service";
 
 @Injectable()
 export class AuthHeaderInterceptor implements HttpInterceptor {
@@ -15,7 +14,7 @@ export class AuthHeaderInterceptor implements HttpInterceptor {
 
   private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
-  constructor(private tokenService: TokenService, private store: Store, private authService: AuthenticationService) {
+  constructor(private tokenService: TokenService, private store: Store) {
   }
 
 
@@ -59,14 +58,13 @@ export class AuthHeaderInterceptor implements HttpInterceptor {
             this.refreshTokenSubject.next(keycloakResponse.access_token);
             return next.handle(this.addAuthHeader(request, keycloakResponse.access_token));
           } else {
-            //Todo
             return next.handle(this.addAuthHeader(request, ""));
           }
         }),
-        catchError((err) => {
+        catchError((_) => {
           this.isRefreshing = false;
           this.store.dispatch(UserActions.logout());
-          return throwError(err);
+          return EMPTY;
         })
       );
     } else {

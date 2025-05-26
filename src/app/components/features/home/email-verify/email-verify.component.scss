@@ -48,3 +48,10 @@
     transform: rotate(360deg);
   }
 }
+
+@media (max-width: 768px) {
+  .main-card {
+    width: 100%;
+    padding: 0;
+  }
+}

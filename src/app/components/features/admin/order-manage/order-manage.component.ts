@@ -23,7 +23,7 @@ export class OrderManageComponent implements OnInit {
     status: new FormControl<"CREATED" | "IN_PROGRESS" | "UNDER_DELIVERY" | "COMPLETED" | undefined>(undefined),
     dateStart: new FormControl<Date | undefined>(undefined),
     dateEnd: new FormControl<Date | undefined>(undefined),
-  })
+  });
 
   constructor(private orderService: OrderControllerService, private snackService: MatSnackBar, private dialogService: MatDialog) {
   }
@@ -50,7 +50,7 @@ export class OrderManageComponent implements OnInit {
     this.orderService.changeOrderStatus({
       id: order.id,
       status: order.status
-    }).subscribe(value => {
+    }).subscribe(_ => {
       this.snackService.open('Sikeres sátusz módosítás', undefined, {
         duration: 2000,
       });
@@ -69,7 +69,7 @@ export class OrderManageComponent implements OnInit {
 
   showDeliveryInfo(order: OrderDto, $event: any) {
     $event.stopPropagation();
-    const ref = this.dialogService.open(DeliveryInfoDialogComponent, {
+    this.dialogService.open(DeliveryInfoDialogComponent, {
       data: {
         order: order,
       }

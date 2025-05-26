@@ -1,18 +1,19 @@
-<div fxLayout="row" fxLayoutAlign="center" class="home-header">
-  <a routerLink="/home" class="logo-name">N I L E</a>
-</div>
-<div fxLayout="column" fxLayoutAlign="center" class="profile-icon">
-  @if (!(currentUser$ | async)) {
-    <button mat-fab (click)="login()">
-      <mat-icon>
-        account_circle
-      </mat-icon>
-    </button>
-  }
-  @if (currentUser$ | async) {
-    <p class="user-name">Szia <a
-      routerLink="/user/userSettings">{{ (currentUser$ | async)?.lastName }}</a> !</p>
-  }
+<div class="home-header">
+  <a routerLink="/home" class="logo-name">E - COMMERCE</a>
+
+  <div fxLayout="column" fxLayoutAlign="center" class="profile-icon">
+    @if (!(currentUser$ | async)) {
+      <button mat-fab (click)="login()">
+        <mat-icon>
+          account_circle
+        </mat-icon>
+      </button>
+    }
+    @if (currentUser$ | async) {
+      <p class="user-name">Szia <a
+        routerLink="/user/userSettings">{{ (currentUser$ | async)?.firsName }}</a> !</p>
+    }
+  </div>
 </div>
 @if ((currentUser$ | async)?.role === 'ADMIN') {
   <div class="action-menu action-menu-admin">

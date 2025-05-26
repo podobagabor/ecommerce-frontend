@@ -12,6 +12,7 @@ import {Store} from "@ngrx/store";
 import {selectUser} from "../../../core/store/app.selectors";
 import {CategoryControllerService} from "../../../api/services/category-controller.service";
 import {CategoryDto} from "../../../api/models/category-dto";
+import {UserActions} from "../../../core/store/user-state/user.actions";
 
 @Component({
   selector: 'app-layout',
@@ -68,6 +69,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
 
   register() {
     const ref = this.dialog.open(RegistrationComponent, {
+      maxWidth: "1024px",
       disableClose: true,
     });
     ref.afterClosed().subscribe(value => {
@@ -89,7 +91,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    this.authenticationService.logout();
+    this.store.dispatch(UserActions.logout());
   }
 
   categoryMenu() {
