@@ -6,9 +6,12 @@ PostgreSql szerver. Publikusan elérhetővé tettem az általam használt image-
 amelyeket a következő parancsokkal lehetséges elindítani: 
 
 $docker pull podobagabor/ecommerce_keycloak:v2 
+
 $docker run --name ecommerce-keycloak -p 8081:8080 podobagabor/ecommerce_keycloak:v2 
 
+
 $docker pull podobagabor/ecommerce_postgre:v3 
+
 $docker run --name ecommerce-postgres -p 5432:5432 -d podobagabor/ecommerce_postgre:v3  
 
 A Keycloak realm definíciós json állomány a backend mellékletben is 
