@@ -1,14 +1,28 @@
 # ecommerce-frontend
-To get the KeyCloak image with the Ecommerce-realms, do the following steps:
-    1. docker pull podobagabor/ecommerce_keycloak:v2
-    2. docker run --name ecommerce-keycloak -p 8081:8080 podobagabor/ecommerce_keycloak:v2 (admin ui auth: admin/admin)
+##Telepítési útmutató 
 
-To get the PostgreSQL image, do the following steps:
-    1. docker pull podobagabor/ecommerce_postgre:v1
-    2. docker run --name ecommerce-postgres -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=admin -p 5432:5432 -d podobagabor/ecommerce_postgre:v1
-    
-To get the Maildev for e-mails, do the following steps:
-    1. npm install -g maildev
-    2. maildev
-    3. After these command, you can examine the e-mail in localhost:1080
-        
+Az alkalmazás működéséhez szükséges egy KeyCloak szerver, illetve egy 
+PostgreSql szerver. Publikusan elérhetővé tettem az általam használt image-eket, 
+amelyeket a következő parancsokkal lehetséges elindítani: 
+
+$docker pull podobagabor/ecommerce_keycloak:v2 
+$docker run --name ecommerce-keycloak -p 8081:8080 podobagabor/ecommerce_keycloak:v2 
+
+$docker pull podobagabor/ecommerce_postgre:v3 
+$docker run --name ecommerce-postgres -p 5432:5432 -d podobagabor/ecommerce_postgre:v3  
+
+A Keycloak realm definíciós json állomány a backend mellékletben is 
+megtalálható. A maildev működéséhez az alábbi parancsok kiadása szükséges: 
+
+$npm install -g maildev 
+$maildev  
+
+A frontend projekt gyökérmappájában szükséges kiadni a következő parancsokat: 
+npm install, ng serve. Ezt követően a frontend alkalmazás a localhost:4200-on elérhetővé 
+válik a böngészőben. 
+
+A backend alkalmazás esetében a root könyvtárban szükséges kiadni az mvn clean 
+package parancsot. Ezt követően a target mappába legenerálódik a .jar file. Ezt a file-t 
+szükséges a gyökérkönyvtárba mozgatni, majd elindítani a következő paranccsal:  
+java -jar ecommerce-backend-0.0.1-SNAPSHOT.jar . A .jar file tömörített formában 
+elérhető a fent linkelt repository-ban. 
